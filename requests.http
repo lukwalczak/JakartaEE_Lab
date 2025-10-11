@@ -54,7 +54,7 @@ Content-Type: multipart/form-data; boundary=boundary
 --boundary
 Content-Disposition: form-data; name="portrait"; filename="sigrid.png'
 
-< simple-rpg/src/main/resources/pl/edu/pg/eti/kask/rpg/configuration/avatar/sigrid.png
+< warhammer-list-creator/src/main/resources/pl/edu/pg/eti/kask/list/configuration/avatar/sigrid.png
 --boundary--
 
 ###
