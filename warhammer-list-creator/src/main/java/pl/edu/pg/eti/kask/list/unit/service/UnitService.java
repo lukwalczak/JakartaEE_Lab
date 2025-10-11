@@ -1,7 +1,7 @@
 package pl.edu.pg.eti.kask.list.unit.service;
 
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
-import pl.edu.pg.eti.kask.list.unit.repository.api.CharacterRepository;
+import pl.edu.pg.eti.kask.list.unit.repository.api.UnitRepository;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.repository.api.UserRepository;
 
@@ -19,7 +19,7 @@ public class UnitService {
     /**
      * Repository for character entity.
      */
-    private final CharacterRepository characterRepository;
+    private final UnitRepository unitRepository;
 
     /**
      * Repository for user entity.
@@ -27,11 +27,11 @@ public class UnitService {
     private final UserRepository userRepository;
 
     /**
-     * @param characterRepository  repository for character entity
+     * @param unitRepository  repository for character entity
      * @param userRepository repository for user entity
      */
-    public UnitService(CharacterRepository characterRepository, UserRepository userRepository) {
-        this.characterRepository = characterRepository;
+    public UnitService(UnitRepository unitRepository, UserRepository userRepository) {
+        this.unitRepository = unitRepository;
         this.userRepository = userRepository;
     }
 
@@ -42,7 +42,7 @@ public class UnitService {
      * @return container with character
      */
     public Optional<Unit> find(UUID id) {
-        return characterRepository.find(id);
+        return unitRepository.find(id);
     }
 
     /**
@@ -51,14 +51,14 @@ public class UnitService {
      * @return selected character for user
      */
     public Optional<Unit> find(User user, UUID id) {
-        return characterRepository.findByIdAndUser(id, user);
+        return unitRepository.findByIdAndUser(id, user);
     }
 
     /**
      * @return all available characters
      */
     public List<Unit> findAll() {
-        return characterRepository.findAll();
+        return unitRepository.findAll();
     }
 
     /**
@@ -66,7 +66,7 @@ public class UnitService {
      * @return all available characters of the selected user
      */
     public List<Unit> findAll(User user) {
-        return characterRepository.findAllByUser(user);
+        return unitRepository.findAllByUser(user);
     }
 
     /**
@@ -75,7 +75,7 @@ public class UnitService {
      * @param unit new character
      */
     public void create(Unit unit) {
-        characterRepository.create(unit);
+        unitRepository.create(unit);
     }
 
     /**
@@ -84,7 +84,7 @@ public class UnitService {
      * @param unit character to be updated
      */
     public void update(Unit unit) {
-        characterRepository.update(unit);
+        unitRepository.update(unit);
     }
 
     /**
@@ -93,7 +93,7 @@ public class UnitService {
      * @param id existing character's id to be deleted
      */
     public void delete(UUID id) {
-        characterRepository.delete(characterRepository.find(id).orElseThrow());
+        unitRepository.delete(unitRepository.find(id).orElseThrow());
     }
 
     /**
@@ -103,10 +103,10 @@ public class UnitService {
      * @param is input stream containing new portrait
      */
     public void updatePortrait(UUID id, InputStream is) {
-        characterRepository.find(id).ifPresent(character -> {
+        unitRepository.find(id).ifPresent(character -> {
             try {
                 character.setPortrait(is.readAllBytes());
-                characterRepository.update(character);
+                unitRepository.update(character);
             } catch (IOException ex) {
                 throw new IllegalStateException(ex);
             }
@@ -116,6 +116,6 @@ public class UnitService {
 
     public Optional<List<Unit>> findAllByUser(UUID id) {
         return userRepository.find(id)
-                .map(characterRepository::findAllByUser);
+                .map(unitRepository::findAllByUser);
     }
 }

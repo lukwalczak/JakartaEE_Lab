@@ -4,6 +4,9 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import lombok.SneakyThrows;
+import pl.edu.pg.eti.kask.list.army.entity.Army;
+import pl.edu.pg.eti.kask.list.army.service.ArmyService;
+import pl.edu.pg.eti.kask.list.model.Faction;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.entity.Skill;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
@@ -35,14 +38,13 @@ public class InitializedData implements ServletContextListener {
      */
     private UserService userService;
 
-    /**
-     * Profession service.
-     */
+    private ArmyService armyService;
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        unitService = (UnitService) event.getServletContext().getAttribute("characterService");
+        unitService = (UnitService) event.getServletContext().getAttribute("unitService");
         userService = (UserService) event.getServletContext().getAttribute("userService");
+        armyService = (ArmyService) event.getServletContext().getAttribute("armyService");
         init();
     }
 
@@ -126,9 +128,48 @@ public class InitializedData implements ServletContextListener {
                 .portrait(getResourceAsByteArray("../avatar/calvian.png"))//package relative path
                 .build();
 
-        Intercessor.getSkillList().add(heavyAttack);
+        Intercessor.addSkill(heavyAttack);
 
+        Unit scout = Unit.builder()
+                .id(UUID.fromString("d3f3b1e4-2f4a-4f0a-8e2e-6f5e8f1c9b7a"))
+                .name("Scout")
+                .movement(2)
+                .save(2)
+                .leadership(2)
+                .toughness(2)
+                .wounds(2)
+                .description("Scout is the eyes and ears.")
+                .portrait(getResourceAsByteArray("../avatar/calvian.png"))//package relative path
+                .build();
+        scout.addSkill(attack);
+
+        Unit medic = Unit.builder()
+                .id(UUID.fromString("a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f"))
+                .name("Medic")
+                .movement(1)
+                .save(3)
+                .leadership(1)
+                .toughness(2)
+                .wounds(2)
+                .description("Medic is the life saver.")
+                .portrait(getResourceAsByteArray("../avatar/calvian.png"))//package relative path
+                .build();
+        medic.addSkill(heal);
+
+        unitService.create(scout);
         unitService.create(Intercessor);
+        unitService.create(medic);
+
+        Army AstraMilitarum = Army.builder()
+                .id(UUID.fromString("f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b"))
+                .name("Astra Militarum Leman Russ Spam")
+                .description("Tried a new list with Rogal Dorn as a commander. Lots of tanks, maily Leman Russ.")
+                .faction(Faction.IMPERIUM)
+                .owner(admin)
+                .build();
+
+        armyService.create(AstraMilitarum);
+
 
     }
 

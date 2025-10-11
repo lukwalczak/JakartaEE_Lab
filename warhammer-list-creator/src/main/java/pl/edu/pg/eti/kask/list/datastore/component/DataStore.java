@@ -166,6 +166,13 @@ public class DataStore {
                 .collect(Collectors.toList());
     }
 
+    public synchronized List<Army> findByUserId(UUID userId) {
+        return armies.stream()
+                .filter(army -> army.getOwner() != null && army.getOwner().getId().equals(userId))
+                .map(cloningUtility::clone)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Clones existing character and updates relationships for values in storage
      *

@@ -1,54 +1,59 @@
-# Get all characters.
+## UNITS
 
-GET http://localhost:9080/simple-rpg/api/characters
+# Get all units.
 
-###
-
-# Get single character.
-
-GET http://localhost:9080/simple-rpg/api/characters/525d3e7b-bb1f-4c13-bf17-926d1a12e4c0
+GET http://localhost:9080/simple-rpg/api/units
 
 ###
 
-# Get single character. Not existing, created later.
+# Get single unit.
 
-GET http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87
-
-###
-
-# Get single character portrait.
-
-GET http://localhost:9080/simple-rpg/api/characters/525d3e7b-bb1f-4c13-bf17-926d1a12e4c0/portrait
+GET http://localhost:9080/simple-rpg/api/units/a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f
 
 ###
 
-# Get single character portrait. Not existing, created later.
+# Get single unit. Not existing, created later.
 
-GET http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87/portrait
+GET http://localhost:9080/simple-rpg/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
 
 ###
 
-# Create new character.
+# Get single unit portrait.
 
-PUT http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87
+GET http://localhost:9080/simple-rpg/api/units/a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f/portrait
+
+###
+
+# Get single unit portrait. Not existing, created later.
+
+GET http://localhost:9080/simple-rpg/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83/portrait
+
+###
+
+# Create new unit.
+
+PUT http://localhost:9080/simple-rpg/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
 Content-Type: application/json
 
 {
-  "name": "Sigrid",
-  "background": "No one special.",
-  "age": 18,
-  "strength": 12,
-  "constitution": 12,
-  "charisma": 12,
-  "health": 24,
-  "profession": "f5875513-bf7b-4ae1-b8a5-5b70a1b90e76"
+  "name": "Medic2",
+  "description": "Medic is the life saver.",
+  "id": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f",
+  "leadership": 1,
+  "movement": 1,
+  "save": 3,
+  "toughness": 2,
+  "wounds": 2
 }
 
 ###
+GET http://localhost:9080/simple-rpg/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
 
-# Create character portrait.
 
-PUT http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87/portrait
+###
+# Create unit portrait.
+
+PUT http://localhost:9080/simple-rpg/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83/portrait
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
@@ -59,41 +64,39 @@ Content-Disposition: form-data; name="portrait"; filename="sigrid.png'
 
 ###
 
-# Create new character. Not existing profession.
+# Update unit.
 
-PUT http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87
+PATCH http://localhost:9080/simple-rpg/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
 Content-Type: application/json
 
 {
-  "name": "Sigrid",
-  "background": "No one special.",
-  "age": 18,
-  "strength": 12,
-  "constitution": 12,
-  "charisma": 12,
-  "profession": "3bb5b0d5-7e22-466f-8c3f-be4baa3d3b8c"
+  "name": "Medic2",
+  "movement": 13,
+  "save": 4
 }
 
 ###
 
-# Update character.
+# Delete unit.
 
-PATCH http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87
-Content-Type: application/json
-
-{
-  "name": "Sir Sigrid",
-  "background": "Someone well known.",
-  "age": 30
-}
+DELETE http://localhost:9080/simple-rpg/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
 
 ###
 
-# Delete character.
 
-DELETE http://localhost:9080/simple-rpg/api/characters/3c6f1eb1-8069-44ab-988f-d7fed2b65d87
+##ARMIES
 
 ###
+
+GET http://localhost:9080/simple-rpg/api/armies
+
+###
+
+# Get single army.
+
+GET http://localhost:9080/simple-rpg/api/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b
+###
+
 
 # Get all professions.
 

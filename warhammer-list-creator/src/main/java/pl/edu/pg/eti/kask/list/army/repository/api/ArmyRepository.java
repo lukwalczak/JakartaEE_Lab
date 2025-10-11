@@ -13,5 +13,6 @@ import java.util.UUID;
  * Repository for character entity. Repositories should be used in business layer (e.g.: in services).
  */
 public interface ArmyRepository extends Repository<Army, UUID> {
-
+    List<Army> findAll();
+    List<Army> findByUserId(UUID userId);
 }

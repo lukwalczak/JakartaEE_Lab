@@ -38,6 +38,11 @@ public class ArmyInMemoryRepository implements ArmyRepository {
     }
 
     @Override
+    public List<Army> findByUserId(UUID userId) {
+        return store.findByUserId(userId);
+    }
+
+    @Override
     public void create(Army entity) {
         store.createArmy(entity);
     }

@@ -33,6 +33,11 @@ public class ArmySimpleController implements ArmyController {
     }
 
     @Override
+    public GetArmiesResponse getArmies(UUID id) {
+        return factory.armiesToResponseFunction().apply(service.findAll(id));
+    }
+
+    @Override
     public void putArmies(UUID id, PutArmyRequest request) {
 
     }

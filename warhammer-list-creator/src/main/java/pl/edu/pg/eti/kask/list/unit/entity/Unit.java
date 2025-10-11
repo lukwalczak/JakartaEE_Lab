@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,7 +40,14 @@ public class Unit implements Serializable {
 
     private Integer save;
 
-    private List<Skill> skillList;
+    private List<Skill> skillList = new ArrayList<>();
+
+    public void addSkill(Skill skill) {
+        if (skillList == null) {
+            skillList = new ArrayList<>();
+        }
+        skillList.add(skill);
+    }
 
     /**
      * Creature's portrait. Images in database are stored as blobs (binary large objects).

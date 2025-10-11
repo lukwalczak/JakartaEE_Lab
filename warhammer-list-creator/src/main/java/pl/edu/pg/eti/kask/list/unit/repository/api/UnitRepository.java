@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * Repository for character entity. Repositories should be used in business layer (e.g.: in services).
  */
-public interface CharacterRepository extends Repository<Unit, UUID> {
+public interface UnitRepository extends Repository<Unit, UUID> {
 
     /**
      * Seeks for single user's character.

@@ -16,12 +16,12 @@ public class UpdateUnitWithRequestFunction implements BiFunction<Unit, PatchUnit
         return Unit.builder()
                 .id(entity.getId())
                 .name(request.getName())
-                .description(entity.getDescription())
-                .leadership(entity.getLeadership())
-                .movement(entity.getMovement())
-                .save(entity.getSave())
-                .toughness(entity.getToughness())
-                .wounds(entity.getWounds())
+                .description(request.getDescription())
+                .leadership(request.getLeadership())
+                .movement(request.getMovement())
+                .save(request.getSave())
+                .toughness(request.getToughness())
+                .wounds(request.getWounds())
                 .portrait(entity.getPortrait())
                 .build();
     }
