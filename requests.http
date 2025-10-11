@@ -84,9 +84,19 @@ DELETE http://localhost:9080/simple-rpg/api/units/3c6f1eb1-8069-44ab-988f-d7fed2
 ###
 
 
+
+
+
+
+
+
+
+
 ##ARMIES
 
 ###
+
+# Get all armies.
 
 GET http://localhost:9080/simple-rpg/api/armies
 
@@ -98,21 +108,25 @@ GET http://localhost:9080/simple-rpg/api/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f
 ###
 
 
-# Get all professions.
+# Get all user armies.
 
-GET http://localhost:9080/simple-rpg/api/professions
-
-###
-
-# Get all profession characters.
-
-GET http://localhost:9080/simple-rpg/api/professions/f5875513-bf7b-4ae1-b8a5-5b70a1b90e76/characters
+GET http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/armies
 
 ###
 
-# Get all profession characters. Not existing.
+# Create new army.
 
-GET http://localhost:9080/simple-rpg/api/professions/d8b50a43-ed45-4441-9bcb-5db7782b47f6/characters
+PUT http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+Content-Type: application/json
+
+{
+  "name": "Space Wolves",
+  "description": "Bloodclaw Legion"
+}
+
+###
+
+# USERS
 
 ###
 

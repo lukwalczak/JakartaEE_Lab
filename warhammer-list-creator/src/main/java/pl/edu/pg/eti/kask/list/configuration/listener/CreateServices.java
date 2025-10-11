@@ -32,7 +32,7 @@ public class CreateServices implements ServletContextListener {
 
         event.getServletContext().setAttribute("userService", new UserService(userRepository, new Pbkdf2PasswordHash()));
         event.getServletContext().setAttribute("unitService", new UnitService(unitRepository, userRepository));
-        event.getServletContext().setAttribute("armyService", new ArmyService(armyRepository, unitRepository));
+        event.getServletContext().setAttribute("armyService", new ArmyService(armyRepository, unitRepository, userRepository));
     }
 
 }

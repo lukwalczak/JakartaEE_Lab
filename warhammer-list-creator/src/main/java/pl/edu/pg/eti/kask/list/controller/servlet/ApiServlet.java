@@ -90,6 +90,10 @@ public class ApiServlet extends HttpServlet {
          */
         public static final Pattern USER_ARMIES = Pattern.compile("/users/(%s)/armies/?".formatted(UUID.pattern()));
 
+        public static final Pattern USER_ARMY =
+                Pattern.compile("/users/(?<userId>%s)/armies/(?<armyId>%s)/?"
+                        .formatted(UUID.pattern(), UUID.pattern()));
+
     }
 
     /**
@@ -169,10 +173,15 @@ public class ApiServlet extends HttpServlet {
                 UUID uuid = extractUuid(Patterns.UNIT_PORTRAIT, path);
                 unitController.putunitPortrait(uuid, request.getPart("portrait").getInputStream());
                 return;
-            } else if (path.matches(Patterns.USER_ARMIES.pattern())){
-                UUID userId = extractUuid(Patterns.USER_ARMIES, path);
-                UUID armyId = UUID.randomUUID();
-                armyController.putArmy(armyId, jsonb.fromJson(request.getReader(), PutArmyRequest.class));
+            } else if (path.matches(Patterns.USER_ARMY.pattern())){
+                Matcher m = Patterns.USER_ARMY.matcher(path);
+                if (!m.matches()) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
+                }
+                java.util.UUID userId = java.util.UUID.fromString(m.group("userId"));
+                java.util.UUID armyId = java.util.UUID.fromString(m.group("armyId"));
+                armyController.putArmy(armyId, jsonb.fromJson(request.getReader(), PutArmyRequest.class), userId);
                 response.addHeader("Location", createUrl(request, Paths.API, "armies", armyId.toString()));
                 return;
             }

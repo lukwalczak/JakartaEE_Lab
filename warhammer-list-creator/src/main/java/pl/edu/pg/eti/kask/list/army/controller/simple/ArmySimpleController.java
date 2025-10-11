@@ -48,6 +48,15 @@ public class ArmySimpleController implements ArmyController {
     }
 
     @Override
+    public void putArmy(UUID id, PutArmyRequest request, UUID userId) {
+        try {
+            service.create(factory.requestToArmy().apply(id, request), userId);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException(e);
+        }
+    }
+
+    @Override
     public void patchArmies(UUID id, PatchArmyRequest request) {
 
     }

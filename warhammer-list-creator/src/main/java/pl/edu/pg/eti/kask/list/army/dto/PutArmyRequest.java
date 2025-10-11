@@ -26,6 +26,4 @@ public class PutArmyRequest {
 
     private String description;
 
-    private UUID ownerId;
-
 }
