@@ -1,18 +1,18 @@
 package pl.edu.pg.eti.kask.list.component;
 
-import pl.edu.pg.eti.kask.list.character.dto.GetCharacterResponse;
-import pl.edu.pg.eti.kask.list.character.dto.GetCharactersResponse;
-import pl.edu.pg.eti.kask.list.character.dto.GetProfessionResponse;
-import pl.edu.pg.eti.kask.list.character.dto.GetProfessionsResponse;
-import pl.edu.pg.eti.kask.list.character.dto.PutCharacterRequest;
-import pl.edu.pg.eti.kask.list.character.dto.function.CharacterToResponseFunction;
-import pl.edu.pg.eti.kask.list.character.dto.function.CharactersToResponseFunction;
-import pl.edu.pg.eti.kask.list.character.dto.function.ProfessionToResponseFunction;
-import pl.edu.pg.eti.kask.list.character.dto.function.ProfessionsToResponseFunction;
-import pl.edu.pg.eti.kask.list.character.dto.function.RequestToCharacterFunction;
-import pl.edu.pg.eti.kask.list.character.dto.function.UpdateCharacterWithRequestFunction;
-import pl.edu.pg.eti.kask.list.character.entity.Character;
-import pl.edu.pg.eti.kask.list.character.entity.Profession;
+import pl.edu.pg.eti.kask.list.unit.dto.GetUnitResponse;
+import pl.edu.pg.eti.kask.list.unit.dto.GetUnitsResponse;
+import pl.edu.pg.eti.kask.list.unit.dto.GetProfessionResponse;
+import pl.edu.pg.eti.kask.list.unit.dto.GetProfessionsResponse;
+import pl.edu.pg.eti.kask.list.unit.dto.PutUnitRequest;
+import pl.edu.pg.eti.kask.list.unit.dto.function.CharacterToResponseFunction;
+import pl.edu.pg.eti.kask.list.unit.dto.function.CharactersToResponseFunction;
+import pl.edu.pg.eti.kask.list.unit.dto.function.ProfessionToResponseFunction;
+import pl.edu.pg.eti.kask.list.unit.dto.function.ProfessionsToResponseFunction;
+import pl.edu.pg.eti.kask.list.unit.dto.function.RequestToCharacterFunction;
+import pl.edu.pg.eti.kask.list.unit.dto.function.UpdateCharacterWithRequestFunction;
+import pl.edu.pg.eti.kask.list.unit.entity.Character;
+import pl.edu.pg.eti.kask.list.unit.entity.Profession;
 import pl.edu.pg.eti.kask.list.user.dto.GetUserResponse;
 import pl.edu.pg.eti.kask.list.user.dto.GetUsersResponse;
 import pl.edu.pg.eti.kask.list.user.dto.PutUserRequest;
@@ -32,7 +32,7 @@ import java.util.function.Function;
 public class DtoFunctionFactory {
 
     /**
-     * Returns a function to convert a single {@link Character} to {@link GetCharacterResponse}.
+     * Returns a function to convert a single {@link Character} to {@link GetUnitResponse}.
      *
      * @return CharacterToResponseFunction instance
      */
@@ -41,7 +41,7 @@ public class DtoFunctionFactory {
     }
 
     /**
-     * Returns a function to convert a list of {@link Character} to {@link GetCharactersResponse}.
+     * Returns a function to convert a list of {@link Character} to {@link GetUnitsResponse}.
      *
      * @return CharactersToResponseFunction instance
      */
@@ -68,7 +68,7 @@ public class DtoFunctionFactory {
     }
 
     /**
-     * Returns a function to convert a {@link PutCharacterRequest} to a {@link Character}.
+     * Returns a function to convert a {@link PutUnitRequest} to a {@link Character}.
      *
      * @return RequestToCharacterFunction instance
      */

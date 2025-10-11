@@ -1,8 +1,8 @@
 package pl.edu.pg.eti.kask.list.datastore.component;
 
 import lombok.extern.java.Log;
-import pl.edu.pg.eti.kask.list.character.entity.Character;
-import pl.edu.pg.eti.kask.list.character.entity.Profession;
+import pl.edu.pg.eti.kask.list.unit.entity.Character;
+import pl.edu.pg.eti.kask.list.unit.entity.Profession;
 import pl.edu.pg.eti.kask.list.serialization.component.CloningUtility;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 

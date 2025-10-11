@@ -8,10 +8,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import pl.edu.pg.eti.kask.list.character.controller.api.CharacterController;
-import pl.edu.pg.eti.kask.list.character.controller.api.ProfessionController;
-import pl.edu.pg.eti.kask.list.character.dto.PatchCharacterRequest;
-import pl.edu.pg.eti.kask.list.character.dto.PutCharacterRequest;
+import pl.edu.pg.eti.kask.list.unit.controller.api.UnitController;
+import pl.edu.pg.eti.kask.list.unit.controller.api.ProfessionController;
+import pl.edu.pg.eti.kask.list.unit.dto.PatchUnitRequest;
+import pl.edu.pg.eti.kask.list.unit.dto.PutUnitRequest;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -31,7 +31,7 @@ public class ApiServlet extends HttpServlet {
     /**
      * Controller for managing collections characters' representations.
      */
-    private CharacterController characterController;
+    private UnitController unitController;
 
     /**
      * Controller for managing collections professions' representations.
@@ -111,7 +111,7 @@ public class ApiServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        characterController = (CharacterController) getServletContext().getAttribute("characterController");
+        unitController = (UnitController) getServletContext().getAttribute("characterController");
         professionController = (ProfessionController) getServletContext().getAttribute("professionController");
     }
 
@@ -123,12 +123,12 @@ public class ApiServlet extends HttpServlet {
         if (Paths.API.equals(servletPath)) {
             if (path.matches(Patterns.CHARACTERS.pattern())) {
                 response.setContentType("application/json");
-                response.getWriter().write(jsonb.toJson(characterController.getCharacters()));
+                response.getWriter().write(jsonb.toJson(unitController.getUnits()));
                 return;
             } else if (path.matches(Patterns.CHARACTER.pattern())) {
                 response.setContentType("application/json");
                 UUID uuid = extractUuid(Patterns.CHARACTER, path);
-                response.getWriter().write(jsonb.toJson(characterController.getCharacter(uuid)));
+                response.getWriter().write(jsonb.toJson(unitController.getCharacter(uuid)));
                 return;
             } else if (path.matches(Patterns.PROFESSIONS.pattern())) {
                 response.setContentType("application/json");
@@ -137,17 +137,17 @@ public class ApiServlet extends HttpServlet {
             } else if (path.matches(Patterns.PROFESSION_CHARACTERS.pattern())) {
                 response.setContentType("application/json");
                 UUID uuid = extractUuid(Patterns.PROFESSION_CHARACTERS, path);
-                response.getWriter().write(jsonb.toJson(characterController.getProfessionCharacters(uuid)));
+                response.getWriter().write(jsonb.toJson(unitController.getProfessionCharacters(uuid)));
                 return;
             } else if (path.matches(Patterns.USER_CHARACTERS.pattern())) {
                 response.setContentType("application/json");
                 UUID uuid = extractUuid(Patterns.USER_CHARACTERS, path);
-                response.getWriter().write(jsonb.toJson(characterController.getUserCharacters(uuid)));
+                response.getWriter().write(jsonb.toJson(unitController.getUserCharacters(uuid)));
                 return;
             } else if (path.matches(Patterns.CHARACTER_PORTRAIT.pattern())) {
                 response.setContentType("image/png");//could be dynamic but atm we support only one format
                 UUID uuid = extractUuid(Patterns.CHARACTER_PORTRAIT, path);
-                byte[] portrait = characterController.getCharacterPortrait(uuid);
+                byte[] portrait = unitController.getCharacterPortrait(uuid);
                 response.setContentLength(portrait.length);
                 response.getOutputStream().write(portrait);
                 return;
@@ -162,12 +162,12 @@ public class ApiServlet extends HttpServlet {
         if (Paths.API.equals(servletPath)) {
             if (path.matches(Patterns.CHARACTER.pattern())) {
                 UUID uuid = extractUuid(Patterns.CHARACTER, path);
-                characterController.putCharacter(uuid, jsonb.fromJson(request.getReader(), PutCharacterRequest.class));
+                unitController.putCharacter(uuid, jsonb.fromJson(request.getReader(), PutUnitRequest.class));
                 response.addHeader("Location", createUrl(request, Paths.API, "characters", uuid.toString()));
                 return;
             } else if (path.matches(Patterns.CHARACTER_PORTRAIT.pattern())) {
                 UUID uuid = extractUuid(Patterns.CHARACTER_PORTRAIT, path);
-                characterController.putCharacterPortrait(uuid, request.getPart("portrait").getInputStream());
+                unitController.putCharacterPortrait(uuid, request.getPart("portrait").getInputStream());
                 return;
             }
         }
@@ -182,7 +182,7 @@ public class ApiServlet extends HttpServlet {
         if (Paths.API.equals(servletPath)) {
             if (path.matches(Patterns.CHARACTER.pattern())) {
                 UUID uuid = extractUuid(Patterns.CHARACTER, path);
-                characterController.deleteCharacter(uuid);
+                unitController.deleteCharacter(uuid);
                 return;
             }
         }
@@ -204,7 +204,7 @@ public class ApiServlet extends HttpServlet {
         if (Paths.API.equals(servletPath)) {
             if (path.matches(Patterns.CHARACTER.pattern())) {
                 UUID uuid = extractUuid(Patterns.CHARACTER, path);
-                characterController.patchCharacter(uuid, jsonb.fromJson(request.getReader(), PatchCharacterRequest.class));
+                unitController.patchCharacter(uuid, jsonb.fromJson(request.getReader(), PatchUnitRequest.class));
                 return;
             }
         }
