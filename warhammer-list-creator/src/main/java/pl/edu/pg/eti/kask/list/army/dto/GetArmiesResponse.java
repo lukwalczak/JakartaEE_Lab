@@ -1,14 +1,6 @@
-package pl.edu.pg.eti.kask.list.unit.dto;
+package pl.edu.pg.eti.kask.list.army.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Singular;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
-public class GetUnitsResponse {
+public class GetArmiesResponse {
 
     /**
      * Represents single character in list.
@@ -36,7 +28,7 @@ public class GetUnitsResponse {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     @EqualsAndHashCode
-    public static class Unit {
+    public static class Army {
 
         /**
          * Unique id identifying character.
@@ -54,6 +46,6 @@ public class GetUnitsResponse {
      * Name of the selected characters.
      */
     @Singular
-    private List<Unit> units;
+    private List<Army> armies;
 
 }

@@ -9,61 +9,55 @@ import java.io.InputStream;
 import java.util.UUID;
 
 /**
- * Controller for managing collections characters' representations.
+ * Controller for managing collections units' representations.
  */
 public interface UnitController {
 
     /**
-     * @return all characters representation
+     * @return all units representation
      */
     GetUnitsResponse getUnits();
 
     /**
-     * @param id profession's id
-     * @return characters representation
-     */
-    GetUnitsResponse getProfessionCharacters(UUID id);
-
-    /**
      * @param id user's id
-     * @return characters representation
+     * @return units representation
      */
-    GetUnitsResponse getUserCharacters(UUID id);
+    GetUnitsResponse getUserUnits(UUID id);
 
     /**
-     * @param uuid character's id
-     * @return character representation
+     * @param uuid unit's id
+     * @return unit representation
      */
-    GetUnitResponse getCharacter(UUID uuid);
+    GetUnitResponse getUnit(UUID uuid);
 
     /**
-     * @param id      character's id
-     * @param request new character representation
+     * @param id      unit's id
+     * @param request new unit representation
      */
-    void putCharacter(UUID id, PutUnitRequest request);
+    void putunit(UUID id, PutUnitRequest request);
 
     /**
-     * @param id      character's id
-     * @param request character update representation
+     * @param id      unit's id
+     * @param request unit update representation
      */
-    void patchCharacter(UUID id, PatchUnitRequest request);
+    void patchunit(UUID id, PatchUnitRequest request);
 
     /**
-     * @param id character's id
+     * @param id unit's id
      */
-    void deleteCharacter(UUID id);
+    void deleteunit(UUID id);
 
     /**
-     * @param id character's id
-     * @return character's portrait
+     * @param id unit's id
+     * @return unit's portrait
      */
-    byte[] getCharacterPortrait(UUID id);
+    byte[] getunitPortrait(UUID id);
 
     /**
-     * @param id       character's id
-     * @param portrait character's new avatar
+     * @param id       unit's id
+     * @param portrait unit's new avatar
      */
-    void putCharacterPortrait(UUID id, InputStream portrait);
+    void putunitPortrait(UUID id, InputStream portrait);
 
 }
 

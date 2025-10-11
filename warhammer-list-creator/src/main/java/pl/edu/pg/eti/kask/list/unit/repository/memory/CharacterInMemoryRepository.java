@@ -1,7 +1,6 @@
 package pl.edu.pg.eti.kask.list.unit.repository.memory;
 
-import pl.edu.pg.eti.kask.list.unit.entity.Character;
-import pl.edu.pg.eti.kask.list.unit.entity.Profession;
+import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.repository.api.CharacterRepository;
 import pl.edu.pg.eti.kask.list.datastore.component.DataStore;
 import pl.edu.pg.eti.kask.list.user.entity.User;
@@ -29,52 +28,46 @@ public class CharacterInMemoryRepository implements CharacterRepository {
     }
 
     @Override
-    public Optional<Character> find(UUID id) {
-        return store.findAllCharacters().stream()
+    public Optional<Unit> find(UUID id) {
+        return store.findAllUnits().stream()
                 .filter(character -> character.getId().equals(id))
                 .findFirst();
     }
 
     @Override
-    public List<Character> findAll() {
-        return store.findAllCharacters();
+    public List<Unit> findAll() {
+        return store.findAllUnits();
     }
 
     @Override
-    public void create(Character entity) {
-        store.createCharacter(entity);
+    public void create(Unit entity) {
+        store.createUnit(entity);
     }
 
     @Override
-    public void delete(Character entity) {
-        store.deleteCharacter(entity.getId());
+    public void delete(Unit entity) {
+        store.deleteUnit(entity.getId());
     }
 
     @Override
-    public void update(Character entity) {
-        store.updateCharacter(entity);
+    public void update(Unit entity) {
+        store.updateUnit(entity);
     }
 
     @Override
-    public Optional<Character> findByIdAndUser(UUID id, User user) {
-        return store.findAllCharacters().stream()
-                .filter(character -> character.getUser().equals(user))
+    public Optional<Unit> findByIdAndUser(UUID id, User user) {
+        return store.findAllUnits().stream()
+                .filter(character -> character.getName().equals(user))
                 .filter(character -> character.getId().equals(id))
                 .findFirst();
     }
 
     @Override
-    public List<Character> findAllByUser(User user) {
-        return store.findAllCharacters().stream()
-                .filter(character -> user.equals(character.getUser()))
+    public List<Unit> findAllByUser(User user) {
+        return store.findAllUnits().stream()
+                .filter(character -> user.equals(character.getName()))
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Character> findAllByProfession(Profession profession) {
-        return store.findAllCharacters().stream()
-                .filter(character -> profession.equals(character.getProfession()))
-                .collect(Collectors.toList());
-    }
 
 }

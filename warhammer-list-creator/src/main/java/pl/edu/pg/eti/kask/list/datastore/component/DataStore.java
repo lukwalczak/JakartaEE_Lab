@@ -1,8 +1,8 @@
 package pl.edu.pg.eti.kask.list.datastore.component;
 
 import lombok.extern.java.Log;
-import pl.edu.pg.eti.kask.list.unit.entity.Character;
-import pl.edu.pg.eti.kask.list.unit.entity.Profession;
+import pl.edu.pg.eti.kask.list.army.entity.Army;
+import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.serialization.component.CloningUtility;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 
@@ -23,19 +23,16 @@ import java.util.stream.Collectors;
 public class DataStore {
 
     /**
-     * Set of all available professions.
-     */
-    private final Set<Profession> professions = new HashSet<>();
-
-    /**
      * Set of all characters.
      */
-    private final Set<Character> characters = new HashSet<>();
+    private final Set<Unit> units = new HashSet<>();
 
     /**
      * Set of all users.
      */
     private final Set<User> users = new HashSet<>();
+
+    private final Set<Army> armies = new HashSet<>();
 
     /**
      * Component used for creating deep copies.
@@ -49,37 +46,14 @@ public class DataStore {
         this.cloningUtility = cloningUtility;
     }
 
-    /**
-     * Seeks for all professions.
-     *
-     * @return list (can be empty) of all professions
-     */
-    public synchronized List<Profession> findAllProfessions() {
-        return professions.stream()
-                .map(cloningUtility::clone)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Stores new profession.
-     *
-     * @param value new profession to be stored
-     * @throws IllegalArgumentException if profession with provided id already exists
-     */
-    public synchronized void createProfession(Profession value) throws IllegalArgumentException {
-        if (professions.stream().anyMatch(profession -> profession.getId().equals(value.getId()))) {
-            throw new IllegalArgumentException("The profession id \"%s\" is not unique".formatted(value.getId()));
-        }
-        professions.add(cloningUtility.clone(value));
-    }
 
     /**
      * Seeks for all characters.
      *
      * @return list (can be empty) of all characters
      */
-    public synchronized List<Character> findAllCharacters() {
-        return characters.stream()
+    public synchronized List<Unit> findAllUnits() {
+        return units.stream()
                 .map(cloningUtility::clone)
                 .collect(Collectors.toList());
     }
@@ -89,14 +63,14 @@ public class DataStore {
      *
      * @param value new character to be stored
      * @throws IllegalArgumentException if character with provided id already exists or when {@link User} or
-     *                                  {@link Profession} with provided uuid does not exist
      */
-    public synchronized void createCharacter(Character value) throws IllegalArgumentException {
-        if (characters.stream().anyMatch(character -> character.getId().equals(value.getId()))) {
+    public synchronized void createUnit(Unit value) throws IllegalArgumentException {
+        if (units.stream().anyMatch(character -> character.getId().equals(value.getId()))) {
             throw new IllegalArgumentException("The character id \"%s\" is not unique".formatted(value.getId()));
         }
-        Character entity = cloneWithRelationships(value);
-        characters.add(entity);
+//        Unit entity = cloneWithRelationships(value);
+        Unit entity = cloningUtility.clone(value);
+        units.add(entity);
     }
 
     /**
@@ -104,12 +78,12 @@ public class DataStore {
      *
      * @param value character to be updated
      * @throws IllegalArgumentException if character with the same id does not exist or when {@link User} or
-     *                                  {@link Profession} with provided uuid does not exist
      */
-    public synchronized void updateCharacter(Character value) throws IllegalArgumentException {
-        Character entity = cloneWithRelationships(value);
-        if (characters.removeIf(character -> character.getId().equals(value.getId()))) {
-            characters.add(entity);
+    public synchronized void updateUnit(Unit value) throws IllegalArgumentException {
+//        Unit entity = cloneWithRelationships(value);
+        Unit entity = cloningUtility.clone(value);
+        if (units.removeIf(character -> character.getId().equals(value.getId()))) {
+            units.add(entity);
         } else {
             throw new IllegalArgumentException("The character with id \"%s\" does not exist".formatted(value.getId()));
         }
@@ -121,8 +95,8 @@ public class DataStore {
      * @param id id of character to be deleted
      * @throws IllegalArgumentException if character with provided id does not exist
      */
-    public synchronized void deleteCharacter(UUID id) throws IllegalArgumentException {
-        if (!characters.removeIf(character -> character.getId().equals(id))) {
+    public synchronized void deleteUnit(UUID id) throws IllegalArgumentException {
+        if (!units.removeIf(character -> character.getId().equals(id))) {
             throw new IllegalArgumentException("The character with id \"%s\" does not exist".formatted(id));
         }
     }
@@ -165,6 +139,33 @@ public class DataStore {
         }
     }
 
+    public synchronized void createArmy(Army value) throws IllegalArgumentException {
+        if(armies.stream().anyMatch(army -> army.getId().equals(value.getId()))) {
+            throw new IllegalArgumentException("The army id \"%s\" is not unique".formatted(value.getId()));
+        }
+        armies.add(cloningUtility.clone(value));
+    }
+
+    public synchronized void updateArmy(Army value) throws IllegalArgumentException {
+        if (armies.removeIf(army -> army.getId().equals(value.getId()))) {
+            armies.add(cloningUtility.clone(value));
+        } else  {
+            throw new IllegalArgumentException("The army with id \"%s\" does not exist".formatted(value.getId()));
+        }
+    }
+
+    public synchronized void deleteArmy(UUID id) throws IllegalArgumentException {
+        if (!armies.removeIf(army -> army.getId().equals(id))) {
+            throw new IllegalArgumentException("The army with id \"%s\" does not exist".formatted(id));
+        }
+    }
+
+    public synchronized List<Army> findAllArmies() {
+        return armies.stream()
+                .map(cloningUtility::clone)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Clones existing character and updates relationships for values in storage
      *
@@ -172,24 +173,24 @@ public class DataStore {
      * @return cloned value with updated relationships
      * @throws IllegalArgumentException when {@link User} or {@link Profession} with provided uuid does not exist
      */
-    private Character cloneWithRelationships(Character value) {
-        Character entity = cloningUtility.clone(value);
-
-        if (entity.getUser() != null) {
-            entity.setUser(users.stream()
-                    .filter(user -> user.getId().equals(value.getUser().getId()))
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("No user with id \"%s\".".formatted(value.getUser().getId()))));
-        }
-
-        if (entity.getProfession() != null) {
-            entity.setProfession(professions.stream()
-                    .filter(profession -> profession.getId().equals(value.getProfession().getId()))
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("No profession with id \"%s\".".formatted(value.getProfession().getId()))));
-        }
-
-        return entity;
-    }
+//    private Unit cloneWithRelationships(Unit value) {
+//        Unit entity = cloningUtility.clone(value);
+//
+//        if (entity.getUser() != null) {
+//            entity.setUser(users.stream()
+//                    .filter(user -> user.getId().equals(value.getUser().getId()))
+//                    .findFirst()
+//                    .orElseThrow(() -> new IllegalArgumentException("No user with id \"%s\".".formatted(value.getUser().getId()))));
+//        }
+//
+//        if (entity.getProfession() != null) {
+//            entity.setProfession(professions.stream()
+//                    .filter(profession -> profession.getId().equals(value.getProfession().getId()))
+//                    .findFirst()
+//                    .orElseThrow(() -> new IllegalArgumentException("No profession with id \"%s\".".formatted(value.getProfession().getId()))));
+//        }
+//
+//        return entity;
+//    }
 
 }

@@ -5,8 +5,8 @@ import pl.edu.pg.eti.kask.list.unit.dto.GetUnitResponse;
 import pl.edu.pg.eti.kask.list.unit.dto.GetUnitsResponse;
 import pl.edu.pg.eti.kask.list.unit.dto.PatchUnitRequest;
 import pl.edu.pg.eti.kask.list.unit.dto.PutUnitRequest;
-import pl.edu.pg.eti.kask.list.unit.entity.Character;
-import pl.edu.pg.eti.kask.list.unit.service.CharacterService;
+import pl.edu.pg.eti.kask.list.unit.entity.Unit;
+import pl.edu.pg.eti.kask.list.unit.service.UnitService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
 import pl.edu.pg.eti.kask.list.controller.servlet.exception.BadRequestException;
 import pl.edu.pg.eti.kask.list.controller.servlet.exception.NotFoundException;
@@ -20,9 +20,9 @@ import java.util.UUID;
 public class UnitSimpleController implements UnitController {
 
     /**
-     * Character service.
+     * unit service.
      */
-    private final CharacterService service;
+    private final UnitService service;
 
     /**
      * Factory producing functions for conversion between DTO and entities.
@@ -30,53 +30,47 @@ public class UnitSimpleController implements UnitController {
     private final DtoFunctionFactory factory;
 
     /**
-     * @param service character service
+     * @param service unit service
      * @param factory factory producing functions for conversion between DTO and entities
      */
-    public UnitSimpleController(CharacterService service, DtoFunctionFactory factory) {
+    public UnitSimpleController(UnitService service, DtoFunctionFactory factory) {
         this.service = service;
         this.factory = factory;
     }
 
     @Override
     public GetUnitsResponse getUnits() {
-        return factory.charactersToResponse().apply(service.findAll());
+        return factory.unitsToResponse().apply(service.findAll());
     }
 
-    @Override
-    public GetUnitsResponse getProfessionCharacters(UUID id) {
-        return service.findAllByProfession(id)
-                .map(factory.charactersToResponse())
-                .orElseThrow(NotFoundException::new);
-    }
 
     @Override
-    public GetUnitsResponse getUserCharacters(UUID id) {
+    public GetUnitsResponse getUserUnits(UUID id) {
         return service.findAllByUser(id)
-                .map(factory.charactersToResponse())
+                .map(factory.unitsToResponse())
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public GetUnitResponse getCharacter(UUID uuid) {
+    public GetUnitResponse getUnit(UUID uuid) {
         return service.find(uuid)
-                .map(factory.characterToResponse())
+                .map(factory.unitToResponse())
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public void putCharacter(UUID id, PutUnitRequest request) {
+    public void putunit(UUID id, PutUnitRequest request) {
         try {
-            service.create(factory.requestToCharacter().apply(id, request));
+            service.create(factory.requestToUnit().apply(id, request));
         } catch (IllegalArgumentException ex) {
             throw new BadRequestException(ex);
         }
     }
 
     @Override
-    public void patchCharacter(UUID id, PatchUnitRequest request) {
+    public void patchunit(UUID id, PatchUnitRequest request) {
         service.find(id).ifPresentOrElse(
-                entity -> service.update(factory.updateCharacter().apply(entity, request)),
+                entity -> service.update(factory.updateUnit().apply(entity, request)),
                 () -> {
                     throw new NotFoundException();
                 }
@@ -84,7 +78,7 @@ public class UnitSimpleController implements UnitController {
     }
 
     @Override
-    public void deleteCharacter(UUID id) {
+    public void deleteunit(UUID id) {
         service.find(id).ifPresentOrElse(
                 entity -> service.delete(id),
                 () -> {
@@ -94,14 +88,14 @@ public class UnitSimpleController implements UnitController {
     }
 
     @Override
-    public byte[] getCharacterPortrait(UUID id) {
+    public byte[] getunitPortrait(UUID id) {
         return service.find(id)
-                .map(Character::getPortrait)
+                .map(Unit::getPortrait)
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public void putCharacterPortrait(UUID id, InputStream portrait) {
+    public void putunitPortrait(UUID id, InputStream portrait) {
         service.find(id).ifPresentOrElse(
                 entity -> service.updatePortrait(id, portrait),
                 () -> {

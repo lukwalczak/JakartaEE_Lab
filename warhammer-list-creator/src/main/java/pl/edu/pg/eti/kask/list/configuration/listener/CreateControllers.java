@@ -4,9 +4,7 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import pl.edu.pg.eti.kask.list.unit.controller.simple.UnitSimpleController;
-import pl.edu.pg.eti.kask.list.unit.controller.simple.ProfessionSimpleController;
-import pl.edu.pg.eti.kask.list.unit.service.CharacterService;
-import pl.edu.pg.eti.kask.list.unit.service.ProfessionService;
+import pl.edu.pg.eti.kask.list.unit.service.UnitService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
 
 /**
@@ -18,17 +16,12 @@ public class CreateControllers implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        CharacterService characterService = (CharacterService) event.getServletContext().getAttribute("characterService");
-        ProfessionService professionService = (ProfessionService) event.getServletContext().getAttribute("professionService");
+        UnitService unitService = (UnitService) event.getServletContext().getAttribute("characterService");
 
         event.getServletContext().setAttribute("characterController", new UnitSimpleController(
-                characterService,
+                unitService,
                 new DtoFunctionFactory()
         ));
 
-        event.getServletContext().setAttribute("professionController", new ProfessionSimpleController(
-                professionService,
-                new DtoFunctionFactory()
-        ));
     }
 }

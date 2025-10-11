@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import pl.edu.pg.eti.kask.list.unit.controller.api.UnitController;
-import pl.edu.pg.eti.kask.list.unit.controller.api.ProfessionController;
 import pl.edu.pg.eti.kask.list.unit.dto.PatchUnitRequest;
 import pl.edu.pg.eti.kask.list.unit.dto.PutUnitRequest;
 
@@ -29,14 +28,9 @@ import java.util.regex.Pattern;
 public class ApiServlet extends HttpServlet {
 
     /**
-     * Controller for managing collections characters' representations.
+     * Controller for managing collections units' representations.
      */
     private UnitController unitController;
-
-    /**
-     * Controller for managing collections professions' representations.
-     */
-    private ProfessionController professionController;
 
     /**
      * Definition of paths supported by this servlet. Separate inner class provides composition for static fields.
@@ -61,19 +55,19 @@ public class ApiServlet extends HttpServlet {
         private static final Pattern UUID = Pattern.compile("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}");
 
         /**
-         * All characters.
+         * All units.
          */
-        public static final Pattern CHARACTERS = Pattern.compile("/characters/?");
+        public static final Pattern unitS = Pattern.compile("/units/?");
 
         /**
-         * Single character.
+         * Single unit.
          */
-        public static final Pattern CHARACTER = Pattern.compile("/characters/(%s)".formatted(UUID.pattern()));
+        public static final Pattern unit = Pattern.compile("/units/(%s)".formatted(UUID.pattern()));
 
         /**
-         * Single character's portrait.
+         * Single unit's portrait.
          */
-        public static final Pattern CHARACTER_PORTRAIT = Pattern.compile("/characters/(%s)/portrait".formatted(UUID.pattern()));
+        public static final Pattern unit_PORTRAIT = Pattern.compile("/units/(%s)/portrait".formatted(UUID.pattern()));
 
         /**
          * All professions.
@@ -81,14 +75,14 @@ public class ApiServlet extends HttpServlet {
         public static final Pattern PROFESSIONS = Pattern.compile("/professions/?");
 
         /**
-         * All characters of single profession.
+         * All units of single profession.
          */
-        public static final Pattern PROFESSION_CHARACTERS = Pattern.compile("/professions/(%s)/characters/?".formatted(UUID.pattern()));
+        public static final Pattern PROFESSION_unitS = Pattern.compile("/professions/(%s)/units/?".formatted(UUID.pattern()));
 
         /**
-         * All characters of single user.
+         * All units of single user.
          */
-        public static final Pattern USER_CHARACTERS = Pattern.compile("/users/(%s)/characters/?".formatted(UUID.pattern()));
+        public static final Pattern USER_unitS = Pattern.compile("/users/(%s)/units/?".formatted(UUID.pattern()));
 
     }
 
@@ -111,8 +105,7 @@ public class ApiServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        unitController = (UnitController) getServletContext().getAttribute("characterController");
-        professionController = (ProfessionController) getServletContext().getAttribute("professionController");
+        unitController = (UnitController) getServletContext().getAttribute("unitController");
     }
 
     @SuppressWarnings("RedundantThrows")
@@ -121,33 +114,24 @@ public class ApiServlet extends HttpServlet {
         String path = parseRequestPath(request);
         String servletPath = request.getServletPath();
         if (Paths.API.equals(servletPath)) {
-            if (path.matches(Patterns.CHARACTERS.pattern())) {
+            if (path.matches(Patterns.unitS.pattern())) {
                 response.setContentType("application/json");
                 response.getWriter().write(jsonb.toJson(unitController.getUnits()));
                 return;
-            } else if (path.matches(Patterns.CHARACTER.pattern())) {
+            } else if (path.matches(Patterns.unit.pattern())) {
                 response.setContentType("application/json");
-                UUID uuid = extractUuid(Patterns.CHARACTER, path);
-                response.getWriter().write(jsonb.toJson(unitController.getCharacter(uuid)));
+                UUID uuid = extractUuid(Patterns.unit, path);
+                response.getWriter().write(jsonb.toJson(unitController.getUnit(uuid)));
                 return;
-            } else if (path.matches(Patterns.PROFESSIONS.pattern())) {
+            } else if (path.matches(Patterns.USER_unitS.pattern())) {
                 response.setContentType("application/json");
-                response.getWriter().write(jsonb.toJson(professionController.getProfessions()));
+                UUID uuid = extractUuid(Patterns.USER_unitS, path);
+                response.getWriter().write(jsonb.toJson(unitController.getUserUnits(uuid)));
                 return;
-            } else if (path.matches(Patterns.PROFESSION_CHARACTERS.pattern())) {
-                response.setContentType("application/json");
-                UUID uuid = extractUuid(Patterns.PROFESSION_CHARACTERS, path);
-                response.getWriter().write(jsonb.toJson(unitController.getProfessionCharacters(uuid)));
-                return;
-            } else if (path.matches(Patterns.USER_CHARACTERS.pattern())) {
-                response.setContentType("application/json");
-                UUID uuid = extractUuid(Patterns.USER_CHARACTERS, path);
-                response.getWriter().write(jsonb.toJson(unitController.getUserCharacters(uuid)));
-                return;
-            } else if (path.matches(Patterns.CHARACTER_PORTRAIT.pattern())) {
+            } else if (path.matches(Patterns.unit_PORTRAIT.pattern())) {
                 response.setContentType("image/png");//could be dynamic but atm we support only one format
-                UUID uuid = extractUuid(Patterns.CHARACTER_PORTRAIT, path);
-                byte[] portrait = unitController.getCharacterPortrait(uuid);
+                UUID uuid = extractUuid(Patterns.unit_PORTRAIT, path);
+                byte[] portrait = unitController.getunitPortrait(uuid);
                 response.setContentLength(portrait.length);
                 response.getOutputStream().write(portrait);
                 return;
@@ -160,14 +144,14 @@ public class ApiServlet extends HttpServlet {
         String path = parseRequestPath(request);
         String servletPath = request.getServletPath();
         if (Paths.API.equals(servletPath)) {
-            if (path.matches(Patterns.CHARACTER.pattern())) {
-                UUID uuid = extractUuid(Patterns.CHARACTER, path);
-                unitController.putCharacter(uuid, jsonb.fromJson(request.getReader(), PutUnitRequest.class));
-                response.addHeader("Location", createUrl(request, Paths.API, "characters", uuid.toString()));
+            if (path.matches(Patterns.unit.pattern())) {
+                UUID uuid = extractUuid(Patterns.unit, path);
+                unitController.putunit(uuid, jsonb.fromJson(request.getReader(), PutUnitRequest.class));
+                response.addHeader("Location", createUrl(request, Paths.API, "units", uuid.toString()));
                 return;
-            } else if (path.matches(Patterns.CHARACTER_PORTRAIT.pattern())) {
-                UUID uuid = extractUuid(Patterns.CHARACTER_PORTRAIT, path);
-                unitController.putCharacterPortrait(uuid, request.getPart("portrait").getInputStream());
+            } else if (path.matches(Patterns.unit_PORTRAIT.pattern())) {
+                UUID uuid = extractUuid(Patterns.unit_PORTRAIT, path);
+                unitController.putunitPortrait(uuid, request.getPart("portrait").getInputStream());
                 return;
             }
         }
@@ -180,9 +164,9 @@ public class ApiServlet extends HttpServlet {
         String path = parseRequestPath(request);
         String servletPath = request.getServletPath();
         if (Paths.API.equals(servletPath)) {
-            if (path.matches(Patterns.CHARACTER.pattern())) {
-                UUID uuid = extractUuid(Patterns.CHARACTER, path);
-                unitController.deleteCharacter(uuid);
+            if (path.matches(Patterns.unit.pattern())) {
+                UUID uuid = extractUuid(Patterns.unit, path);
+                unitController.deleteunit(uuid);
                 return;
             }
         }
@@ -202,9 +186,9 @@ public class ApiServlet extends HttpServlet {
         String path = parseRequestPath(request);
         String servletPath = request.getServletPath();
         if (Paths.API.equals(servletPath)) {
-            if (path.matches(Patterns.CHARACTER.pattern())) {
-                UUID uuid = extractUuid(Patterns.CHARACTER, path);
-                unitController.patchCharacter(uuid, jsonb.fromJson(request.getReader(), PatchUnitRequest.class));
+            if (path.matches(Patterns.unit.pattern())) {
+                UUID uuid = extractUuid(Patterns.unit, path);
+                unitController.patchunit(uuid, jsonb.fromJson(request.getReader(), PatchUnitRequest.class));
                 return;
             }
         }
@@ -240,7 +224,7 @@ public class ApiServlet extends HttpServlet {
 
     /**
      * Creates URL using host, port and context root from servlet request and any number of path elements. If any of
-     * path elements starts or ends with '/' character, that character is removed.
+     * path elements starts or ends with '/' unit, that unit is removed.
      *
      * @param request servlet request
      * @param paths   any (can be none) number of path elements

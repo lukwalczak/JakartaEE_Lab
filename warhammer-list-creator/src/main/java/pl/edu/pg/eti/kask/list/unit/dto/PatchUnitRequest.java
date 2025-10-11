@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.UUID;
+
 /**
  * PATCH character request. Contains all fields that can be updated by the user. How character is described is defined
  * in {@link GetUnitsResponse.Character} and
@@ -23,19 +25,18 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class PatchUnitRequest {
 
-    /**
-     * Character's name.
-     */
     private String name;
 
-    /**
-     * Character's background story.
-     */
-    private String background;
+    private String description;
 
-    /**
-     * Character's name.
-     */
-    private Integer age;
+    private Integer movement;
+
+    private Integer toughness;
+
+    private Integer wounds;
+
+    private Integer leadership;
+
+    private Integer save;
 
 }

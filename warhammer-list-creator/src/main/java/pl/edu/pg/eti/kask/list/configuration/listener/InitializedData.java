@@ -4,11 +4,9 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import lombok.SneakyThrows;
-import pl.edu.pg.eti.kask.list.unit.entity.Character;
-import pl.edu.pg.eti.kask.list.unit.entity.Profession;
+import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.entity.Skill;
-import pl.edu.pg.eti.kask.list.unit.service.CharacterService;
-import pl.edu.pg.eti.kask.list.unit.service.ProfessionService;
+import pl.edu.pg.eti.kask.list.unit.service.UnitService;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
 import pl.edu.pg.eti.kask.list.user.service.UserService;
@@ -30,7 +28,7 @@ public class InitializedData implements ServletContextListener {
     /**
      * Character service.
      */
-    private CharacterService characterService;
+    private UnitService unitService;
 
     /**
      * User service.
@@ -40,13 +38,11 @@ public class InitializedData implements ServletContextListener {
     /**
      * Profession service.
      */
-    private ProfessionService professionService;
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        characterService = (CharacterService) event.getServletContext().getAttribute("characterService");
+        unitService = (UnitService) event.getServletContext().getAttribute("characterService");
         userService = (UserService) event.getServletContext().getAttribute("userService");
-        professionService = (ProfessionService) event.getServletContext().getAttribute("professionService");
         init();
     }
 
@@ -118,107 +114,22 @@ public class InitializedData implements ServletContextListener {
                 .description("Attacks an enemy with heavy attack.")
                 .build();
 
-        Profession bard = Profession.builder()
-                .id(UUID.fromString("f5875513-bf7b-4ae1-b8a5-5b70a1b90e76"))
-                .name("Bard")
-                .skill(1, attack)
-                .skill(2, charm)
-                .build();
-
-        Profession cleric = Profession.builder()
-                .id(UUID.fromString("5d1da2ae-6a14-4b6d-8b4f-d117867118d4"))
-                .name("Cleric")
-                .skill(1, attack)
-                .skill(2, heal)
-                .build();
-
-        Profession warrior = Profession.builder()
-                .id(UUID.fromString("2d9b1e8c-67c5-4188-a911-5f064a63d8cd"))
-                .name("Warrior")
-                .skill(1, attack)
-                .skill(2, heavyAttack)
-                .build();
-
-        Profession rogue = Profession.builder()
-                .id(UUID.randomUUID())
-                .name("Rogue")
-                .skill(1, attack)
-                .skill(2, backStab)
-                .build();
-
-        professionService.create(bard);
-        professionService.create(cleric);
-        professionService.create(warrior);
-        professionService.create(rogue);
-
-        Character calvian = Character.builder()
+        Unit Intercessor = Unit.builder()
                 .id(UUID.fromString("525d3e7b-bb1f-4c13-bf17-926d1a12e4c0"))
-                .name("Calvian")
-                .age(18)
-                .background("A young bard with some infernal roots.")
-                .experience(0)
-                .level(1)
-                .profession(bard)
-                .charisma(16)
-                .constitution(12)
-                .strength(8)
-                .health(2 * 12)
+                .name("Intercessor")
+                .movement(1)
+                .save(1)
+                .leadership(1)
+                .toughness(3)
+                .wounds(3)
+                .description("Intercessor is the wound.")
                 .portrait(getResourceAsByteArray("../avatar/calvian.png"))//package relative path
-                .user(kevin)
                 .build();
 
-        Character uhlbrecht = Character.builder()
-                .id(UUID.fromString("cc0b0577-bb6f-45b7-81d6-3db88e6ac19f"))
-                .name("Uhlbrecht")
-                .age(37)
-                .background("Quite experienced half-orc warrior.")
-                .experience(0)
-                .level(1)
-                .profession(warrior)
-                .charisma(8)
-                .constitution(10)
-                .strength(18)
-                .health(2 * 10)
-                .portrait(getResourceAsByteArray("../avatar/uhlbrecht.png"))//package relative path
-                .user(kevin)
-                .build();
+        Intercessor.getSkillList().add(heavyAttack);
 
-        Character eloise = Character.builder()
-                .id(UUID.fromString("f08ef7e3-7f2a-4378-b1fb-2922d730c70d"))
-                .name("Eloise")
-                .age(32)
-                .background("Human cleric.")
-                .experience(0)
-                .level(1)
-                .profession(cleric)
-                .charisma(8)
-                .constitution(12)
-                .strength(14)
-                .health(2 * 12)
-                .portrait(getResourceAsByteArray("../avatar/eloise.png"))//package relative path
-                .user(alice)
-                .build();
+        unitService.create(Intercessor);
 
-        Character zereni = Character.builder()
-                .id(UUID.fromString("ff327e8a-77c0-4f9b-90a2-89e16895d1e1"))
-                .name("Zereni")
-                .age(20)
-                .background("Half elf rogue.")
-                .experience(0)
-                .level(1)
-                .profession(rogue)
-                .charisma(14)
-                .constitution(12)
-                .strength(10)
-                .health(2 * 12)
-                .portrait(getResourceAsByteArray("../avatar/zereni.png"))//package relative path
-                .user(alice)
-                .build();
-
-        characterService.create(calvian);
-        characterService.create(uhlbrecht);
-        characterService.create(eloise);
-        characterService.create(zereni);
     }
 
     /**

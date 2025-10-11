@@ -25,44 +25,20 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class PutUnitRequest {
 
-    /**
-     * Name of the character.
-     */
+    private UUID id;
+
     private String name;
 
-    /**
-     * Character's background story.
-     */
-    private String background;
+    private String description;
 
-    /**
-     * Character's age.
-     */
-    private Integer age;
+    private Integer movement;
 
-    /**
-     * Character's strength.
-     */
-    private Integer strength;
+    private Integer toughness;
 
-    /**
-     * Character's constitution.
-     */
-    private Integer constitution;
+    private Integer wounds;
 
-    /**
-     * Character's charisma.
-     */
-    private Integer charisma;
+    private Integer leadership;
 
-    /**
-     * Character's actual health.
-     */
-    private Integer health;
-
-    /**
-     * Identifier of the character's profession.
-     */
-    private UUID profession;
+    private Integer save;
 
 }

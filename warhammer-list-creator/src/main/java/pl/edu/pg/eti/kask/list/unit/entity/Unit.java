@@ -1,30 +1,27 @@
-package pl.edu.pg.eti.kask.list.unit.dto;
+package pl.edu.pg.eti.kask.list.unit.entity;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import pl.edu.pg.eti.kask.list.unit.entity.Skill;
+import lombok.experimental.SuperBuilder;
+import pl.edu.pg.eti.kask.list.user.entity.User;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * GET character response. It contains all field that can be presented (but not necessarily changed) to the used. How
- * character is described is defined in {@link GetUnitsResponse.Character}
- */
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString
-@EqualsAndHashCode
-public class GetUnitResponse {
+@ToString(callSuper = true)
+@EqualsAndHashCode()
+public class Unit implements Serializable {
 
     private UUID id;
 
@@ -42,5 +39,13 @@ public class GetUnitResponse {
 
     private Integer save;
 
+    private List<Skill> skillList;
+
+    /**
+     * Creature's portrait. Images in database are stored as blobs (binary large objects).
+     */
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private byte[] portrait;
 
 }

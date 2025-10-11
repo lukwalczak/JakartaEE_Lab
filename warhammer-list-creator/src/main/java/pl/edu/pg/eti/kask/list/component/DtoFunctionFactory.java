@@ -1,18 +1,17 @@
 package pl.edu.pg.eti.kask.list.component;
 
+import pl.edu.pg.eti.kask.list.army.dto.function.ArmiesToResponseFunction;
+import pl.edu.pg.eti.kask.list.army.dto.function.ArmyToResponseFunction;
+import pl.edu.pg.eti.kask.list.army.dto.function.RequestToArmyFunction;
+import pl.edu.pg.eti.kask.list.army.dto.function.UpdateArmyWithRequestFunction;
 import pl.edu.pg.eti.kask.list.unit.dto.GetUnitResponse;
 import pl.edu.pg.eti.kask.list.unit.dto.GetUnitsResponse;
-import pl.edu.pg.eti.kask.list.unit.dto.GetProfessionResponse;
-import pl.edu.pg.eti.kask.list.unit.dto.GetProfessionsResponse;
 import pl.edu.pg.eti.kask.list.unit.dto.PutUnitRequest;
-import pl.edu.pg.eti.kask.list.unit.dto.function.CharacterToResponseFunction;
-import pl.edu.pg.eti.kask.list.unit.dto.function.CharactersToResponseFunction;
-import pl.edu.pg.eti.kask.list.unit.dto.function.ProfessionToResponseFunction;
-import pl.edu.pg.eti.kask.list.unit.dto.function.ProfessionsToResponseFunction;
-import pl.edu.pg.eti.kask.list.unit.dto.function.RequestToCharacterFunction;
-import pl.edu.pg.eti.kask.list.unit.dto.function.UpdateCharacterWithRequestFunction;
-import pl.edu.pg.eti.kask.list.unit.entity.Character;
-import pl.edu.pg.eti.kask.list.unit.entity.Profession;
+import pl.edu.pg.eti.kask.list.unit.dto.function.UnitToResponseFunction;
+import pl.edu.pg.eti.kask.list.unit.dto.function.UnitsToResponseFunction;
+import pl.edu.pg.eti.kask.list.unit.dto.function.RequestToUnitFunction;
+import pl.edu.pg.eti.kask.list.unit.dto.function.UpdateUnitWithRequestFunction;
+import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.user.dto.GetUserResponse;
 import pl.edu.pg.eti.kask.list.user.dto.GetUsersResponse;
 import pl.edu.pg.eti.kask.list.user.dto.PutUserRequest;
@@ -32,57 +31,41 @@ import java.util.function.Function;
 public class DtoFunctionFactory {
 
     /**
-     * Returns a function to convert a single {@link Character} to {@link GetUnitResponse}.
+     * Returns a function to convert a single {@link Unit} to {@link GetUnitResponse}.
      *
-     * @return CharacterToResponseFunction instance
+     * @return UnitToResponseFunction instance
      */
-    public CharacterToResponseFunction characterToResponse() {
-        return new CharacterToResponseFunction();
+    public UnitToResponseFunction unitToResponse() {
+        return new UnitToResponseFunction();
+    }
+
+
+    /**
+     * Returns a function to convert a list of {@link Unit} to {@link GetUnitsResponse}.
+     *
+     * @return UnitsToResponseFunction instance
+     */
+    public UnitsToResponseFunction unitsToResponse() {
+        return new UnitsToResponseFunction();
+    }
+
+
+    /**
+     * Returns a function to convert a {@link PutUnitRequest} to a {@link Unit}.
+     *
+     * @return RequestToUnitFunction instance
+     */
+    public RequestToUnitFunction requestToUnit() {
+        return new RequestToUnitFunction();
     }
 
     /**
-     * Returns a function to convert a list of {@link Character} to {@link GetUnitsResponse}.
+     * Returns a function to update a {@link Unit}.
      *
-     * @return CharactersToResponseFunction instance
+     * @return UpdateUnitFunction instance
      */
-    public CharactersToResponseFunction charactersToResponse() {
-        return new CharactersToResponseFunction();
-    }
-
-    /**
-     * Returns a function to convert a single {@link Profession} to {@link GetProfessionResponse}.
-     *
-     * @return ProfessionToResponseFunction instance
-     */
-    public ProfessionToResponseFunction professionToResponse() {
-        return new ProfessionToResponseFunction();
-    }
-
-    /**
-     * Returns a function to convert a list of {@link Profession} to {@link GetProfessionsResponse}.
-     *
-     * @return ProfessionsToResponseFunction instance
-     */
-    public ProfessionsToResponseFunction professionsToResponse() {
-        return new ProfessionsToResponseFunction();
-    }
-
-    /**
-     * Returns a function to convert a {@link PutUnitRequest} to a {@link Character}.
-     *
-     * @return RequestToCharacterFunction instance
-     */
-    public RequestToCharacterFunction requestToCharacter() {
-        return new RequestToCharacterFunction();
-    }
-
-    /**
-     * Returns a function to update a {@link Character}.
-     *
-     * @return UpdateCharacterFunction instance
-     */
-    public UpdateCharacterWithRequestFunction updateCharacter() {
-        return new UpdateCharacterWithRequestFunction();
+    public UpdateUnitWithRequestFunction updateUnit() {
+        return new UpdateUnitWithRequestFunction();
     }
 
     /**
@@ -130,4 +113,8 @@ public class DtoFunctionFactory {
         return new UserToResponseFunction();
     }
 
+    public ArmyToResponseFunction armyToResponse() {return new ArmyToResponseFunction();}
+    public ArmiesToResponseFunction armiesToResponseFunction() {return new ArmiesToResponseFunction();}
+    public RequestToArmyFunction  requestToArmy() {return new RequestToArmyFunction();}
+    public UpdateArmyWithRequestFunction  updateArmy() {return new UpdateArmyWithRequestFunction();}
 }

@@ -1,8 +1,7 @@
 package pl.edu.pg.eti.kask.list.unit.service;
 
-import pl.edu.pg.eti.kask.list.unit.entity.Character;
+import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.repository.api.CharacterRepository;
-import pl.edu.pg.eti.kask.list.unit.repository.api.ProfessionRepository;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.repository.api.UserRepository;
 
@@ -15,17 +14,12 @@ import java.util.UUID;
 /**
  * Service layer for all business actions regarding character entity.
  */
-public class CharacterService {
+public class UnitService {
 
     /**
      * Repository for character entity.
      */
     private final CharacterRepository characterRepository;
-
-    /**
-     * Repository for profession entity.
-     */
-    private final ProfessionRepository professionRepository;
 
     /**
      * Repository for user entity.
@@ -34,12 +28,10 @@ public class CharacterService {
 
     /**
      * @param characterRepository  repository for character entity
-     * @param professionRepository repository for profession entity
      * @param userRepository repository for user entity
      */
-    public CharacterService(CharacterRepository characterRepository, ProfessionRepository professionRepository, UserRepository userRepository) {
+    public UnitService(CharacterRepository characterRepository, UserRepository userRepository) {
         this.characterRepository = characterRepository;
-        this.professionRepository = professionRepository;
         this.userRepository = userRepository;
     }
 
@@ -49,7 +41,7 @@ public class CharacterService {
      * @param id character's id
      * @return container with character
      */
-    public Optional<Character> find(UUID id) {
+    public Optional<Unit> find(UUID id) {
         return characterRepository.find(id);
     }
 
@@ -58,14 +50,14 @@ public class CharacterService {
      * @param user existing user
      * @return selected character for user
      */
-    public Optional<Character> find(User user, UUID id) {
+    public Optional<Unit> find(User user, UUID id) {
         return characterRepository.findByIdAndUser(id, user);
     }
 
     /**
      * @return all available characters
      */
-    public List<Character> findAll() {
+    public List<Unit> findAll() {
         return characterRepository.findAll();
     }
 
@@ -73,26 +65,26 @@ public class CharacterService {
      * @param user existing user, character's owner
      * @return all available characters of the selected user
      */
-    public List<Character> findAll(User user) {
+    public List<Unit> findAll(User user) {
         return characterRepository.findAllByUser(user);
     }
 
     /**
      * Creates new character.
      *
-     * @param character new character
+     * @param unit new character
      */
-    public void create(Character character) {
-        characterRepository.create(character);
+    public void create(Unit unit) {
+        characterRepository.create(unit);
     }
 
     /**
      * Updates existing character.
      *
-     * @param character character to be updated
+     * @param unit character to be updated
      */
-    public void update(Character character) {
-        characterRepository.update(character);
+    public void update(Unit unit) {
+        characterRepository.update(unit);
     }
 
     /**
@@ -121,12 +113,8 @@ public class CharacterService {
         });
     }
 
-    public Optional<List<Character>> findAllByProfession(UUID id) {
-        return professionRepository.find(id)
-                .map(characterRepository::findAllByProfession);
-    }
 
-    public Optional<List<Character>> findAllByUser(UUID id) {
+    public Optional<List<Unit>> findAllByUser(UUID id) {
         return userRepository.find(id)
                 .map(characterRepository::findAllByUser);
     }
