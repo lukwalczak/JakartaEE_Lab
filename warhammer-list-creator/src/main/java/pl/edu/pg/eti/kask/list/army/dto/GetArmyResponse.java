@@ -17,6 +17,21 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class GetArmyResponse {
 
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @ToString
+    @EqualsAndHashCode
+    public static class UserSummary {
+        private UUID id;
+        private String login;
+        public  UserSummary(UUID id, String login) {
+            this.id = id;
+            this.login = login;
+        }
+    }
+
     private UUID id;
 
     private String name;
@@ -25,7 +40,7 @@ public class GetArmyResponse {
 
     private Faction faction;
 
-    private User owner;
+    private UserSummary userSummary;
 
     private List<Squad> squads;
 

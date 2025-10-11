@@ -13,7 +13,11 @@ public class ArmyToResponseFunction implements Function<Army, GetArmyResponse> {
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .faction(entity.getFaction())
-                .owner(entity.getOwner())
+                .userSummary( GetArmyResponse.UserSummary.builder()
+                        .id(entity.getOwner().getId())
+                        .login(entity.getOwner().getLogin())
+                        .build()
+                )
                 .build();
     }
 

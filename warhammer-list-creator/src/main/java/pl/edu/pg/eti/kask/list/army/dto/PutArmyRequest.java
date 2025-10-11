@@ -22,16 +22,10 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class PutArmyRequest {
 
-    private UUID id;
-
     private String name;
 
     private String description;
 
-    private Faction faction;
-
-    private User owner;
-
-    private List<Squad> squads;
+    private UUID ownerId;
 
 }

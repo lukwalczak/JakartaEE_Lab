@@ -14,14 +14,13 @@ import java.util.function.BiFunction;
  */
 public class RequestToArmyFunction implements BiFunction<UUID, PutArmyRequest, Army> {
 
+
     @Override
     public Army apply(UUID id, PutArmyRequest request) {
         return Army.builder()
                 .id(id)
                 .name(request.getName())
                 .description(request.getDescription())
-                .squads(request.getSquads())
-                .faction(request.getFaction())
                 .build();
     }
 

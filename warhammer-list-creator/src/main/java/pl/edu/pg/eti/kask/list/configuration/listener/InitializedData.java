@@ -168,7 +168,34 @@ public class InitializedData implements ServletContextListener {
                 .owner(admin)
                 .build();
 
+        Army Orks = Army.builder()
+                .id(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
+                .name("Ork Waaagh!")
+                .description("A horde of Orks led by Warboss Gorgutz.")
+                .faction(Faction.XENOS)
+                .owner(admin)
+                .build();
+
+        Army Aeldari = Army.builder()
+                .id(UUID.fromString("223e4567-e89b-12d3-a456-426614174001"))
+                .name("Aeldari Strike Force")
+                .description("A swift and deadly Aeldari strike force.")
+                .faction(Faction.XENOS)
+                .owner(kevin)
+                .build();
+
+        Army ThousandSons = Army.builder()
+                .id(UUID.fromString("323e4567-e89b-12d3-a456-426614174002"))
+                .name("Thousand Sons Sorcerers")
+                .description("A legion of Thousand Sons led by Magnus the Red.")
+                .faction(Faction.CHAOS)
+                .owner(alice)
+                .build();
+
         armyService.create(AstraMilitarum);
+        armyService.create(Orks);
+        armyService.create(Aeldari);
+        armyService.create(ThousandSons);
 
 
     }

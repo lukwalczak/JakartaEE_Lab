@@ -7,6 +7,7 @@ import pl.edu.pg.eti.kask.list.army.dto.PatchArmyRequest;
 import pl.edu.pg.eti.kask.list.army.dto.PutArmyRequest;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
+import pl.edu.pg.eti.kask.list.controller.servlet.exception.BadRequestException;
 import pl.edu.pg.eti.kask.list.controller.servlet.exception.NotFoundException;
 
 import java.util.UUID;
@@ -38,8 +39,12 @@ public class ArmySimpleController implements ArmyController {
     }
 
     @Override
-    public void putArmies(UUID id, PutArmyRequest request) {
-
+    public void putArmy(UUID id, PutArmyRequest request) {
+        try {
+            service.create(factory.requestToArmy().apply(id, request));
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException(e);
+        }
     }
 
     @Override

@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import pl.edu.pg.eti.kask.list.army.controller.api.ArmyController;
+import pl.edu.pg.eti.kask.list.army.dto.PutArmyRequest;
 import pl.edu.pg.eti.kask.list.unit.controller.api.UnitController;
 import pl.edu.pg.eti.kask.list.unit.dto.PatchUnitRequest;
 import pl.edu.pg.eti.kask.list.unit.dto.PutUnitRequest;
@@ -167,6 +168,12 @@ public class ApiServlet extends HttpServlet {
             } else if (path.matches(Patterns.UNIT_PORTRAIT.pattern())) {
                 UUID uuid = extractUuid(Patterns.UNIT_PORTRAIT, path);
                 unitController.putunitPortrait(uuid, request.getPart("portrait").getInputStream());
+                return;
+            } else if (path.matches(Patterns.USER_ARMIES.pattern())){
+                UUID userId = extractUuid(Patterns.USER_ARMIES, path);
+                UUID armyId = UUID.randomUUID();
+                armyController.putArmy(armyId, jsonb.fromJson(request.getReader(), PutArmyRequest.class));
+                response.addHeader("Location", createUrl(request, Paths.API, "armies", armyId.toString()));
                 return;
             }
         }

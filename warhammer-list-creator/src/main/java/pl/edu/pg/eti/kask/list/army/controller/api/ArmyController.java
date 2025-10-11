@@ -15,7 +15,7 @@ public interface ArmyController {
 
     GetArmiesResponse getArmies(UUID id);
 
-    void putArmies(UUID id, PutArmyRequest request);
+    void putArmy(UUID id, PutArmyRequest request);
 
     void patchArmies(UUID id, PatchArmyRequest request);
 
