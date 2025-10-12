@@ -8,13 +8,14 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class Squad {
 
     //    UUID of a squad
-    private UUID uuid;
+    private UUID id;
 
     //    Army squad belongs to
     private Army army;
@@ -24,4 +25,5 @@ public class Squad {
 
     //    Units squad consists of
     private Unit unit;
+
 }
