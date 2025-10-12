@@ -200,6 +200,17 @@ public class ApiServlet extends HttpServlet {
                 unitController.deleteunit(uuid);
                 return;
             }
+            else if (path.matches(Patterns.USER_ARMY.pattern())){
+                Matcher m = Patterns.USER_ARMY.matcher(path);
+                if (!m.matches()) {
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                    return;
+                }
+                java.util.UUID userId = java.util.UUID.fromString(m.group("userId"));
+                java.util.UUID armyId = java.util.UUID.fromString(m.group("armyId"));
+                armyController.deleteArmy(armyId);
+                return;
+            }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }

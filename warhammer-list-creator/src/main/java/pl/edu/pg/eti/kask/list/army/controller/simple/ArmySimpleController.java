@@ -57,13 +57,18 @@ public class ArmySimpleController implements ArmyController {
     }
 
     @Override
-    public void patchArmies(UUID id, PatchArmyRequest request) {
+    public void patchArmy(UUID id, PatchArmyRequest request) {
 
     }
 
     @Override
-    public void deleteArmies(UUID id) {
-
+    public void deleteArmy(UUID id) {
+        service.find(id).ifPresentOrElse(
+                service::delete,
+                () -> {
+                    throw new NotFoundException();
+                }
+        );
     }
 
 }
