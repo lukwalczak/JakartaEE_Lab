@@ -18,6 +18,7 @@ public class ArmyToResponseFunction implements Function<Army, GetArmyResponse> {
                         .login(entity.getOwner().getLogin())
                         .build()
                 )
+                .squads(entity.getSquads())
                 .build();
     }
 

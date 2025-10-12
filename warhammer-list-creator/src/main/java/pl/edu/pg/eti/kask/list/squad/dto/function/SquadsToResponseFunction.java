@@ -1,8 +1,5 @@
 package pl.edu.pg.eti.kask.list.squad.dto.function;
 
-import pl.edu.pg.eti.kask.list.army.dto.GetArmiesResponse;
-import pl.edu.pg.eti.kask.list.army.entity.Army;
-import pl.edu.pg.eti.kask.list.squad.dto.GetSquadResponse;
 import pl.edu.pg.eti.kask.list.squad.dto.GetSquadsResponse;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 

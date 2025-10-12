@@ -4,6 +4,8 @@ import lombok.*;
 
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
+
+import java.io.Serializable;
 import java.util.UUID;
 
 @Getter
@@ -12,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class Squad {
+public class Squad implements Serializable {
 
     //    UUID of a squad
     private UUID id;

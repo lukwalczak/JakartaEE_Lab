@@ -7,6 +7,8 @@ import lombok.SneakyThrows;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
 import pl.edu.pg.eti.kask.list.model.Faction;
+import pl.edu.pg.eti.kask.list.squad.entity.Squad;
+import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.entity.Skill;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
@@ -38,13 +40,19 @@ public class InitializedData implements ServletContextListener {
      */
     private UserService userService;
 
+
     private ArmyService armyService;
+
+
+    private SquadService squadService;
+
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
         unitService = (UnitService) event.getServletContext().getAttribute("unitService");
         userService = (UserService) event.getServletContext().getAttribute("userService");
         armyService = (ArmyService) event.getServletContext().getAttribute("armyService");
+        squadService = (SquadService) event.getServletContext().getAttribute("squadService");
         init();
     }
 
@@ -197,6 +205,22 @@ public class InitializedData implements ServletContextListener {
         armyService.create(Aeldari);
         armyService.create(ThousandSons);
 
+        Squad squad1 = Squad.builder()
+                .id(UUID.fromString("423e4567-e89b-12d3-a456-426614174003"))
+                .army(AstraMilitarum)
+                .unit(Intercessor)
+                .count(10)
+                .build();
+
+        Squad squad2 = Squad.builder()
+                .id(UUID.fromString("523e4567-e89b-12d3-a456-426614174004"))
+                .army(AstraMilitarum)
+                .unit(medic)
+                .count(2)
+                .build();
+
+        squadService.create(squad1);
+        squadService.create(squad2);
 
     }
 

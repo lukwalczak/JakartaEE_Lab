@@ -2,6 +2,7 @@ package pl.edu.pg.eti.kask.list.datastore.component;
 
 import lombok.extern.java.Log;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
+import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.serialization.component.CloningUtility;
 import pl.edu.pg.eti.kask.list.user.entity.User;
@@ -32,7 +33,10 @@ public class DataStore {
      */
     private final Set<User> users = new HashSet<>();
 
+
     private final Set<Army> armies = new HashSet<>();
+
+    private final Set<Squad> squads = new HashSet<>();
 
     /**
      * Component used for creating deep copies.
@@ -172,6 +176,42 @@ public class DataStore {
                 .map(cloningUtility::clone)
                 .collect(Collectors.toList());
     }
+
+    public synchronized List<Squad> findAllSquadsByArmyId(UUID armyId) {
+        return squads.stream()
+                .filter(squad -> squad.getArmy() != null && squad.getArmy().getId().equals(armyId))
+                .map(cloningUtility::clone)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized void createSquad(Squad value) throws IllegalArgumentException {
+        if(squads.stream().anyMatch(squad -> squad.getId().equals(value.getId()))) {
+            throw new IllegalArgumentException("The squad id \"%s\" is not unique".formatted(value.getId()));
+        }
+        squads.add(cloningUtility.clone(value));
+    }
+
+    public synchronized void updateSquad(Squad value) throws IllegalArgumentException {
+        if (squads.removeIf(squad -> squad.getId().equals(value.getId()))) {
+            squads.add(cloningUtility.clone(value));
+        } else  {
+            throw new IllegalArgumentException("The squad with id \"%s\" does not exist".formatted(value.getId()));
+        }
+    }
+
+    public synchronized void deleteSquad(UUID id) throws IllegalArgumentException {
+        if (!squads.removeIf(squad -> squad.getId().equals(id))) {
+            throw new IllegalArgumentException("The squad with id \"%s\" does not exist".formatted(id));
+        }
+    }
+
+    public synchronized List<Squad> findAllSquads() {
+        return squads.stream()
+                .map(cloningUtility::clone)
+                .collect(Collectors.toList());
+    }
+
+
 
     /**
      * Clones existing character and updates relationships for values in storage

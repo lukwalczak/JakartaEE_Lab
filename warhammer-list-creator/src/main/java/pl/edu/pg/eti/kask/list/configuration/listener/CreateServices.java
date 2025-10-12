@@ -6,6 +6,10 @@ import jakarta.servlet.annotation.WebListener;
 import pl.edu.pg.eti.kask.list.army.repository.api.ArmyRepository;
 import pl.edu.pg.eti.kask.list.army.repository.memory.ArmyInMemoryRepository;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
+import pl.edu.pg.eti.kask.list.squad.entity.Squad;
+import pl.edu.pg.eti.kask.list.squad.repository.api.SquadRepository;
+import pl.edu.pg.eti.kask.list.squad.repository.memory.SquadInMemoryRepository;
+import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.repository.api.UnitRepository;
 import pl.edu.pg.eti.kask.list.unit.repository.memory.UnitInMemoryRepository;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
@@ -29,10 +33,12 @@ public class CreateServices implements ServletContextListener {
         UserRepository userRepository = new UserInMemoryRepository(dataSource);
         UnitRepository unitRepository = new UnitInMemoryRepository(dataSource);
         ArmyRepository armyRepository = new ArmyInMemoryRepository(dataSource);
+        SquadRepository squadRepository = new SquadInMemoryRepository(dataSource);
 
         event.getServletContext().setAttribute("userService", new UserService(userRepository, new Pbkdf2PasswordHash()));
         event.getServletContext().setAttribute("unitService", new UnitService(unitRepository, userRepository));
         event.getServletContext().setAttribute("armyService", new ArmyService(armyRepository, unitRepository, userRepository));
+        event.getServletContext().setAttribute("squadService", new SquadService(armyRepository, unitRepository, squadRepository));
     }
 
 }

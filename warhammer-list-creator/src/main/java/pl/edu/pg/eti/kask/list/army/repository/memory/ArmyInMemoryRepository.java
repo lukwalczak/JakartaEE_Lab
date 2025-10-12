@@ -57,5 +57,4 @@ public class ArmyInMemoryRepository implements ArmyRepository {
         store.updateArmy(entity);
     }
 
-
 }
