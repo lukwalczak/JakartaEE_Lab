@@ -15,6 +15,7 @@ import pl.edu.pg.eti.kask.list.squad.dto.PutSquadRequest;
 import pl.edu.pg.eti.kask.list.unit.controller.api.UnitController;
 import pl.edu.pg.eti.kask.list.unit.dto.PatchUnitRequest;
 import pl.edu.pg.eti.kask.list.unit.dto.PutUnitRequest;
+import pl.edu.pg.eti.kask.list.user.controller.api.UserController;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -132,7 +133,7 @@ public class ApiServlet extends HttpServlet {
         unitController = (UnitController) getServletContext().getAttribute("unitController");
         armyController = (ArmyController) getServletContext().getAttribute("armyController");
         squadController = (SquadContoller) getServletContext().getAttribute("squadController");
-
+        userController = (UserController) getServletContext().getAttribute("userController");
     }
 
     @SuppressWarnings("RedundantThrows")
@@ -171,6 +172,22 @@ public class ApiServlet extends HttpServlet {
                 UUID uuid = extractUuid(Patterns.ARMY, path);
                 response.getWriter().write(jsonb.toJson(armyController.getArmy(uuid)));
                 return;
+            } else if (path.matches(Patterns.USER.pattern())){
+                response.setContentType("application/json");
+                UUID uuid = extractUuid(Patterns.USER, path);
+                response.getWriter().write(jsonb.toJson(userController.getUser(uuid)));
+                return;
+            } else if (path.matches(Patterns.USERS.pattern())){
+                response.setContentType("application/json");
+                response.getWriter().write(jsonb.toJson(userController.getUsers()));
+                return;
+            } else if (path.matches(Patterns.USER_PORTRAIT.pattern())) {
+                response.setContentType("image/png");
+                UUID uuid = extractUuid(Patterns.USER_PORTRAIT, path);
+                byte[] portrait = userController.getUserPortrait(uuid);
+                response.setContentLength(portrait.length);
+                response.getOutputStream().write(portrait);
+                return;
             }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -205,6 +222,10 @@ public class ApiServlet extends HttpServlet {
                 squadController.putSquad(uuid, jsonb.fromJson(request.getReader(), PutSquadRequest.class));
                 response.addHeader("Location", createUrl(request, Paths.API, "squads", uuid.toString()));
                 return;
+            } else if (path.matches(Patterns.USER_PORTRAIT.pattern())) {
+                UUID uuid = extractUuid(Patterns.USER_PORTRAIT, path);
+                userController.putUserPortrait(uuid, request.getPart("portrait").getInputStream());
+                return;
             }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -234,6 +255,10 @@ public class ApiServlet extends HttpServlet {
             } else if (path.matches(Patterns.SQUAD.pattern())) {
                 UUID uuid = extractUuid(Patterns.SQUAD, path);
                 squadController.deleteSquad(uuid);
+                return;
+            } else if (path.matches(Patterns.USER_PORTRAIT.pattern())) {
+                UUID uuid = extractUuid(Patterns.USER_PORTRAIT, path);
+                userController.deleteUserPortrait(uuid);
                 return;
             }
         }

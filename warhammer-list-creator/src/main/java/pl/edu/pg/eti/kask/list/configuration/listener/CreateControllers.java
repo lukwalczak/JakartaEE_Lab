@@ -10,6 +10,8 @@ import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.controller.simple.UnitSimpleController;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
+import pl.edu.pg.eti.kask.list.user.controller.simple.UserSimpleController;
+import pl.edu.pg.eti.kask.list.user.service.UserService;
 
 /**
  * Listener started automatically on servlet context initialized. Creates an instance of controllers and puts them in
@@ -23,7 +25,7 @@ public class CreateControllers implements ServletContextListener {
         UnitService unitService = (UnitService) event.getServletContext().getAttribute("unitService");
         ArmyService armyService = (ArmyService) event.getServletContext().getAttribute("armyService");
         SquadService squadService = (SquadService) event.getServletContext().getAttribute("squadService");
-
+        UserService userService = (UserService) event.getServletContext().getAttribute("userService");
 
 
         event.getServletContext().setAttribute("unitController", new UnitSimpleController(
@@ -43,5 +45,7 @@ public class CreateControllers implements ServletContextListener {
         ));
 
         event.getServletContext().setAttribute("squadController", new SquadSimpleController(squadService,armyService,unitService));
+
+        event.getServletContext().setAttribute("userController", new UserSimpleController(userService));
     }
 }

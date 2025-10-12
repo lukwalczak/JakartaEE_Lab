@@ -128,28 +128,94 @@ Content-Type: application/json
 #Get created army.
 
 GET http://localhost:9080/simple-rpg/api/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+###
+
+GET http://localhost:9080/simple-rpg/api/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b
+
+###
+
+## SQUADS
+
+## Put 15 scouts to squad.
+
+PUT http://localhost:9080/simple-rpg/api/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a54
+Content-Type: application/json
+
+{
+  "armyId": "f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b",
+  "unitId": "d3f3b1e4-2f4a-4f0a-8e2e-6f5e8f1c9b7a",
+  "count": 15
+}
+###
+
+# Put 6 Intercessors to squad.
+###
+
+PUT http://localhost:9080/simple-rpg/api/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a21
+Content-Type: application/json
+
+{
+  "armyId": "f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b",
+  "unitId": "525d3e7b-bb1f-4c13-bf17-926d1a12e4c0",
+  "count": 6
+}
+###
+
+# Delete squad.
+
+DELETE http://localhost:9080/simple-rpg/api/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a21
 
 ###
 #Delete army.
 
 DELETE http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
 
+
+
+
+
 # USERS
 
 ###
 
-# Get all user characters.
+# Get users.
 
-GET http://localhost:9080/simple-rpg/api/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/characters
-
-###
-
-# Get all user characters. Empty.
-
-GET http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/characters
+GET http://localhost:9080/simple-rpg/api/users
 
 ###
 
-# Get all user characters. Not existing.
+# Get single user.
 
-GET http://localhost:9080/simple-rpg/api/users/c07cab55-a56f-4d67-b351-175bb7a94b7a/characters
+GET http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6
+
+###
+#Get non existing user.
+
+GET http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
+###
+
+
+# Create user portrait.
+
+PUT http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/portrait
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="portrait"; filename="sigrid.png'
+
+< warhammer-list-creator/src/main/resources/pl/edu/pg/eti/kask/list/configuration/avatar/zereni.png
+--boundary--
+
+###
+
+# Get user portrait.
+
+GET http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/portrait
+
+###
+
+# Delete user portrait.
+
+DELETE http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/portrait
+
+###

@@ -4,6 +4,9 @@ import pl.edu.pg.eti.kask.list.crypto.component.Pbkdf2PasswordHash;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.repository.api.UserRepository;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,6 +52,10 @@ public class UserService {
         return repository.findByLogin(login);
     }
 
+    public List<User> findAll() {
+        return repository.findAll();
+    }
+
     /**
      * Saves new user. Password is hashed using configured hash algorithm.
      *
@@ -68,6 +75,24 @@ public class UserService {
         return find(login)
                 .map(user -> passwordHash.verify(password.toCharArray(), user.getPassword()))
                 .orElse(false);
+    }
+
+    public void deletePortrait(UUID id) {
+        repository.find(id).ifPresent(character -> {
+            character.setPortrait(null);
+            repository.update(character);
+        });
+    }
+
+    public void updatePortrait(UUID id, InputStream is) {
+        repository.find(id).ifPresent(character -> {
+            try {
+                character.setPortrait(is.readAllBytes());
+                repository.update(character);
+            } catch (IOException ex) {
+                throw new IllegalStateException(ex);
+            }
+        });
     }
 
 }
