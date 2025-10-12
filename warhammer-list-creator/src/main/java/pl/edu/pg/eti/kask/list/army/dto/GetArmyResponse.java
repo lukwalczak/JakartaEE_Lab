@@ -2,8 +2,7 @@ package pl.edu.pg.eti.kask.list.army.dto;
 
 import lombok.*;
 import pl.edu.pg.eti.kask.list.model.Faction;
-import pl.edu.pg.eti.kask.list.squad.entity.Squad;
-import pl.edu.pg.eti.kask.list.user.entity.User;
+//import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,6 +30,25 @@ public class GetArmyResponse {
             this.login = login;
         }
     }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @ToString
+    @EqualsAndHashCode
+    public static class Squad {
+        private UUID id;
+        private String unitName;
+        private Integer count;
+
+        public Squad(UUID id, String unitName, Integer count) {
+            this.id = id;
+            this.unitName = unitName;
+            this.count = count;
+        }
+    }
+
 
     private UUID id;
 

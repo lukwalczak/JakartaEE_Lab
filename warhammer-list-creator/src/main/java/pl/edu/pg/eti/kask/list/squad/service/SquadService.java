@@ -26,6 +26,8 @@ public class SquadService {
 
     public List<Squad> findAll(){ return squadRepository.findAll();}
 
+    public List<Squad> findAll(UUID id){ return squadRepository.findByArmyId(id);}
+
     public Optional<Squad> findById(UUID id){
         return squadRepository.find(id);
     }

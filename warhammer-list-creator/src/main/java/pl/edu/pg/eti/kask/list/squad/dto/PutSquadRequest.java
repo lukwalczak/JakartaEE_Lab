@@ -13,6 +13,8 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class PutSquadRequest {
 
+    private UUID armyId;
+
     private Integer count;
 
     private UUID unitId;

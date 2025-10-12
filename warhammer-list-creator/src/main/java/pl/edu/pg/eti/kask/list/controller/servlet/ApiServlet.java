@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import pl.edu.pg.eti.kask.list.army.controller.api.ArmyController;
 import pl.edu.pg.eti.kask.list.army.dto.PutArmyRequest;
+import pl.edu.pg.eti.kask.list.squad.controller.api.SquadContoller;
+import pl.edu.pg.eti.kask.list.squad.dto.PutSquadRequest;
 import pl.edu.pg.eti.kask.list.unit.controller.api.UnitController;
 import pl.edu.pg.eti.kask.list.unit.dto.PatchUnitRequest;
 import pl.edu.pg.eti.kask.list.unit.dto.PutUnitRequest;
@@ -35,6 +37,10 @@ public class ApiServlet extends HttpServlet {
     private UnitController unitController;
 
     private ArmyController armyController;
+
+    private SquadContoller squadController;
+
+    private UserController userController;
 
 
     /**
@@ -94,6 +100,14 @@ public class ApiServlet extends HttpServlet {
                 Pattern.compile("/users/(?<userId>%s)/armies/(?<armyId>%s)/?"
                         .formatted(UUID.pattern(), UUID.pattern()));
 
+        public static final Pattern SQUAD = Pattern.compile("/squads/(%s)".formatted(UUID.pattern()));
+
+        public static final Pattern USER = Pattern.compile("/users/(%s)".formatted(UUID.pattern()));
+
+        public static final Pattern USERS = Pattern.compile("/users/?");
+
+        public static final Pattern USER_PORTRAIT = Pattern.compile("/users/(%s)/portrait".formatted(UUID.pattern()));
+
     }
 
     /**
@@ -117,6 +131,8 @@ public class ApiServlet extends HttpServlet {
         super.init();
         unitController = (UnitController) getServletContext().getAttribute("unitController");
         armyController = (ArmyController) getServletContext().getAttribute("armyController");
+        squadController = (SquadContoller) getServletContext().getAttribute("squadController");
+
     }
 
     @SuppressWarnings("RedundantThrows")
@@ -184,6 +200,11 @@ public class ApiServlet extends HttpServlet {
                 armyController.putArmy(armyId, jsonb.fromJson(request.getReader(), PutArmyRequest.class), userId);
                 response.addHeader("Location", createUrl(request, Paths.API, "armies", armyId.toString()));
                 return;
+            } else if (path.matches(Patterns.SQUAD.pattern())) {
+                UUID uuid = extractUuid(Patterns.SQUAD, path);
+                squadController.putSquad(uuid, jsonb.fromJson(request.getReader(), PutSquadRequest.class));
+                response.addHeader("Location", createUrl(request, Paths.API, "squads", uuid.toString()));
+                return;
             }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -209,6 +230,10 @@ public class ApiServlet extends HttpServlet {
                 java.util.UUID userId = java.util.UUID.fromString(m.group("userId"));
                 java.util.UUID armyId = java.util.UUID.fromString(m.group("armyId"));
                 armyController.deleteArmy(armyId);
+                return;
+            } else if (path.matches(Patterns.SQUAD.pattern())) {
+                UUID uuid = extractUuid(Patterns.SQUAD, path);
+                squadController.deleteSquad(uuid);
                 return;
             }
         }

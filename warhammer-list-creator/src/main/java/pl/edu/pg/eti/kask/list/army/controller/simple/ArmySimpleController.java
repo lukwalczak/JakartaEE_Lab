@@ -9,6 +9,7 @@ import pl.edu.pg.eti.kask.list.army.service.ArmyService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
 import pl.edu.pg.eti.kask.list.controller.servlet.exception.BadRequestException;
 import pl.edu.pg.eti.kask.list.controller.servlet.exception.NotFoundException;
+import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 
 import java.util.UUID;
 
@@ -16,17 +17,36 @@ public class ArmySimpleController implements ArmyController {
 
     private final ArmyService service;
 
+    private final SquadService squadService;
+
     private final DtoFunctionFactory factory;
 
-    public ArmySimpleController(ArmyService armyService, DtoFunctionFactory factory) {
+    public ArmySimpleController(ArmyService armyService, SquadService squadService, DtoFunctionFactory factory) {
         this.service = armyService;
+        this.squadService = squadService;
         this.factory = factory;
     }
 
     @Override
     public GetArmyResponse getArmy(UUID id) {
-        return service.find(id).map(factory.armyToResponse()).orElseThrow(NotFoundException::new);
+        return service.find(id)
+                .map(factory.armyToResponse())
+                .map(response -> {
+                    response.setSquads(
+                            squadService.findByArmyId(id).stream()
+                                    .map(squad -> GetArmyResponse.Squad.builder()
+                                            .id(squad.getId())
+                                            .unitName(squad.getUnit().getName())
+                                            .count(squad.getCount())
+                                            .build()
+                                    )
+                                    .toList()
+                    );
+                    return response;
+                })
+                .orElseThrow(NotFoundException::new);
     }
+
 
     @Override
     public GetArmiesResponse getArmies() {

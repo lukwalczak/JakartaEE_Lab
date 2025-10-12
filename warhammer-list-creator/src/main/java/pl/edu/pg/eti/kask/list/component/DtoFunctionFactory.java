@@ -117,4 +117,5 @@ public class DtoFunctionFactory {
     public ArmiesToResponseFunction armiesToResponseFunction() {return new ArmiesToResponseFunction();}
     public RequestToArmyFunction  requestToArmy() {return new RequestToArmyFunction();}
     public UpdateArmyWithRequestFunction  updateArmy() {return new UpdateArmyWithRequestFunction();}
+
 }
