@@ -189,11 +189,34 @@ GET http://localhost:9080/simple-rpg/api/users
 GET http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6
 
 ###
-#Get non existing user.
+#Get non existing user
 
 GET http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
 ###
 
+
+###
+
+# Create new user
+
+PUT http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
+Content-Type: application/json
+
+{
+  "login": "lukasz",
+  "password": "lukasz",
+  "email": "lukasz@example.com",
+  "name": "lukasz",
+  "surname": "Walczak",
+  "birthDate": "1990-01-01"
+}
+###
+
+# Delete user
+
+DELETE http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
+
+###
 
 # Create user portrait.
 

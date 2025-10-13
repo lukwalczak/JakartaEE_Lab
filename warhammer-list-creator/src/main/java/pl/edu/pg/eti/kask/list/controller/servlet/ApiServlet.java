@@ -16,6 +16,7 @@ import pl.edu.pg.eti.kask.list.unit.controller.api.UnitController;
 import pl.edu.pg.eti.kask.list.unit.dto.PatchUnitRequest;
 import pl.edu.pg.eti.kask.list.unit.dto.PutUnitRequest;
 import pl.edu.pg.eti.kask.list.user.controller.api.UserController;
+import pl.edu.pg.eti.kask.list.user.dto.PutUserRequest;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -226,6 +227,11 @@ public class ApiServlet extends HttpServlet {
                 UUID uuid = extractUuid(Patterns.USER_PORTRAIT, path);
                 userController.putUserPortrait(uuid, request.getPart("portrait").getInputStream());
                 return;
+            } else if (path.matches(Patterns.USER.pattern())){
+                UUID uuid = extractUuid(Patterns.USER, path);
+                userController.putUser(uuid, jsonb.fromJson(request.getReader(), PutUserRequest.class));
+                response.addHeader("Location", createUrl(request, Paths.API, "users", uuid.toString()));
+                return;
             }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -259,6 +265,10 @@ public class ApiServlet extends HttpServlet {
             } else if (path.matches(Patterns.USER_PORTRAIT.pattern())) {
                 UUID uuid = extractUuid(Patterns.USER_PORTRAIT, path);
                 userController.deleteUserPortrait(uuid);
+                return;
+            } else if (path.matches(Patterns.USER.pattern())) {
+                UUID uuid = extractUuid(Patterns.USER, path);
+                userController.deleteUser(uuid);
                 return;
             }
         }

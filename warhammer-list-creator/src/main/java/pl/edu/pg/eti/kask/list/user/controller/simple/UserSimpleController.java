@@ -1,10 +1,13 @@
 package pl.edu.pg.eti.kask.list.user.controller.simple;
 
+import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
+import pl.edu.pg.eti.kask.list.controller.servlet.exception.BadRequestException;
 import pl.edu.pg.eti.kask.list.controller.servlet.exception.NotFoundException;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.user.controller.api.UserController;
 import pl.edu.pg.eti.kask.list.user.dto.GetUserResponse;
 import pl.edu.pg.eti.kask.list.user.dto.GetUsersResponse;
+import pl.edu.pg.eti.kask.list.user.dto.PutUserRequest;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.service.UserService;
 
@@ -15,8 +18,11 @@ public class UserSimpleController implements UserController {
 
     private final UserService userService;
 
-    public UserSimpleController(UserService userService) {
+    private final DtoFunctionFactory factory;
+
+    public UserSimpleController(UserService userService, DtoFunctionFactory factory) {
         this.userService = userService;
+        this.factory = factory;
     }
 
     @Override
@@ -69,6 +75,25 @@ public class UserSimpleController implements UserController {
     public void deleteUserPortrait(UUID id) {
         userService.find(id).ifPresentOrElse(
                 entity -> userService.deletePortrait(id),
+                () -> {
+                    throw new NotFoundException();
+                }
+        );
+    }
+
+    @Override
+    public void putUser(UUID id, PutUserRequest putUserRequest) {
+        try{
+            userService.create(factory.requestToUser().apply(id, putUserRequest));
+        } catch (IllegalArgumentException e){
+            throw new BadRequestException();
+        }
+    }
+
+    @Override
+    public void deleteUser(UUID id) {
+        userService.find(id).ifPresentOrElse(
+                entity -> userService.delete(id),
                 () -> {
                     throw new NotFoundException();
                 }
