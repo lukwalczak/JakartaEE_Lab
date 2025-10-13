@@ -23,5 +23,7 @@ public interface UserController {
 
     void deleteUser(UUID id);
 
+    boolean portraitExists(UUID id);
+
 
 }

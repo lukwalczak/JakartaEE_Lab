@@ -9,8 +9,10 @@ import pl.edu.pg.eti.kask.list.user.dto.GetUserResponse;
 import pl.edu.pg.eti.kask.list.user.dto.GetUsersResponse;
 import pl.edu.pg.eti.kask.list.user.dto.PutUserRequest;
 import pl.edu.pg.eti.kask.list.user.entity.User;
+import pl.edu.pg.eti.kask.list.user.repository.api.AvatarRepository;
 import pl.edu.pg.eti.kask.list.user.service.UserService;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -18,10 +20,13 @@ public class UserSimpleController implements UserController {
 
     private final UserService userService;
 
+    private final AvatarRepository avatarRepository;
+
     private final DtoFunctionFactory factory;
 
-    public UserSimpleController(UserService userService, DtoFunctionFactory factory) {
+    public UserSimpleController(UserService userService, AvatarRepository avatarRepository, DtoFunctionFactory factory) {
         this.userService = userService;
+        this.avatarRepository = avatarRepository;
         this.factory = factory;
     }
 
@@ -56,29 +61,32 @@ public class UserSimpleController implements UserController {
 
     @Override
     public byte[] getUserPortrait(UUID id) {
-        return userService.find(id)
-                .map(User::getPortrait)
-                .orElseThrow(NotFoundException::new);
+        try{
+            userService.find(id).orElseThrow(NotFoundException::new);
+            return avatarRepository.getAvatar(id).orElseThrow(NotFoundException::new);
+        } catch (IOException e) {
+            throw new BadRequestException(e);
+        }
     }
 
     @Override
     public void putUserPortrait(UUID id, InputStream portrait) {
-        userService.find(id).ifPresentOrElse(
-                entity -> userService.updatePortrait(id, portrait),
-                () -> {
-                    throw new NotFoundException();
-                }
-        );
+        try {
+            userService.find(id).orElseThrow(NotFoundException::new);
+            avatarRepository.upsert(id, portrait);
+        } catch (IOException e) {
+            throw new BadRequestException(e);
+        }
     }
 
     @Override
     public void deleteUserPortrait(UUID id) {
-        userService.find(id).ifPresentOrElse(
-                entity -> userService.deletePortrait(id),
-                () -> {
-                    throw new NotFoundException();
-                }
-        );
+        try {
+            userService.find(id).orElseThrow(NotFoundException::new);
+            avatarRepository.delete(id);
+        } catch (IOException e) {
+            throw new NotFoundException(e);
+        }
     }
 
     @Override
@@ -98,5 +106,15 @@ public class UserSimpleController implements UserController {
                     throw new NotFoundException();
                 }
         );
+    }
+
+    @Override
+    public boolean portraitExists(UUID id) {
+        try {
+            userService.find(id).orElseThrow(NotFoundException::new);
+            return avatarRepository.getAvatar(id).isPresent();
+        } catch (IOException e) {
+            throw new BadRequestException(e);
+        }
     }
 }

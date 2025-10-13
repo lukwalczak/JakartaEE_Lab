@@ -16,5 +16,10 @@
     <listener>
         <listener-class>pl.edu.pg.eti.kask.list.configuration.listener.CreateControllers</listener-class>
     </listener>
+    
+    <context-param>
+        <param-name>avatar.dir</param-name>
+        <param-value>avatar</param-value>
+    </context-param>
 
 </web-app>

@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.configuration.listener;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
@@ -12,11 +13,19 @@ import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.entity.Skill;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
+import pl.edu.pg.eti.kask.list.user.controller.api.UserController;
+import pl.edu.pg.eti.kask.list.user.controller.simple.UserSimpleController;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
+import pl.edu.pg.eti.kask.list.user.repository.api.AvatarRepository;
+import pl.edu.pg.eti.kask.list.user.repository.memory.AvatarInMemoryRepository;
 import pl.edu.pg.eti.kask.list.user.service.UserService;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -71,6 +80,17 @@ public class InitializedData implements ServletContextListener {
                 .email("admin@simplerpg.example.com")
                 .password("adminadmin")
                 .roles(List.of(UserRoles.ADMIN, UserRoles.USER))
+                .build();
+
+        User test = User.builder()
+                .id(UUID.fromString("d290f1ee-6c54-4b01-90e6-d701748f0851"))
+                .login("test")
+                .name("Test")
+                .surname("Testowy")
+                .birthDate(LocalDate.of(1995, 5, 15))
+                .email("test@test.example.com")
+                .password("testtest")
+                .roles(List.of(UserRoles.USER))
                 .build();
 
         User kevin = User.builder()

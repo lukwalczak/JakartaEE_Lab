@@ -70,9 +70,12 @@ PATCH http://localhost:9080/simple-rpg/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b
 Content-Type: application/json
 
 {
-  "name": "Medic2",
-  "movement": 13,
-  "save": 4
+  "description": "Medic is the life saver.",
+  "leadership": 1,
+  "movement": 1,
+  "save": 3,
+  "toughness": 2,
+  "wounds": 2
 }
 
 ###
