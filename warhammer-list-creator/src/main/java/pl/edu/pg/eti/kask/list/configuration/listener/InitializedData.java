@@ -4,11 +4,14 @@ import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import lombok.SneakyThrows;
-import pl.edu.pg.eti.kask.list.character.entity.Character;
-import pl.edu.pg.eti.kask.list.character.entity.Profession;
-import pl.edu.pg.eti.kask.list.character.entity.Skill;
-import pl.edu.pg.eti.kask.list.character.service.CharacterService;
-import pl.edu.pg.eti.kask.list.character.service.ProfessionService;
+import pl.edu.pg.eti.kask.list.army.entity.Army;
+import pl.edu.pg.eti.kask.list.army.service.ArmyService;
+import pl.edu.pg.eti.kask.list.model.Faction;
+import pl.edu.pg.eti.kask.list.squad.entity.Squad;
+import pl.edu.pg.eti.kask.list.squad.service.SquadService;
+import pl.edu.pg.eti.kask.list.unit.entity.Unit;
+import pl.edu.pg.eti.kask.list.unit.entity.Skill;
+import pl.edu.pg.eti.kask.list.unit.service.UnitService;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
 import pl.edu.pg.eti.kask.list.user.service.UserService;
@@ -30,23 +33,26 @@ public class InitializedData implements ServletContextListener {
     /**
      * Character service.
      */
-    private CharacterService characterService;
+    private UnitService unitService;
 
     /**
      * User service.
      */
     private UserService userService;
 
-    /**
-     * Profession service.
-     */
-    private ProfessionService professionService;
+
+    private ArmyService armyService;
+
+
+    private SquadService squadService;
+
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        characterService = (CharacterService) event.getServletContext().getAttribute("characterService");
+        unitService = (UnitService) event.getServletContext().getAttribute("unitService");
         userService = (UserService) event.getServletContext().getAttribute("userService");
-        professionService = (ProfessionService) event.getServletContext().getAttribute("professionService");
+        armyService = (ArmyService) event.getServletContext().getAttribute("armyService");
+        squadService = (SquadService) event.getServletContext().getAttribute("squadService");
         init();
     }
 
@@ -118,107 +124,104 @@ public class InitializedData implements ServletContextListener {
                 .description("Attacks an enemy with heavy attack.")
                 .build();
 
-        Profession bard = Profession.builder()
-                .id(UUID.fromString("f5875513-bf7b-4ae1-b8a5-5b70a1b90e76"))
-                .name("Bard")
-                .skill(1, attack)
-                .skill(2, charm)
-                .build();
-
-        Profession cleric = Profession.builder()
-                .id(UUID.fromString("5d1da2ae-6a14-4b6d-8b4f-d117867118d4"))
-                .name("Cleric")
-                .skill(1, attack)
-                .skill(2, heal)
-                .build();
-
-        Profession warrior = Profession.builder()
-                .id(UUID.fromString("2d9b1e8c-67c5-4188-a911-5f064a63d8cd"))
-                .name("Warrior")
-                .skill(1, attack)
-                .skill(2, heavyAttack)
-                .build();
-
-        Profession rogue = Profession.builder()
-                .id(UUID.randomUUID())
-                .name("Rogue")
-                .skill(1, attack)
-                .skill(2, backStab)
-                .build();
-
-        professionService.create(bard);
-        professionService.create(cleric);
-        professionService.create(warrior);
-        professionService.create(rogue);
-
-        Character calvian = Character.builder()
+        Unit Intercessor = Unit.builder()
                 .id(UUID.fromString("525d3e7b-bb1f-4c13-bf17-926d1a12e4c0"))
-                .name("Calvian")
-                .age(18)
-                .background("A young bard with some infernal roots.")
-                .experience(0)
-                .level(1)
-                .profession(bard)
-                .charisma(16)
-                .constitution(12)
-                .strength(8)
-                .health(2 * 12)
+                .name("Intercessor")
+                .movement(1)
+                .save(1)
+                .leadership(1)
+                .toughness(3)
+                .wounds(3)
+                .description("Intercessor is the wound.")
                 .portrait(getResourceAsByteArray("../avatar/calvian.png"))//package relative path
-                .user(kevin)
                 .build();
 
-        Character uhlbrecht = Character.builder()
-                .id(UUID.fromString("cc0b0577-bb6f-45b7-81d6-3db88e6ac19f"))
-                .name("Uhlbrecht")
-                .age(37)
-                .background("Quite experienced half-orc warrior.")
-                .experience(0)
-                .level(1)
-                .profession(warrior)
-                .charisma(8)
-                .constitution(10)
-                .strength(18)
-                .health(2 * 10)
-                .portrait(getResourceAsByteArray("../avatar/uhlbrecht.png"))//package relative path
-                .user(kevin)
+        Intercessor.addSkill(heavyAttack);
+
+        Unit scout = Unit.builder()
+                .id(UUID.fromString("d3f3b1e4-2f4a-4f0a-8e2e-6f5e8f1c9b7a"))
+                .name("Scout")
+                .movement(2)
+                .save(2)
+                .leadership(2)
+                .toughness(2)
+                .wounds(2)
+                .description("Scout is the eyes and ears.")
+                .portrait(getResourceAsByteArray("../avatar/calvian.png"))//package relative path
+                .build();
+        scout.addSkill(attack);
+
+        Unit medic = Unit.builder()
+                .id(UUID.fromString("a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f"))
+                .name("Medic")
+                .movement(1)
+                .save(3)
+                .leadership(1)
+                .toughness(2)
+                .wounds(2)
+                .description("Medic is the life saver.")
+                .portrait(getResourceAsByteArray("../avatar/calvian.png"))//package relative path
+                .build();
+        medic.addSkill(heal);
+
+        unitService.create(scout);
+        unitService.create(Intercessor);
+        unitService.create(medic);
+
+        Army AstraMilitarum = Army.builder()
+                .id(UUID.fromString("f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b"))
+                .name("Astra Militarum Leman Russ Spam")
+                .description("Tried a new list with Rogal Dorn as a commander. Lots of tanks, maily Leman Russ.")
+                .faction(Faction.IMPERIUM)
+                .owner(admin)
                 .build();
 
-        Character eloise = Character.builder()
-                .id(UUID.fromString("f08ef7e3-7f2a-4378-b1fb-2922d730c70d"))
-                .name("Eloise")
-                .age(32)
-                .background("Human cleric.")
-                .experience(0)
-                .level(1)
-                .profession(cleric)
-                .charisma(8)
-                .constitution(12)
-                .strength(14)
-                .health(2 * 12)
-                .portrait(getResourceAsByteArray("../avatar/eloise.png"))//package relative path
-                .user(alice)
+        Army Orks = Army.builder()
+                .id(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
+                .name("Ork Waaagh!")
+                .description("A horde of Orks led by Warboss Gorgutz.")
+                .faction(Faction.XENOS)
+                .owner(admin)
                 .build();
 
-        Character zereni = Character.builder()
-                .id(UUID.fromString("ff327e8a-77c0-4f9b-90a2-89e16895d1e1"))
-                .name("Zereni")
-                .age(20)
-                .background("Half elf rogue.")
-                .experience(0)
-                .level(1)
-                .profession(rogue)
-                .charisma(14)
-                .constitution(12)
-                .strength(10)
-                .health(2 * 12)
-                .portrait(getResourceAsByteArray("../avatar/zereni.png"))//package relative path
-                .user(alice)
+        Army Aeldari = Army.builder()
+                .id(UUID.fromString("223e4567-e89b-12d3-a456-426614174001"))
+                .name("Aeldari Strike Force")
+                .description("A swift and deadly Aeldari strike force.")
+                .faction(Faction.XENOS)
+                .owner(kevin)
                 .build();
 
-        characterService.create(calvian);
-        characterService.create(uhlbrecht);
-        characterService.create(eloise);
-        characterService.create(zereni);
+        Army ThousandSons = Army.builder()
+                .id(UUID.fromString("323e4567-e89b-12d3-a456-426614174002"))
+                .name("Thousand Sons Sorcerers")
+                .description("A legion of Thousand Sons led by Magnus the Red.")
+                .faction(Faction.CHAOS)
+                .owner(alice)
+                .build();
+
+        armyService.create(AstraMilitarum);
+        armyService.create(Orks);
+        armyService.create(Aeldari);
+        armyService.create(ThousandSons);
+
+        Squad squad1 = Squad.builder()
+                .id(UUID.fromString("423e4567-e89b-12d3-a456-426614174003"))
+                .army(AstraMilitarum)
+                .unit(Intercessor)
+                .count(10)
+                .build();
+
+        Squad squad2 = Squad.builder()
+                .id(UUID.fromString("523e4567-e89b-12d3-a456-426614174004"))
+                .army(AstraMilitarum)
+                .unit(medic)
+                .count(2)
+                .build();
+
+        squadService.create(squad1);
+        squadService.create(squad2);
+
     }
 
     /**

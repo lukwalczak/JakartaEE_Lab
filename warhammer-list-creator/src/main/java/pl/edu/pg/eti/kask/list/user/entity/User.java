@@ -67,4 +67,8 @@ public class User implements Serializable {
      * User's security roles.
      */
     private List<String> roles;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private byte[] portrait;
 }
