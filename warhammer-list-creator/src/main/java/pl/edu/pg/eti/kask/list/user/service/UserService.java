@@ -66,6 +66,13 @@ public class UserService {
         repository.create(user);
     }
 
+    public void update(User user) {
+        repository.update(user);
+    }
+
+    public void delete(UUID id) {
+        repository.find(id).ifPresent(repository::delete);
+    }
     /**
      * @param login    user's login
      * @param password user's password

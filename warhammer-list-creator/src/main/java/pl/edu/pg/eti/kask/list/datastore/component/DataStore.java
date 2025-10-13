@@ -129,6 +129,12 @@ public class DataStore {
         users.add(cloningUtility.clone(value));
     }
 
+    public synchronized void deleteUser(User user) throws IllegalArgumentException {
+        if (!users.removeIf(character -> character.getId().equals(user.getId()))) {
+            throw new IllegalArgumentException("The user with id \"%s\" does not exist".formatted(user.getId()));
+        }
+    }
+
     /**
      * Updates existing user.
      *
