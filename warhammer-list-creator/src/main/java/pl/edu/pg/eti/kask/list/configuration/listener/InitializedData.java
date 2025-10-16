@@ -1,9 +1,7 @@
 package pl.edu.pg.eti.kask.list.configuration.listener;
 
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.annotation.WebListener;
 import lombok.SneakyThrows;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
@@ -13,19 +11,11 @@ import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.entity.Skill;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
-import pl.edu.pg.eti.kask.list.user.controller.api.UserController;
-import pl.edu.pg.eti.kask.list.user.controller.simple.UserSimpleController;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
-import pl.edu.pg.eti.kask.list.user.repository.api.AvatarRepository;
-import pl.edu.pg.eti.kask.list.user.repository.memory.AvatarInMemoryRepository;
 import pl.edu.pg.eti.kask.list.user.service.UserService;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +26,7 @@ import java.util.UUID;
  * cases of empty database. When using persistence storage application instance should be initialized only during first
  * run in order to init database with starting data. Good place to create first default admin user.
  */
-@WebListener//using annotation does not allow configuring order
+//@WebListener//using annotation does not allow configuring order
 public class InitializedData implements ServletContextListener {
 
     /**

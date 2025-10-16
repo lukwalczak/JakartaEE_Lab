@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.controller.servlet;
 
+import jakarta.inject.Inject;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.ServletException;
@@ -37,13 +38,21 @@ public class ApiServlet extends HttpServlet {
     /**
      * Controller for managing collections units' representations.
      */
-    private UnitController unitController;
+    private final UnitController unitController;
 
-    private ArmyController armyController;
+    private final ArmyController armyController;
 
-    private SquadContoller squadController;
+    private final SquadContoller squadController;
 
-    private UserController userController;
+    private final UserController userController;
+
+    @Inject
+    public ApiServlet(UnitController unitController, ArmyController armyController, SquadContoller squadController, UserController userController) {
+        this.unitController = unitController;
+        this.armyController = armyController;
+        this.squadController = squadController;
+        this.userController = userController;
+    }
 
 
     /**
@@ -127,15 +136,6 @@ public class ApiServlet extends HttpServlet {
         } else {
             super.service(request, response);
         }
-    }
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        unitController = (UnitController) getServletContext().getAttribute("unitController");
-        armyController = (ArmyController) getServletContext().getAttribute("armyController");
-        squadController = (SquadContoller) getServletContext().getAttribute("squadController");
-        userController = (UserController) getServletContext().getAttribute("userController");
     }
 
     @SuppressWarnings("RedundantThrows")
@@ -276,7 +276,6 @@ public class ApiServlet extends HttpServlet {
             } else if (path.matches(Patterns.USER_PORTRAIT.pattern())) {
                 UUID uuid = extractUuid(Patterns.USER_PORTRAIT, path);
                 userController.deleteUserPortrait(uuid);
-                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 return;
             } else if (path.matches(Patterns.USER.pattern())) {
                 UUID uuid = extractUuid(Patterns.USER, path);

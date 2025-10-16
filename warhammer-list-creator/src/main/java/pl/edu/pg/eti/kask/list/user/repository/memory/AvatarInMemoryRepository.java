@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.list.user.repository.memory;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.list.user.repository.api.AvatarRepository;
 
 import java.io.IOException;
@@ -9,10 +11,12 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
+@RequestScoped
 public class AvatarInMemoryRepository implements AvatarRepository {
 
     private final Path dir;
 
+    @Inject
     public AvatarInMemoryRepository(Path dir) {
         this.dir = dir;
     }

@@ -10,7 +10,7 @@ import pl.edu.pg.eti.kask.list.serialization.component.CloningUtility;
  * Listener started automatically on servlet context initialized. Creates an instance of datasource and puts it in the
  * application (servlet) context.
  */
-@WebListener//using annotation does not allow configuring order
+//@WebListener//using annotation does not allow configuring order
 public class CreateDataSource implements ServletContextListener {
 
     @Override

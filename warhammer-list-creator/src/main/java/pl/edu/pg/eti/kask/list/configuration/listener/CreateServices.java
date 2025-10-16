@@ -23,7 +23,7 @@ import pl.edu.pg.eti.kask.list.user.service.UserService;
  * Listener started automatically on servlet context initialized. Creates an instance of services (business layer) and
  * puts them in the application (servlet) context.
  */
-@WebListener//using annotation does not allow configuring order
+//@WebListener//using annotation does not allow configuring order
 public class CreateServices implements ServletContextListener {
 
     @Override

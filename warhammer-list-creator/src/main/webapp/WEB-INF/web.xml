@@ -5,21 +5,21 @@
          version="6.0"
          metadata-complete="false">
 
-    <listener>
-        <listener-class>pl.edu.pg.eti.kask.list.configuration.listener.CreateDataSource</listener-class>
-    </listener>
+<!--    <listener>-->
+<!--        <listener-class>pl.edu.pg.eti.kask.list.configuration.listener.CreateDataSource</listener-class>-->
+<!--    </listener>-->
 
-    <listener>
-        <listener-class>pl.edu.pg.eti.kask.list.configuration.listener.CreateServices</listener-class>
-    </listener>
+<!--    <listener>-->
+<!--        <listener-class>pl.edu.pg.eti.kask.list.configuration.listener.CreateServices</listener-class>-->
+<!--    </listener>-->
 
-    <listener>
-        <listener-class>pl.edu.pg.eti.kask.list.configuration.listener.CreateControllers</listener-class>
-    </listener>
+<!--    <listener>-->
+<!--        <listener-class>pl.edu.pg.eti.kask.list.configuration.listener.CreateControllers</listener-class>-->
+<!--    </listener>-->
     
     <context-param>
         <param-name>avatar.dir</param-name>
-        <param-value>avatar</param-value>
+        <param-value>C:\Users\lukasz</param-value>
     </context-param>
 
 </web-app>

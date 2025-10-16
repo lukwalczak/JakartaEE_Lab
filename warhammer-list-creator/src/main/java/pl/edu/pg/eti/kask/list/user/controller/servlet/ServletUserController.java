@@ -1,14 +1,14 @@
-package pl.edu.pg.eti.kask.list.user.controller.simple;
+package pl.edu.pg.eti.kask.list.user.controller.servlet;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
 import pl.edu.pg.eti.kask.list.controller.servlet.exception.BadRequestException;
 import pl.edu.pg.eti.kask.list.controller.servlet.exception.NotFoundException;
-import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.user.controller.api.UserController;
 import pl.edu.pg.eti.kask.list.user.dto.GetUserResponse;
 import pl.edu.pg.eti.kask.list.user.dto.GetUsersResponse;
 import pl.edu.pg.eti.kask.list.user.dto.PutUserRequest;
-import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.repository.api.AvatarRepository;
 import pl.edu.pg.eti.kask.list.user.service.UserService;
 
@@ -16,7 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-public class UserSimpleController implements UserController {
+@RequestScoped
+public class ServletUserController implements UserController {
 
     private final UserService userService;
 
@@ -24,7 +25,8 @@ public class UserSimpleController implements UserController {
 
     private final DtoFunctionFactory factory;
 
-    public UserSimpleController(UserService userService, AvatarRepository avatarRepository, DtoFunctionFactory factory) {
+    @Inject
+    public ServletUserController(UserService userService, AvatarRepository avatarRepository, DtoFunctionFactory factory) {
         this.userService = userService;
         this.avatarRepository = avatarRepository;
         this.factory = factory;
