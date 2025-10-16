@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.list.squad.controller.simple;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
 import pl.edu.pg.eti.kask.list.controller.servlet.exception.BadRequestException;
 import pl.edu.pg.eti.kask.list.controller.servlet.exception.NotFoundException;
@@ -13,12 +15,14 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
+@RequestScoped
 public class SquadSimpleController implements SquadContoller {
 
     private final SquadService squadService;
     private final ArmyService armyService;
     private final UnitService unitService;
 
+    @Inject
     public SquadSimpleController(SquadService squadService, ArmyService armyService, UnitService unitService) {
         this.squadService = squadService;
         this.armyService = armyService;

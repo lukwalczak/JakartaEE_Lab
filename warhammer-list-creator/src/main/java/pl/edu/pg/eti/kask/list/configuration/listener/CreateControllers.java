@@ -10,7 +10,7 @@ import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.controller.simple.UnitSimpleController;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
-import pl.edu.pg.eti.kask.list.user.controller.servlet.ServletUserController;
+import pl.edu.pg.eti.kask.list.user.controller.simple.UserSimpleController;
 import pl.edu.pg.eti.kask.list.user.repository.api.AvatarRepository;
 import pl.edu.pg.eti.kask.list.user.repository.memory.AvatarInMemoryRepository;
 import pl.edu.pg.eti.kask.list.user.service.UserService;
@@ -45,7 +45,7 @@ public class CreateControllers implements ServletContextListener {
         } catch (IOException e) {
             throw new IllegalStateException("Cannot create avatar directory: " + avatarBase, e);
         }
-        AvatarRepository avatarRepository = new AvatarInMemoryRepository(avatarBase);
+        AvatarRepository avatarRepository = new AvatarInMemoryRepository(dirParam);
 
 
         event.getServletContext().setAttribute("unitController", new UnitSimpleController(
@@ -61,7 +61,7 @@ public class CreateControllers implements ServletContextListener {
 
         event.getServletContext().setAttribute("squadController", new SquadSimpleController(squadService,armyService,unitService));
 
-        event.getServletContext().setAttribute("userController", new ServletUserController(userService, avatarRepository, new DtoFunctionFactory()));
+        event.getServletContext().setAttribute("userController", new UserSimpleController(userService, avatarRepository, new DtoFunctionFactory()));
     }
 
     private static Path resolveBaseDir(ServletContext sc, String dirParam) {

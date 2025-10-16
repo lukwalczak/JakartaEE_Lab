@@ -197,9 +197,6 @@ GET http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f0
 GET http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
 ###
 
-
-###
-
 # Create new user
 
 PUT http://localhost:9080/simple-rpg/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2

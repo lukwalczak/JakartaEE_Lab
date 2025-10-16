@@ -1,5 +1,8 @@
 package pl.edu.pg.eti.kask.list.unit.service;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.repository.api.UnitRepository;
 import pl.edu.pg.eti.kask.list.user.entity.User;
@@ -14,6 +17,9 @@ import java.util.UUID;
 /**
  * Service layer for all business actions regarding character entity.
  */
+
+@RequestScoped
+@NoArgsConstructor(force = true)
 public class UnitService {
 
     /**
@@ -30,6 +36,7 @@ public class UnitService {
      * @param unitRepository  repository for character entity
      * @param userRepository repository for user entity
      */
+    @Inject
     public UnitService(UnitRepository unitRepository, UserRepository userRepository) {
         this.unitRepository = unitRepository;
         this.userRepository = userRepository;

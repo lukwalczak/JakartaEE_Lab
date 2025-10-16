@@ -240,6 +240,8 @@ public class ApiServlet extends HttpServlet {
                 return;
             } else if (path.matches(Patterns.USER.pattern())){
                 UUID uuid = extractUuid(Patterns.USER, path);
+                boolean existed = userController.getUser(uuid) != null;
+                response.setStatus(existed ? HttpServletResponse.SC_NO_CONTENT : HttpServletResponse.SC_CREATED);
                 userController.putUser(uuid, jsonb.fromJson(request.getReader(), PutUserRequest.class));
                 response.addHeader("Location", createUrl(request, Paths.API, "users", uuid.toString()));
                 return;

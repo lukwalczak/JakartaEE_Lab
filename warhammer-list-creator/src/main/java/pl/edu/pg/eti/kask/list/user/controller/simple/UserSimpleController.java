@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.kask.list.user.controller.servlet;
+package pl.edu.pg.eti.kask.list.user.controller.simple;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -17,7 +17,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @RequestScoped
-public class ServletUserController implements UserController {
+public class UserSimpleController implements UserController {
 
     private final UserService userService;
 
@@ -26,7 +26,7 @@ public class ServletUserController implements UserController {
     private final DtoFunctionFactory factory;
 
     @Inject
-    public ServletUserController(UserService userService, AvatarRepository avatarRepository, DtoFunctionFactory factory) {
+    public UserSimpleController(UserService userService, AvatarRepository avatarRepository, DtoFunctionFactory factory) {
         this.userService = userService;
         this.avatarRepository = avatarRepository;
         this.factory = factory;
