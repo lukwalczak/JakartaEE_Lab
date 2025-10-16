@@ -160,8 +160,8 @@ public class ApiServlet extends HttpServlet {
                 return;
             } else if (path.matches(Patterns.UNIT_PORTRAIT.pattern())) {
                 response.setContentType("image/png");
-                UUID uuid = extractUuid(Patterns.USER_PORTRAIT, path);
-                byte[] portrait = userController.getUserPortrait(uuid);
+                UUID uuid = extractUuid(Patterns.UNIT_PORTRAIT, path);
+                byte[] portrait = unitController.getunitPortrait(uuid);
                 response.setContentLength(portrait.length);
                 response.getOutputStream().write(portrait);
                 return;
@@ -216,6 +216,8 @@ public class ApiServlet extends HttpServlet {
                 }
                 java.util.UUID userId = java.util.UUID.fromString(m.group("userId"));
                 java.util.UUID armyId = java.util.UUID.fromString(m.group("armyId"));
+                boolean existed = armyController.getArmy(armyId) != null;
+                response.setStatus(existed ? HttpServletResponse.SC_NO_CONTENT : HttpServletResponse.SC_CREATED);
                 armyController.putArmy(armyId, jsonb.fromJson(request.getReader(), PutArmyRequest.class), userId);
                 response.addHeader("Location", createUrl(request, Paths.API, "armies", armyId.toString()));
                 return;
@@ -258,6 +260,12 @@ public class ApiServlet extends HttpServlet {
         if (Paths.API.equals(servletPath)) {
             if (path.matches(Patterns.UNIT.pattern())) {
                 UUID uuid = extractUuid(Patterns.UNIT, path);
+                boolean existed = unitController.getUnit(uuid) != null;
+                if (!existed) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
+                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 unitController.deleteunit(uuid);
                 return;
             }

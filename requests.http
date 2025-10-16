@@ -71,9 +71,9 @@ Content-Type: application/json
 
 {
   "description": "Medic is the life saver.",
-  "leadership": 1,
-  "movement": 1,
-  "save": 3,
+  "leadership": 3,
+  "movement": 2,
+  "save": 4,
   "toughness": 2,
   "wounds": 2
 }
