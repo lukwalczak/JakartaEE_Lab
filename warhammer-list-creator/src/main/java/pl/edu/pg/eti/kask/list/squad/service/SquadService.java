@@ -1,5 +1,8 @@
 package pl.edu.pg.eti.kask.list.squad.service;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.army.repository.api.ArmyRepository;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 import pl.edu.pg.eti.kask.list.squad.repository.api.SquadRepository;
@@ -9,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@ApplicationScoped
+@NoArgsConstructor(force = true)
 public class SquadService {
 
     private final ArmyRepository armyRepository;
@@ -17,6 +22,7 @@ public class SquadService {
 
     private final SquadRepository squadRepository;
 
+    @Inject
     public SquadService(ArmyRepository armyRepository, UnitRepository unitRepository, SquadRepository squadRepository) {
         this.armyRepository = armyRepository;
         this.unitRepository = unitRepository;

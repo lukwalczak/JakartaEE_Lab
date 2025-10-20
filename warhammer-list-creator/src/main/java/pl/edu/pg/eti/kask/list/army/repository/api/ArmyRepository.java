@@ -15,4 +15,6 @@ import java.util.UUID;
 public interface ArmyRepository extends Repository<Army, UUID> {
     List<Army> findAll();
     List<Army> findByUserId(UUID userId);
+
+    boolean exists(UUID id);
 }

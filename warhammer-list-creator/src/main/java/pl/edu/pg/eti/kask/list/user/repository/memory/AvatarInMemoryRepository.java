@@ -1,20 +1,26 @@
 package pl.edu.pg.eti.kask.list.user.repository.memory;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import pl.edu.pg.eti.kask.list.user.repository.api.AvatarRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.UUID;
 
+@ApplicationScoped
 public class AvatarInMemoryRepository implements AvatarRepository {
 
     private final Path dir;
 
-    public AvatarInMemoryRepository(Path dir) {
-        this.dir = dir;
+    @Inject
+    public AvatarInMemoryRepository(@ConfigProperty(name = "avatar.dir") String dirString) {
+        this.dir = Paths.get(dirString);
     }
 
     private Path getAvatarPath(UUID id) {

@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.list.unit.repository.memory;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.repository.api.UnitRepository;
 import pl.edu.pg.eti.kask.list.datastore.component.DataStore;
@@ -13,6 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Repository for unit entity. Repositories should be used in business layer (e.g.: in services).
  */
+@RequestScoped
 public class UnitInMemoryRepository implements UnitRepository {
 
     /**
@@ -23,6 +26,7 @@ public class UnitInMemoryRepository implements UnitRepository {
     /**
      * @param store data store
      */
+    @Inject
     public UnitInMemoryRepository(DataStore store) {
         this.store = store;
     }

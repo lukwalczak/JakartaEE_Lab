@@ -1,12 +1,6 @@
 package pl.edu.pg.eti.kask.list.unit.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 
@@ -40,6 +34,7 @@ public class Unit implements Serializable {
 
     private Integer save;
 
+    @Builder.Default
     private List<Skill> skillList = new ArrayList<>();
 
     public void addSkill(Skill skill) {

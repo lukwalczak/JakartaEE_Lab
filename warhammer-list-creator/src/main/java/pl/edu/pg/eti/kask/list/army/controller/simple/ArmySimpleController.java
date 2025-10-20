@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.list.army.controller.simple;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.list.army.controller.api.ArmyController;
 import pl.edu.pg.eti.kask.list.army.dto.GetArmiesResponse;
 import pl.edu.pg.eti.kask.list.army.dto.GetArmyResponse;
@@ -13,6 +15,7 @@ import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 
 import java.util.UUID;
 
+@RequestScoped
 public class ArmySimpleController implements ArmyController {
 
     private final ArmyService service;
@@ -21,6 +24,7 @@ public class ArmySimpleController implements ArmyController {
 
     private final DtoFunctionFactory factory;
 
+    @Inject
     public ArmySimpleController(ArmyService armyService, SquadService squadService, DtoFunctionFactory factory) {
         this.service = armyService;
         this.squadService = squadService;
@@ -89,6 +93,11 @@ public class ArmySimpleController implements ArmyController {
                     throw new NotFoundException();
                 }
         );
+    }
+
+    @Override
+    public boolean armyExists(UUID id) {
+        return service.exists(id);
     }
 
 }

@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.component;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import pl.edu.pg.eti.kask.list.army.dto.function.ArmiesToResponseFunction;
 import pl.edu.pg.eti.kask.list.army.dto.function.ArmyToResponseFunction;
 import pl.edu.pg.eti.kask.list.army.dto.function.RequestToArmyFunction;
@@ -28,6 +29,7 @@ import java.util.function.Function;
  * Factor for creating {@link Function} implementation for converting between various objects used in different layers.
  * Instead of injecting multiple function objects single factory is injected.
  */
+@ApplicationScoped
 public class DtoFunctionFactory {
 
     /**

@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.list.unit.controller.simple;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.list.unit.controller.api.UnitController;
 import pl.edu.pg.eti.kask.list.unit.dto.GetUnitResponse;
 import pl.edu.pg.eti.kask.list.unit.dto.GetUnitsResponse;
@@ -17,6 +19,7 @@ import java.util.UUID;
 /**
  * Simple framework agnostic implementation of controller.
  */
+@RequestScoped
 public class UnitSimpleController implements UnitController {
 
     /**
@@ -33,6 +36,7 @@ public class UnitSimpleController implements UnitController {
      * @param service unit service
      * @param factory factory producing functions for conversion between DTO and entities
      */
+    @Inject
     public UnitSimpleController(UnitService service, DtoFunctionFactory factory) {
         this.service = service;
         this.factory = factory;

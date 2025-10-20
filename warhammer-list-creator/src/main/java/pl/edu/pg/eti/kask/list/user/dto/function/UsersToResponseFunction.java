@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.user.dto.function;
 
+import jakarta.enterprise.context.Dependent;
 import pl.edu.pg.eti.kask.list.user.dto.GetUsersResponse;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 

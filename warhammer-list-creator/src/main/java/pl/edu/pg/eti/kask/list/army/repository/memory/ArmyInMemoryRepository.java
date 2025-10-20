@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.list.army.repository.memory;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.repository.api.ArmyRepository;
 import pl.edu.pg.eti.kask.list.datastore.component.DataStore;
@@ -11,6 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@RequestScoped
 public class ArmyInMemoryRepository implements ArmyRepository {
 
     /**
@@ -21,6 +24,7 @@ public class ArmyInMemoryRepository implements ArmyRepository {
     /**
      * @param store data store
      */
+    @Inject
     public ArmyInMemoryRepository(DataStore store) {
         this.store = store;
     }
@@ -40,6 +44,12 @@ public class ArmyInMemoryRepository implements ArmyRepository {
     @Override
     public List<Army> findByUserId(UUID userId) {
         return store.findByUserId(userId);
+    }
+
+    @Override
+    public boolean exists(UUID id) {
+        return store.findAllArmies().stream()
+                .anyMatch(army -> army.getId().equals(id));
     }
 
     @Override

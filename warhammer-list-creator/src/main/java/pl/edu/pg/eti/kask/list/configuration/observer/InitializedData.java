@@ -1,76 +1,58 @@
-package pl.edu.pg.eti.kask.list.configuration.listener;
+package pl.edu.pg.eti.kask.list.configuration.observer;
 
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.annotation.WebListener;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.context.control.RequestContextController;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 import lombok.SneakyThrows;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
 import pl.edu.pg.eti.kask.list.model.Faction;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
-import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.entity.Skill;
+import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
-import pl.edu.pg.eti.kask.list.user.controller.api.UserController;
-import pl.edu.pg.eti.kask.list.user.controller.simple.UserSimpleController;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
-import pl.edu.pg.eti.kask.list.user.repository.api.AvatarRepository;
-import pl.edu.pg.eti.kask.list.user.repository.memory.AvatarInMemoryRepository;
 import pl.edu.pg.eti.kask.list.user.service.UserService;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Listener started automatically on servlet context initialized. Fetches instance of the datasource from the servlet
- * context and fills it with default content. Normally this class would fetch database datasource and init data only in
- * cases of empty database. When using persistence storage application instance should be initialized only during first
- * run in order to init database with starting data. Good place to create first default admin user.
- */
-@WebListener//using annotation does not allow configuring order
-public class InitializedData implements ServletContextListener {
 
-    /**
-     * Character service.
-     */
-    private UnitService unitService;
+@ApplicationScoped
+public class InitializedData {
 
-    /**
-     * User service.
-     */
-    private UserService userService;
+    private final UserService userService;
 
+    private final ArmyService armyService;
 
-    private ArmyService armyService;
+    private final UnitService unitService;
 
+    private final SquadService squadService;
 
-    private SquadService squadService;
+    private final RequestContextController requestContextController;
 
+    @Inject
+    public InitializedData(UserService userService, ArmyService armyService, UnitService unitService, SquadService squadService, RequestContextController requestContextController) {
+        this.userService = userService;
+        this.armyService = armyService;
+        this.unitService = unitService;
+        this.squadService = squadService;
+        this.requestContextController = requestContextController;
+    }
 
-    @Override
-    public void contextInitialized(ServletContextEvent event) {
-        unitService = (UnitService) event.getServletContext().getAttribute("unitService");
-        userService = (UserService) event.getServletContext().getAttribute("userService");
-        armyService = (ArmyService) event.getServletContext().getAttribute("armyService");
-        squadService = (SquadService) event.getServletContext().getAttribute("squadService");
+    public void contextInitialized(@Observes @Initialized(ApplicationScoped.class) Object init) {
         init();
     }
 
-    /**
-     * Initializes database with some example values. Should be called after creating this object. This object should be
-     * created only once.
-     */
     @SneakyThrows
     private void init() {
+        requestContextController.activate();
         User admin = User.builder()
                 .id(UUID.fromString("c4804e0f-769e-4ab9-9ebe-0578fb4f00a6"))
                 .login("admin")
@@ -118,6 +100,7 @@ public class InitializedData implements ServletContextListener {
         userService.create(admin);
         userService.create(kevin);
         userService.create(alice);
+        userService.create(test);
 
         Skill attack = Skill.builder()
                 .name("Attack")
@@ -242,12 +225,10 @@ public class InitializedData implements ServletContextListener {
         squadService.create(squad1);
         squadService.create(squad2);
 
+        requestContextController.deactivate();
+
     }
 
-    /**
-     * @param name name of the desired resource
-     * @return array of bytes read from the resource
-     */
     @SneakyThrows
     private byte[] getResourceAsByteArray(String name) {
         try (InputStream is = this.getClass().getResourceAsStream(name)) {
@@ -258,5 +239,6 @@ public class InitializedData implements ServletContextListener {
             }
         }
     }
+
 
 }

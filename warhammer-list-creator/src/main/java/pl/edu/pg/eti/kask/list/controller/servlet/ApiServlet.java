@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.controller.servlet;
 
+import jakarta.inject.Inject;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.ServletException;
@@ -37,13 +38,21 @@ public class ApiServlet extends HttpServlet {
     /**
      * Controller for managing collections units' representations.
      */
-    private UnitController unitController;
+    private final UnitController unitController;
 
-    private ArmyController armyController;
+    private final ArmyController armyController;
 
-    private SquadContoller squadController;
+    private final SquadContoller squadController;
 
-    private UserController userController;
+    private final UserController userController;
+
+    @Inject
+    public ApiServlet(UnitController unitController, ArmyController armyController, SquadContoller squadController, UserController userController) {
+        this.unitController = unitController;
+        this.armyController = armyController;
+        this.squadController = squadController;
+        this.userController = userController;
+    }
 
 
     /**
@@ -129,15 +138,6 @@ public class ApiServlet extends HttpServlet {
         }
     }
 
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        unitController = (UnitController) getServletContext().getAttribute("unitController");
-        armyController = (ArmyController) getServletContext().getAttribute("armyController");
-        squadController = (SquadContoller) getServletContext().getAttribute("squadController");
-        userController = (UserController) getServletContext().getAttribute("userController");
-    }
-
     @SuppressWarnings("RedundantThrows")
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -160,8 +160,8 @@ public class ApiServlet extends HttpServlet {
                 return;
             } else if (path.matches(Patterns.UNIT_PORTRAIT.pattern())) {
                 response.setContentType("image/png");
-                UUID uuid = extractUuid(Patterns.USER_PORTRAIT, path);
-                byte[] portrait = userController.getUserPortrait(uuid);
+                UUID uuid = extractUuid(Patterns.UNIT_PORTRAIT, path);
+                byte[] portrait = unitController.getunitPortrait(uuid);
                 response.setContentLength(portrait.length);
                 response.getOutputStream().write(portrait);
                 return;
@@ -216,6 +216,8 @@ public class ApiServlet extends HttpServlet {
                 }
                 java.util.UUID userId = java.util.UUID.fromString(m.group("userId"));
                 java.util.UUID armyId = java.util.UUID.fromString(m.group("armyId"));
+                boolean existed = armyController.armyExists(armyId);
+                response.setStatus(existed ? HttpServletResponse.SC_NO_CONTENT : HttpServletResponse.SC_CREATED);
                 armyController.putArmy(armyId, jsonb.fromJson(request.getReader(), PutArmyRequest.class), userId);
                 response.addHeader("Location", createUrl(request, Paths.API, "armies", armyId.toString()));
                 return;
@@ -240,6 +242,8 @@ public class ApiServlet extends HttpServlet {
                 return;
             } else if (path.matches(Patterns.USER.pattern())){
                 UUID uuid = extractUuid(Patterns.USER, path);
+                boolean existed = userController.userExists(uuid);
+                response.setStatus(existed ? HttpServletResponse.SC_NO_CONTENT : HttpServletResponse.SC_CREATED);
                 userController.putUser(uuid, jsonb.fromJson(request.getReader(), PutUserRequest.class));
                 response.addHeader("Location", createUrl(request, Paths.API, "users", uuid.toString()));
                 return;
@@ -256,6 +260,12 @@ public class ApiServlet extends HttpServlet {
         if (Paths.API.equals(servletPath)) {
             if (path.matches(Patterns.UNIT.pattern())) {
                 UUID uuid = extractUuid(Patterns.UNIT, path);
+                boolean existed = unitController.getUnit(uuid) != null;
+                if (!existed) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
+                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 unitController.deleteunit(uuid);
                 return;
             }
@@ -276,7 +286,6 @@ public class ApiServlet extends HttpServlet {
             } else if (path.matches(Patterns.USER_PORTRAIT.pattern())) {
                 UUID uuid = extractUuid(Patterns.USER_PORTRAIT, path);
                 userController.deleteUserPortrait(uuid);
-                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 return;
             } else if (path.matches(Patterns.USER.pattern())) {
                 UUID uuid = extractUuid(Patterns.USER, path);

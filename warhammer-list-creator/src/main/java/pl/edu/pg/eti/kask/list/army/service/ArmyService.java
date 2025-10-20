@@ -1,5 +1,8 @@
 package pl.edu.pg.eti.kask.list.army.service;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.repository.api.ArmyRepository;
 import pl.edu.pg.eti.kask.list.unit.repository.api.UnitRepository;
@@ -9,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@RequestScoped
+@NoArgsConstructor(force = true)
 public class ArmyService {
 
     private final ArmyRepository armyRepository;
@@ -17,6 +22,7 @@ public class ArmyService {
 
     private final UserRepository userRepository;
 
+    @Inject
     public ArmyService(ArmyRepository armyRepository, UnitRepository unitRepository, UserRepository userRepository) {
         this.armyRepository = armyRepository;
         this.unitRepository = unitRepository;
@@ -44,4 +50,7 @@ public class ArmyService {
 
     public void delete(UUID id){ armyRepository.delete(armyRepository.find(id).orElseThrow());}
 
+    public boolean exists(UUID id) {
+        return armyRepository.exists(id);
+    }
 }
