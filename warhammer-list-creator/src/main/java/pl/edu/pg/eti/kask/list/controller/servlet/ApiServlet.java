@@ -216,7 +216,7 @@ public class ApiServlet extends HttpServlet {
                 }
                 java.util.UUID userId = java.util.UUID.fromString(m.group("userId"));
                 java.util.UUID armyId = java.util.UUID.fromString(m.group("armyId"));
-                boolean existed = armyController.getArmy(armyId) != null;
+                boolean existed = armyController.armyExists(armyId);
                 response.setStatus(existed ? HttpServletResponse.SC_NO_CONTENT : HttpServletResponse.SC_CREATED);
                 armyController.putArmy(armyId, jsonb.fromJson(request.getReader(), PutArmyRequest.class), userId);
                 response.addHeader("Location", createUrl(request, Paths.API, "armies", armyId.toString()));
@@ -242,7 +242,7 @@ public class ApiServlet extends HttpServlet {
                 return;
             } else if (path.matches(Patterns.USER.pattern())){
                 UUID uuid = extractUuid(Patterns.USER, path);
-                boolean existed = userController.getUser(uuid) != null;
+                boolean existed = userController.userExists(uuid);
                 response.setStatus(existed ? HttpServletResponse.SC_NO_CONTENT : HttpServletResponse.SC_CREATED);
                 userController.putUser(uuid, jsonb.fromJson(request.getReader(), PutUserRequest.class));
                 response.addHeader("Location", createUrl(request, Paths.API, "users", uuid.toString()));

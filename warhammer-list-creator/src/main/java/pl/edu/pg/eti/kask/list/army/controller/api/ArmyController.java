@@ -23,4 +23,6 @@ public interface ArmyController {
 
     void deleteArmy(UUID id);
 
+    boolean armyExists(UUID id);
+
 }

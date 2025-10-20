@@ -47,6 +47,12 @@ public class ArmyInMemoryRepository implements ArmyRepository {
     }
 
     @Override
+    public boolean exists(UUID id) {
+        return store.findAllArmies().stream()
+                .anyMatch(army -> army.getId().equals(id));
+    }
+
+    @Override
     public void create(Army entity) {
         store.createArmy(entity);
     }

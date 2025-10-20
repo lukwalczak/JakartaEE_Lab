@@ -145,7 +145,7 @@ PUT http://localhost:9080/simple-rpg/api/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f
 Content-Type: application/json
 
 {
-  "armyId": "f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b",
+  "armyId": "c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6",
   "unitId": "d3f3b1e4-2f4a-4f0a-8e2e-6f5e8f1c9b7a",
   "count": 15
 }

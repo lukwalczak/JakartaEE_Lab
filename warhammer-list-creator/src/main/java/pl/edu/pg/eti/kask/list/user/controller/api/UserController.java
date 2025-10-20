@@ -25,5 +25,7 @@ public interface UserController {
 
     boolean portraitExists(UUID id);
 
+    boolean userExists(UUID id);
+
 
 }

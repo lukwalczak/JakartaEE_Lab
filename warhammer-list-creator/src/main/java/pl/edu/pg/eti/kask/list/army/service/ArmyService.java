@@ -50,4 +50,7 @@ public class ArmyService {
 
     public void delete(UUID id){ armyRepository.delete(armyRepository.find(id).orElseThrow());}
 
+    public boolean exists(UUID id) {
+        return armyRepository.exists(id);
+    }
 }

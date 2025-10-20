@@ -95,4 +95,9 @@ public class ArmySimpleController implements ArmyController {
         );
     }
 
+    @Override
+    public boolean armyExists(UUID id) {
+        return service.exists(id);
+    }
+
 }

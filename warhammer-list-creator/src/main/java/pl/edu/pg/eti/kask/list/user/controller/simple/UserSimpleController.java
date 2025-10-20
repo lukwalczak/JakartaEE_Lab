@@ -119,4 +119,9 @@ public class UserSimpleController implements UserController {
             throw new BadRequestException(e);
         }
     }
+
+    @Override
+    public boolean userExists(UUID id) {
+        return userService.find(id).isPresent();
+    }
 }
