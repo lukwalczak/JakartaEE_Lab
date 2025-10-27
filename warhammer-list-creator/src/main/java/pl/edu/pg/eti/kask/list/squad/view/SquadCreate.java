@@ -19,6 +19,8 @@ import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 
 import java.io.Serializable;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 
 @ConversationScoped
 @Named
@@ -28,14 +30,22 @@ public class SquadCreate implements Serializable {
 
     private final SquadService squadService;
     private final ModelToSquadFunction modelToSquadFunction;
+
     @Getter
     private SquadCreateModel squad;
+
     @Getter
     private final Conversation conversation;
 
     private final ArmyService armyService;
     private final UnitService unitService;
     private final ToUnitsModelFunction toUnitsModelFunction;
+
+    @Getter
+    private pl.edu.pg.eti.kask.list.army.model.ArmiesModel availableArmies;
+
+    @Getter
+    private UnitsModel availableUnits;
 
     @Inject
     public SquadCreate(SquadService squadService,
@@ -61,17 +71,43 @@ public class SquadCreate implements Serializable {
                     .build();
             conversation.begin();
         }
-    }
 
-    public UnitsModel getAvailableUnits() {
-        return toUnitsModelFunction.apply(unitService.findAll());
-    }
+        try {
+            System.out.println("DUPA2");
+            var units = unitService.findAll();
+            if (units == null) {
+                availableUnits = new UnitsModel();
+            } else {
+                var nonNullIdUnits = units.stream()
+                        .filter(u -> u.getId() != null)
+                        .collect(Collectors.toList());
+                if (nonNullIdUnits.size() != units.size()) {
+                    log.warning("Filtered out " + (units.size() - nonNullIdUnits.size()) + " unit(s) with null id");
+                }
+                availableUnits = toUnitsModelFunction.apply(nonNullIdUnits);
+            }
+        } catch (Exception e) {
+            availableUnits = new UnitsModel();
+        }
 
-    public ArmiesModel getAvailableArmies() {
-        var armies = armyService.findAll();
-        ArmiesModel.ArmiesModelBuilder builder = ArmiesModel.builder();
-        armies.forEach(a -> builder.army(ArmiesModel.Army.builder().id(a.getId()).name(a.getName()).build()));
-        return builder.build();
+        try {
+            var armies = armyService.findAll();
+            if (armies == null) {
+                availableArmies = ArmiesModel.builder().build();
+            } else {
+                var filtered = armies.stream()
+                        .filter(a -> a.getId() != null)
+                        .collect(Collectors.toList());
+                ArmiesModel.ArmiesModelBuilder builder = ArmiesModel.builder();
+                filtered.forEach(a -> builder.army(ArmiesModel.Army.builder()
+                        .id(a.getId())
+                        .name(a.getName())
+                        .build()));
+                availableArmies = builder.build();
+            }
+        } catch (Exception e) {
+            availableArmies = ArmiesModel.builder().build();
+        }
     }
 
     public String cancelAction() {

@@ -12,13 +12,24 @@ public class UuidConverter implements Converter<UUID> {
 
     @Override
     public UUID getAsObject(FacesContext context, UIComponent component, String value) {
-        return UUID.fromString(value);
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(value);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, UUID value) {
+        if (value == null) {
+            return "";
+        }
         return value.toString();
     }
+
 
 
 }

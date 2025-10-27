@@ -16,14 +16,22 @@
                 <h:panelGrid columns="2">
                     <h:outputLabel for="army" value="Army:"/>
                     <h:selectOneMenu id="army" value="#{squadCreate.squad.armyId}" required="true">
+                        <f:selectItem itemLabel="-- select army --" itemValue="#{null}" />
                         <f:selectItems value="#{squadCreate.availableArmies.armies}" var="a"
-                                       itemLabel="#{a.name}" itemValue="#{a.id}"/>
+                                       itemLabel="#{a.name}" itemValue="#{a.id}"
+                                       rendered="#{not empty squadCreate.availableArmies and not empty squadCreate.availableArmies.armies}"/>
+                        <f:selectItem itemLabel="-- no armies available --" itemValue="#{null}" disabled="true"
+                                      rendered="#{empty squadCreate.availableArmies or empty squadCreate.availableArmies.armies}"/>
                     </h:selectOneMenu>
 
                     <h:outputLabel for="unit" value="Unit:"/>
                     <h:selectOneMenu id="unit" value="#{squadCreate.squad.unitId}" required="true">
+                        <f:selectItem itemLabel="-- select unit --" itemValue="#{null}" />
                         <f:selectItems value="#{squadCreate.availableUnits.units}" var="u"
-                                       itemLabel="#{u.name}" itemValue="#{u.id}"/>
+                                       itemLabel="#{u.name}" itemValue="#{u.id}"
+                                       rendered="#{not empty squadCreate.availableUnits and not empty squadCreate.availableUnits.units}"/>
+                        <f:selectItem itemLabel="-- no units available --" itemValue="#{null}" disabled="true"
+                                      rendered="#{empty squadCreate.availableUnits or empty squadCreate.availableUnits.units}"/>
                     </h:selectOneMenu>
 
                     <h:outputLabel for="count" value="Count:"/>
