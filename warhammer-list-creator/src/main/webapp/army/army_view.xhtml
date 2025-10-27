@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<ui:composition template="/templates/base.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <ui:define name="title">Podgląd armii</ui:define>
+    <ui:define name="content">
+        <h2>Armia - szczegóły</h2>
+        <h:panelGrid columns="2">
+            <h:outputLabel value="ID:"/>
+            <h:outputText value="#{armyBean.selected.id}"/>
+            <h:outputLabel value="Nazwa:"/>
+            <h:outputText value="#{armyBean.selected.name}"/>
+            <h:outputLabel value="Właściciel:"/>
+            <h:outputText value="#{armyBean.selected.owner != null ? armyBean.selected.owner.name : ''}"/>
+        </h:panelGrid>
+
+        <h3>Squady w tej armii</h3>
+        <h:form>
+            <h:dataTable value="#{armyBean.selected.squads}" var="s" border="1">
+                <h:column><f:facet name="header">ID</f:facet>#{s.id}</h:column>
+                <h:column><f:facet name="header">Nazwa</f:facet>#{s.name}</h:column>
+                <h:column>
+                    <f:facet name="header">Akcje</f:facet>
+                    <h:commandLink value="Podgląd" action="#{squadBean.view(s)}"/>
+                    &nbsp;|&nbsp;
+                    <h:commandLink value="Edytuj" action="#{squadBean.prepareEdit(s)}"/>
+                    &nbsp;|&nbsp;
+                    <h:commandButton value="Usuń" action="#{squadBean.delete(s)}" onclick="return confirm('Usuń squad?');"/>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+
+        <br/>
+        <h:link outcome="/armies/list.xhtml" value="Powrót do listy"/>
+    </ui:define>
+</ui:composition>

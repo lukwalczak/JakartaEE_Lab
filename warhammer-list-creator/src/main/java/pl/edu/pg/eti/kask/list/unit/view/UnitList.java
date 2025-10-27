@@ -32,6 +32,6 @@ public class UnitList {
 
     public String deleteUnit(UnitsModel.Unit unit) {
         unitService.delete(unit.getId());
-        return "/unit/list?faces-redirect=true";
+        return "/unit/unit_list?faces-redirect=true";
     }
 }

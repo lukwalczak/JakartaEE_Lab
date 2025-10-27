@@ -17,7 +17,7 @@
         <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
         <h:outputStylesheet library="default" name="css/styles.css"/>
         <h:outputScript library="webjars" name="mdb-ui-kit/6.4.0/js/mdb.min.js"/>
-        <h:outputScript library="webjars" name="mdbootstrap/x.x.x/js/mdb.min.js" />
+        <h:outputScript library="webjars" name="mdbootstrap/x.x.x/js/mdb.min.js"/>
 
         <h:outputScript library="mdb" name="js/init.js" target="body"/>
     </h:head>
@@ -25,10 +25,10 @@
 
     <h:body>
         <div class="container">
-            <header class="mb-4 mt-4">
-                <h1>Simple RPG</h1>
-            </header>
 
+            <div id="header">
+                <ui:include src="header.xhtml"/>
+            </div>
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
                 <div class="container-fluid">
@@ -38,7 +38,23 @@
                         </li>
                         <li class="nav-item">
                             <h:link styleClass="nav-link"
-                                    outcome="/unit/unit_list.xhtml">Units</h:link>
+                                    outcome="/user/user_list.xhtml">Users
+                            </h:link>
+                        </li>
+                        <li>
+                            <h:link styleClass="nav-link"
+                                    outcome="/army/army_list.xhtml">Armies
+                            </h:link>
+                        </li>
+                        <li>
+                            <h:link styleClass="nav-link"
+                                    outcome="/squad/squad_list.xhtml">Squads
+                            </h:link>
+                        </li>
+                        <li>
+                            <h:link styleClass="nav-link"
+                                    outcome="/unit/unit_list.xhtml">Units
+                            </h:link>
                         </li>
                     </ul>
                 </div>
@@ -47,15 +63,10 @@
                 <ui:insert name="content"/>
             </main>
 
+            <div id="footer">
+                <ui:include src="footer.xhtml"/>
+            </div>
 
-            <footer class="text-center text-lg-start bg-light text-muted p-2">
-                <div class="text-center">
-                    Copyright &#169; 2025, s193530
-                </div>
-                <div class="text-center">
-                    All character's portraits are random internet images
-                </div>
-            </footer>
         </div>
     </h:body>
 </f:view>

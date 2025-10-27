@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:jsf="jakarta.faces"
+                template="/WEB-INF/template/main.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{unitCreate.init()}"/>
+    </f:metadata>
+
+    <ui:define name="content">
+        <article>
+            <header><h2>Create unit</h2></header>
+            <h:form styleClass="container" onreset="onReset()" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-2 p-2 text-center">
+                        <h:commandButton styleClass="btn" value="Previous" immediate="true"
+                                         action="#{unitCreate.goToBasicAction()}"/>
+                    </div>
+                    <div class="col-2 p-2 text-center">
+                        <h:commandButton styleClass="btn" value="Next"
+                                         action="#{unitCreate.goToConfirmAction()}"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 p-2">
+                        <div>
+                            <h:panelGroup rendered="#{unitCreate.unit.portrait == null}">
+                                <h:outputLabel for="portrait" value="Portrait:" styleClass="form-label"/>
+                                <h:inputFile id="portrait" styleClass="form-control"
+                                             value="#{unitCreate.unit.portrait}"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{unitCreate.unit.portrait != null}">
+                                <h:outputLabel for="portraitFile2" value="Portrait:" styleClass="form-label"/>
+                                <div class="input-group">
+                                    <h:inputText id="portraitFile2" styleClass="form-control" disabled="true"
+                                                 readonly="true"
+                                                 value="#{unitCreate.unit.portrait.submittedFileName}"/>
+                                    <h:commandButton styleClass="btn  btn-outline-secondary" value="Reset"
+                                                     action="#{unitCreate.resetPortraitAction()}"/>
+                                </div>
+                                <h:graphicImage alt="unit portrait" styleClass="w-100"
+                                                value="#{unitCreate.unitPortraitUrl}"/>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2 p-2 text-center">
+                        <h:button styleClass="btn btn-primary" value="Create" disabled="true"/>
+                    </div>
+                    <div class="col-2 p-2 text-center">
+                        <h:commandButton styleClass="btn btn-secondary" value="Cancel"
+                                         action="#{unitCreate.cancelAction()}"/>
+                    </div>
+                </div>
+            </h:form>
+        </article>
+    </ui:define>
+
+</ui:composition>

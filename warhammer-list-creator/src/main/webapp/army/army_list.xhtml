@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<ui:composition template="/templates/base.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <ui:define name="title">Lista armii</ui:define>
+    <ui:define name="content">
+        <h2>Armie</h2>
+        <h:form>
+            <h:commandButton value="Dodaj armię" action="#{armyBean.prepareCreate}"/>
+            <br/><br/>
+            <h:dataTable value="#{armyBean.items}" var="a" border="1">
+                <h:column><f:facet name="header">ID</f:facet>#{a.id}</h:column>
+                <h:column><f:facet name="header">Nazwa</f:facet>#{a.name}</h:column>
+                <h:column><f:facet name="header">Właściciel</f:facet>#{a.owner != null ? a.owner.name : ''}</h:column>
+                <h:column>
+                    <f:facet name="header">Akcje</f:facet>
+                    <h:commandLink value="Podgląd" action="#{armyBean.view(a)}"/>
+                    &nbsp;|&nbsp;
+                    <h:commandLink value="Edytuj" action="#{armyBean.prepareEdit(a)}"/>
+                    &nbsp;|&nbsp;
+                    <h:commandButton value="Usuń" action="#{armyBean.delete(a)}" onclick="return confirm('Usuń armię?');"/>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

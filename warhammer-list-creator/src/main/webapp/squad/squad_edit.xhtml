@@ -17,8 +17,8 @@
                 <div class="row">
                     <div class="col-4 p-2">
                         <div class="form-outline">
-                            <h:outputLabel for="name" value="Name:" styleClass="form-label"/>
                             <h:inputText id="name" value="#{unitEdit.unit.name}" styleClass="form-control"/>
+                            <h:outputLabel for="name" value="Name:" styleClass="form-label"/>
                         </div>
                     </div>
                 </div>
@@ -26,8 +26,8 @@
                 <div class="row">
                     <div class="col-4 p-2">
                         <div class="form-outline">
-                            <h:outputLabel for="leadership" value="leadership:" styleClass="form-label"/>
-                            <h:inputText id="leadership" value="#{unitEdit.unit.leadership}" styleClass="form-control"/>
+                            <h:inputText id="age" value="#{unitEdit.unit.age}" styleClass="form-control"/>
+                            <h:outputLabel for="age" value="Age:" styleClass="form-label"/>
                         </div>
                     </div>
                 </div>
@@ -35,36 +35,19 @@
                 <div class="row">
                     <div class="col-4 p-2">
                         <div class="form-outline">
-                            <h:outputLabel for="toughness" value="toughness:" styleClass="form-label"/>
-                            <h:inputText id="toughness" value="#{unitEdit.unit.toughness}"
-                                             styleClass="form-control" rows="4"/>
+                            <h:inputFile id="portrait" value="#{unitEdit.unit.portrait}"
+                                         styleClass="form-control active"/>
+                            <h:outputLabel for="portrait" value="Portrait:" styleClass="form-label"/>
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-4 p-2">
                         <div class="form-outline">
-                            <h:outputLabel for="wounds" value="wounds:" styleClass="form-label"/>
-                            <h:inputText id="wounds" value="#{unitEdit.unit.wounds}"
+                            <h:inputTextarea id="background" value="#{unitEdit.unit.background}"
                                              styleClass="form-control" rows="4"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4 p-2">
-                        <div class="form-outline">
-                            <h:outputLabel for="save" value="save:" styleClass="form-label"/>
-                            <h:inputText id="save" value="#{unitEdit.unit.save}"
-                                             styleClass="form-control" rows="4"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-4 p-2">
-                        <div class="form-outline">
-                            <h:outputLabel for="description" value="description:" styleClass="form-label"/>
-                            <h:inputTextarea id="description" value="#{unitEdit.unit.description}"
-                                             styleClass="form-control" rows="4"/>
+                            <h:outputLabel for="background" value="Background:" styleClass="form-label"/>
                         </div>
                     </div>
                 </div>

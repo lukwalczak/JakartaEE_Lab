@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<ui:composition template="/templates/base.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="title">Podgląd użytkownika</ui:define>
+    <ui:define name="content">
+        <h2>Użytkownik - szczegóły</h2>
+        <h:panelGrid columns="2">
+            <h:outputLabel value="ID:"/>
+            <h:outputText value="#{userBean.selected.id}"/>
+            <h:outputLabel value="Imię:"/>
+            <h:outputText value="#{userBean.selected.name}"/>
+            <h:outputLabel value="Opis:"/>
+            <h:outputText value="#{userBean.selected.description}"/>
+        </h:panelGrid>
+
+        <h3>Armie użytkownika</h3>
+        <h:form>
+            <h:dataTable value="#{userBean.selected.armies}" var="a" border="1">
+                <h:column><f:facet name="header">ID</f:facet>#{a.id}</h:column>
+                <h:column><f:facet name="header">Nazwa</f:facet>#{a.name}</h:column>
+                <h:column>
+                    <f:facet name="header">Akcje</f:facet>
+                    <h:commandLink value="Podgląd" action="#{armyBean.view(a)}"/>
+                    &nbsp;|&nbsp;
+                    <h:commandLink value="Edytuj" action="#{armyBean.prepareEdit(a)}"/>
+                    &nbsp;|&nbsp;
+                    <h:commandButton value="Usuń" action="#{armyBean.delete(a)}" onclick="return confirm('Usuń armię?');"/>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+
+        <br/>
+        <h:link outcome="/users/list.xhtml" value="Powrót do listy"/>
+    </ui:define>
+</ui:composition>
