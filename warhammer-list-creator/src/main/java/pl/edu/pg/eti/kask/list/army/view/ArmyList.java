@@ -16,7 +16,6 @@ public class ArmyList {
     private ArmiesModel armiesModel;
 
     private final ToArmiesModelFunction function;
-
     @Inject
     public ArmyList(ArmyService armyService, ToArmiesModelFunction function) {
         this.armyService = armyService;

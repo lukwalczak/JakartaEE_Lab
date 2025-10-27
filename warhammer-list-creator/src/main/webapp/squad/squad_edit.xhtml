@@ -15,25 +15,25 @@
             <header><h2>Edit squad</h2></header>
             <h:form>
                 <h:panelGrid columns="2">
-                    <h:outputLabel for="army" value="Army:"/>
-                    <h:selectOneMenu id="army" value="#{squadEdit.squad.armyId}" required="true">
+                    <h:outputLabel for="army" value="Army:" class=" "/>
+                    <h:selectOneMenu id="army" value="#{squadEdit.squad.armyId}" required="true" class="list-group form-control">
                         <f:selectItems value="#{squadEdit.availableArmies.armies}" var="a"
-                                       itemLabel="#{a.name}" itemValue="#{a.id}"/>
+                                       itemLabel="#{a.name}" itemValue="#{a.id}" class="list-group-item"/>
                     </h:selectOneMenu>
 
                     <h:outputLabel for="unit" value="Unit:"/>
-                    <h:selectOneMenu id="unit" value="#{squadEdit.squad.unitId}" required="true">
+                    <h:selectOneMenu id="unit" value="#{squadEdit.squad.unitId}" required="true" class="list-group form-control">
                         <f:selectItems value="#{squadEdit.availableUnits.units}" var="u"
-                                       itemLabel="#{u.name}" itemValue="#{u.id}"/>
+                                       itemLabel="#{u.name}" itemValue="#{u.id}" class="list-group-item"/>
                     </h:selectOneMenu>
 
                     <h:outputLabel for="count" value="Count:"/>
-                    <h:inputText id="count" value="#{squadEdit.squad.count}" required="true"/>
+                    <h:inputText id="count" value="#{squadEdit.squad.count}" required="true" class="form-control"/>
                 </h:panelGrid>
 
                 <div style="margin-top:1rem;">
-                    <h:commandButton value="Save" action="#{squadEdit.saveAction()}"/>
-                    <h:link value="Back" outcome="/squad/squad_view.xhtml">
+                    <h:commandButton value="Save" action="#{squadEdit.saveAction()}" class="btn btn-primary"/>
+                    <h:link value="Back" outcome="/squad/squad_view.xhtml" class="btn btn-secondary" style="margin-left:1rem;">
                         <f:param name="id" value="#{squadEdit.squad.id}"/>
                     </h:link>
                 </div>

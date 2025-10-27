@@ -4,41 +4,38 @@
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:f="jakarta.faces.core"
                 template="/WEB-INF/template/main.xhtml">
-
     <f:metadata>
         <f:viewAction action="#{armyCreate.init()}"/>
     </f:metadata>
-
     <ui:define name="content">
         <article>
             <header><h2>Confirm create army</h2></header>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Name:"/>
+                    <h:outputText value="#{armyCreate.army.name}"/>
 
-            <h:panelGrid columns="2">
-                <h:outputLabel value="Name:"/>
-                <h:outputText value="#{armyCreate.army.name}"/>
+                    <h:outputLabel value="Description:"/>
+                    <h:outputText value="#{armyCreate.army.description}" escape="false"/>
+                </h:panelGrid>
 
-                <h:outputLabel value="Description:"/>
-                <h:outputText value="#{armyCreate.army.description}" escape="false"/>
-            </h:panelGrid>
+                <h3>Squads</h3>
+                <h:dataTable value="#{armyCreate.army.squads}" var="s" rendered="#{not empty armyCreate.army.squads}">
+                    <h:column>
+                        <f:facet name="header">Unit</f:facet>
+                        <h:outputText value="#{s.unitId}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Count</f:facet>
+                        <h:outputText value="#{s.count}"/>
+                    </h:column>
+                </h:dataTable>
 
-            <h3>Squads</h3>
-            <h:dataTable value="#{armyCreate.army.squads}" var="s">
-                <h:column>
-                    <f:facet name="header">Unit</f:facet>
-                    <h:outputText value="#{armyCreate.availableUnits.units[armyCreate.army.squads.indexOf(s)].name}" rendered="#{false}"/>
-                    <!-- The simplest reliable approach: show unit name by lookup on server side; but here we display id when name not available -->
-                    <h:outputText value="#{s.unitId}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Count</f:facet>
-                    <h:outputText value="#{s.count}"/>
-                </h:column>
-            </h:dataTable>
-
-            <div style="margin-top:1rem;">
-                <h:commandButton value="Back" action="/army/army_create_basic.xhtml?faces-redirect=true"/>
-                <h:commandButton value="Save" action="#{armyCreate.saveAction()}"/>
-            </div>
+                <div style="margin-top:1rem;">
+                    <h:commandButton value="Back" action="/army/army_create_basic.xhtml?faces-redirect=true"/>
+                    <h:commandButton value="Save" action="#{armyCreate.saveAction()}"/>
+                </div>
+            </h:form>
         </article>
     </ui:define>
 </ui:composition>

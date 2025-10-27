@@ -8,25 +8,29 @@
     <ui:define name="content">
         <h:outputStylesheet library="army" name="css/army_list.css"/>
         <article class="text--justified">
-            <header><h2>Armies</h2></header>
+            <header><h2>armies</h2></header>
 
-            <h:dataTable value="#{armyList.armiesModel.armies}" var="army" styleClass="table align-middle mb-0 bg-white"
-                         headerClass="bg-light">
-                <h:column>
-                    <f:facet name="header">Name</f:facet>
-                    <h:outputText value="#{army.name}"/>
-                </h:column>
+            <h:form>
+                <h:dataTable value="#{armyList.armiesModel.armies}" var="army" styleClass="table align-middle mb-0 bg-white"
+                             headerClass="bg-light">
+                    <h:column>
+                        <f:facet name="header">Name</f:facet>
+                        <h:outputText value="#{army.name}"/>
+                    </h:column>
 
-                <h:column>
-                    <f:facet name="header">Actions</f:facet>
-                    <h:link outcome="/army/army_view.xhtml" value="View" class="btn btn-primary">
-                        <f:param name="id" value="#{army.id}"/>
-                    </h:link>
-                    <h:link outcome="/army/army_edit.xhtml" value="Edit" class="btn btn-secondary">
-                        <f:param name="id" value="#{army.id}"/>
-                    </h:link>
-                </h:column>
-            </h:dataTable>
+                    <h:column>
+                        <f:facet name="header">Actions</f:facet>
+                        <h:link outcome="/army/army_view.xhtml" value="View" class="btn btn-primary">
+                            <f:param name="id" value="#{army.id}"/>
+                        </h:link>
+                        <h:link outcome="/army/army_edit.xhtml" value="Edit" class="btn btn-secondary">
+                            <f:param name="id" value="#{army.id}"/>
+                        </h:link>
+                        <h:commandButton value="Delete" styleClass="btn btn-danger"
+                                         action="#{armyList.deleteArmy(army)}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
 
             <div style="margin-top:1rem;">
                 <h:link outcome="/army/army_create_basic.xhtml" value="Create new army" class="btn btn-primary"/>

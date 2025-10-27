@@ -21,14 +21,20 @@
             <section class="army-card">
                 <dl>
                     <dt>Name</dt>
-                    <dd><h:outputText value="#{armyView.armyModel != null ? armyView.armyModel.name : ''}"/></dd>
+                    <dd>
+                        <h:outputText value="#{armyView.armyModel != null ? armyView.armyModel.name : ''}"/>
+                    </dd>
 
                     <dt>Description</dt>
-                    <dd><h:outputText value="#{armyView.armyModel != null ? armyView.armyModel.description : ''}" escape="false"/></dd>
+                    <dd>
+                        <h:outputText value="#{armyView.armyModel != null ? armyView.armyModel.description : ''}"
+                                      escape="false"/>
+                    </dd>
                 </dl>
 
                 <h3>Squads</h3>
-                <h:dataTable value="#{armyView.armyModel.squads}" var="s" rendered="#{not empty armyView.armyModel.squads}">
+                <h:dataTable value="#{armyView.armyModel.squads}" var="s"
+                             rendered="#{not empty armyView.armyModel.squads}">
                     <h:column>
                         <f:facet name="header">Unit</f:facet>
                         <h:outputText value="#{s.unitName}"/>

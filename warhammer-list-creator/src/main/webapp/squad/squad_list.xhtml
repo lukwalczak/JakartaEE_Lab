@@ -10,33 +10,39 @@
         <article class="text--justified">
             <header><h2>Squads</h2></header>
 
-            <h:dataTable value="#{squadList.squadsModel.squads}" var="squad" styleClass="table align-middle mb-0 bg-white"
-                         headerClass="bg-light">
-                <h:column>
-                    <f:facet name="header">Army</f:facet>
-                    <h:outputText value="#{squad.armyName}"/>
-                </h:column>
+            <!-- Formularz otaczający tabelę, potrzebny do wykonania akcji (commandButton) -->
+            <h:form>
+                <h:dataTable value="#{squadList.squadsModel.squads}" var="squad" styleClass="table align-middle mb-0 bg-white"
+                             headerClass="bg-light">
+                    <h:column>
+                        <f:facet name="header">Army</f:facet>
+                        <h:outputText value="#{squad.armyName}"/>
+                    </h:column>
 
-                <h:column>
-                    <f:facet name="header">Unit</f:facet>
-                    <h:outputText value="#{squad.unitName}"/>
-                </h:column>
+                    <h:column>
+                        <f:facet name="header">Unit</f:facet>
+                        <h:outputText value="#{squad.unitName}"/>
+                    </h:column>
 
-                <h:column>
-                    <f:facet name="header">Count</f:facet>
-                    <h:outputText value="#{squad.count}"/>
-                </h:column>
+                    <h:column>
+                        <f:facet name="header">Count</f:facet>
+                        <h:outputText value="#{squad.count}"/>
+                    </h:column>
 
-                <h:column>
-                    <f:facet name="header">Actions</f:facet>
-                    <h:link outcome="/squad/squad_view.xhtml" value="View" class="btn btn-primary">
-                        <f:param name="id" value="#{squad.id}"/>
-                    </h:link>
-                    <h:link outcome="/squad/squad_edit.xhtml" value="Edit" class="btn btn-secondary">
-                        <f:param name="id" value="#{squad.id}"/>
-                    </h:link>
-                </h:column>
-            </h:dataTable>
+                    <h:column>
+                        <f:facet name="header">Actions</f:facet>
+                        <h:link outcome="/squad/squad_view.xhtml" value="View" class="btn btn-primary">
+                            <f:param name="id" value="#{squad.id}"/>
+                        </h:link>
+                        <h:link outcome="/squad/squad_edit.xhtml" value="Edit" class="btn btn-secondary">
+                            <f:param name="id" value="#{squad.id}"/>
+                        </h:link>
+
+                        <h:commandButton value="Delete" styleClass="btn btn-danger"
+                                         action="#{squadList.deleteSquad(squad)}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
 
             <div style="margin-top:1rem;">
                 <h:link outcome="/squad/squad_create.xhtml" value="Create new squad" class="btn btn-primary"/>

@@ -55,9 +55,9 @@ public class ArmyEdit implements Serializable {
     }
 
     public void init() throws IOException {
-        Optional<Army> maybe = armyService.find(id);
-        if (maybe.isPresent()) {
-            Army a = maybe.get();
+        Optional<Army> army = armyService.find(id);
+        if (army.isPresent()) {
+            Army a = army.get();
             a.setSquads(squadService.findByArmyId(a.getId()));
             this.army = toArmyEditModelFunction.apply(a);
 

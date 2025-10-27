@@ -65,6 +65,11 @@ public class ArmyCreate implements Serializable {
                     .id(UUID.randomUUID())
                     .build();
             conversation.begin();
+            if (army.getSquads() == null) {
+                army.setSquads(new ArrayList<>());
+            } else {
+                army.setSquads(new ArrayList<>(army.getSquads()));
+            }
         }
     }
 
@@ -93,6 +98,9 @@ public class ArmyCreate implements Serializable {
     }
 
     public String saveAction() {
+        if (army.getId() == null) {
+            army.setId(UUID.randomUUID());
+        }
         armyService.create(modelToArmyFunction.apply(army));
 
         army.getSquads().forEach(s -> {
@@ -102,7 +110,6 @@ public class ArmyCreate implements Serializable {
                     .build();
             squadService.create(squad, army.getId(), s.getUnitId());
         });
-
         conversation.end();
         return "/army/army_list.xhtml?faces-redirect=true";
     }

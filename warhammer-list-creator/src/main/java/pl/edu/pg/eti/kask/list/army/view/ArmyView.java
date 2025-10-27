@@ -51,4 +51,11 @@ public class ArmyView {
             FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "Army not found");
         }
     }
+
+    public String deleteAction() {
+        if (id != null) {
+            armyService.delete(id);
+        }
+        return "/army/army_list.xhtml?faces-redirect=true";
+    }
 }

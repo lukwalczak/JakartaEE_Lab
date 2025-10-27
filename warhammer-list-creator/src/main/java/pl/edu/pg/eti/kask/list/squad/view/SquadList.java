@@ -31,7 +31,9 @@ public class SquadList {
     }
 
     public String deleteSquad(SquadsModel.Squad squad) {
-        squadService.delete(squad.getId());
+        if (squad != null && squad.getId() != null) {
+            squadService.delete(squad.getId());
+        }
         return "/squad/squad_list.xhtml?faces-redirect=true";
     }
 }
