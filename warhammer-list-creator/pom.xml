@@ -55,6 +55,13 @@
             <artifactId>microprofile-config-api</artifactId>
             <version>2.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>mdb-ui-kit</artifactId>
+            <version>6.4.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
