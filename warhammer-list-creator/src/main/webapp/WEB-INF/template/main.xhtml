@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core">
+<f:view>
+    <h:head>
+        <meta charset="UTF-8"/>
+        <meta name="description" content="Simple wh40k list creator"/>
+        <meta name="keywords" content="RPG"/>
+        <meta name="author" content="s193530"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Warhammer List Creator</title>
+
+        <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
+        <h:outputStylesheet library="default" name="css/styles.css"/>
+        <h:outputScript library="webjars" name="mdb-ui-kit/6.4.0/js/mdb.min.js"/>
+        <h:outputScript library="webjars" name="mdbootstrap/x.x.x/js/mdb.min.js"/>
+
+        <h:outputScript library="mdb" name="js/init.js" target="body"/>
+    </h:head>
+
+
+    <h:body>
+        <div class="container">
+
+            <div id="header">
+                <ui:include src="header.xhtml"/>
+            </div>
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+                <div class="container-fluid">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <h:link styleClass="nav-link" outcome="/index.xhtml">Home</h:link>
+                        </li>
+                        <li class="nav-item">
+                            <h:link styleClass="nav-link"
+                                    outcome="/user/user_list.xhtml">Users
+                            </h:link>
+                        </li>
+                        <li>
+                            <h:link styleClass="nav-link"
+                                    outcome="/army/army_list.xhtml">Armies
+                            </h:link>
+                        </li>
+                        <li>
+                            <h:link styleClass="nav-link"
+                                    outcome="/squad/squad_list.xhtml">Squads
+                            </h:link>
+                        </li>
+                        <li>
+                            <h:link styleClass="nav-link"
+                                    outcome="/unit/unit_list.xhtml">Units
+                            </h:link>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main class="mb-4 mt-4">
+                <ui:insert name="content"/>
+            </main>
+
+            <div id="footer">
+                <ui:include src="footer.xhtml"/>
+            </div>
+
+        </div>
+    </h:body>
+</f:view>
+</html>

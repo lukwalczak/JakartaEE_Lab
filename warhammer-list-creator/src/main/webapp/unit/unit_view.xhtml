@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{unitView.id}" required="true"/>
+        <f:viewAction action="#{unitView.init()}"/>
+    </f:metadata>
+
+    <ui:define name="content">
+        <h:outputStylesheet library="unit" name="css/unit_view.css"/>
+
+        <article class="text--justified">
+            <header>
+                <h2>Unit details</h2>
+            </header>
+
+            <section class="unit-card">
+                <div class="unit-portrait">
+                    <h:graphicImage alt="unit portrait"
+                                    value="/api/units/#{unitView.unitModel != null ? unitView.unitModel.id : ''}/portrait"
+                                    styleClass="portrait-large"/>
+                </div>
+
+                <div class="unit-info">
+                    <h3>
+                        <h:outputText value="#{unitView.unitModel != null ? unitView.unitModel.name : '—'}"/>
+                    </h3>
+
+                    <dl>
+                        <dt>ID</dt>
+                        <dd><h:outputText value="#{unitView.unitModel != null ? unitView.unitModel.id : ''}"/></dd>
+
+                        <dt>Leadership</dt>
+                        <dd><h:outputText value="#{unitView.unitModel != null ? unitView.unitModel.leadership : ''}"/></dd>
+
+                        <dt>Toughness</dt>
+                        <dd><h:outputText value="#{unitView.unitModel != null ? unitView.unitModel.toughness : ''}"/></dd>
+
+                        <dt>Wounds</dt>
+                        <dd><h:outputText value="#{unitView.unitModel != null ? unitView.unitModel.wounds : ''}"/></dd>
+
+                        <dt>Save</dt>
+                        <dd><h:outputText value="#{unitView.unitModel != null ? unitView.unitModel.save : ''}"/></dd>
+
+                        <dt>Description</dt>
+                        <dd><h:outputText value="#{unitView.unitModel != null ? unitView.unitModel.description : ''}" escape="false"/></dd>
+                    </dl>
+
+                    <div class="button-group">
+                        <div class="btn-item" style="display:inline-block; margin-right:1rem;">
+                            <h:link outcome="/unit/unit_edit.xhtml" value="Edit" class="btn btn-primary">
+                                <f:param name="id" value="#{unitView.unitModel != null ? unitView.unitModel.id : ''}"/>
+                            </h:link>
+                        </div>
+                        <div class="btn-item" style="display:inline-block;">
+                            <h:link outcome="/unit/unit_list.xhtml" value="Back to list" class="btn btn-primary"/>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </ui:define>
+</ui:composition>

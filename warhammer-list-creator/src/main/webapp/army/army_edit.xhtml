@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<ui:composition template="/templates/base.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="title">Edycja armii</ui:define>
+    <ui:define name="content">
+        <h2>Dodaj / Edytuj armię</h2>
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputLabel for="name" value="Nazwa:"/>
+                <h:inputText id="name" value="#{armyBean.selected.name}" required="true"/>
+
+                <h:outputLabel for="owner" value="Właściciel (użytkownik):"/>
+                <h:selectOneMenu id="owner" value="#{armyBean.selected.owner}" converter="userConverter">
+                    <f:selectItem itemLabel="-- wybierz --" itemValue="#{null}"/>
+                    <f:selectItems value="#{armyBean.allUsers}" var="u" itemValue="#{u}" itemLabel="#{u.name}"/>
+                </h:selectOneMenu>
+            </h:panelGrid>
+
+            <br/>
+            <h:commandButton value="Zapisz" action="#{armyBean.save}"/>
+            <h:link outcome="/armies/list.xhtml" value="Anuluj"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

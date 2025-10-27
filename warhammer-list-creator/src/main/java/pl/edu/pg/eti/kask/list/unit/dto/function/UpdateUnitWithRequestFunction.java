@@ -15,6 +15,7 @@ public class UpdateUnitWithRequestFunction implements BiFunction<Unit, PatchUnit
     public Unit apply(Unit entity, PatchUnitRequest request) {
         return Unit.builder()
                 .id(entity.getId())
+                .name(request.getName())
                 .description(request.getDescription())
                 .leadership(request.getLeadership())
                 .movement(request.getMovement())

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{unitEdit.id}" required="true"/>
+        <f:viewAction action="#{unitEdit.init()}"/>
+    </f:metadata>
+
+    <ui:define name="content">
+        <article>
+            <header><h2>Edit unit info</h2></header>
+            <h:form styleClass="container" onreset="onReset()" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-4 p-2">
+                        <div class="form-outline">
+                            <h:outputLabel for="name" value="Name:" styleClass="form-label"/>
+                            <h:inputText id="name" value="#{unitEdit.unit.name}" styleClass="form-control"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 p-2">
+                        <div class="form-outline">
+                            <h:outputLabel for="leadership" value="leadership:" styleClass="form-label"/>
+                            <h:inputText id="leadership" value="#{unitEdit.unit.leadership}" styleClass="form-control"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 p-2">
+                        <div class="form-outline">
+                            <h:outputLabel for="toughness" value="toughness:" styleClass="form-label"/>
+                            <h:inputText id="toughness" value="#{unitEdit.unit.toughness}"
+                                             styleClass="form-control" rows="4"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 p-2">
+                        <div class="form-outline">
+                            <h:outputLabel for="wounds" value="wounds:" styleClass="form-label"/>
+                            <h:inputText id="wounds" value="#{unitEdit.unit.wounds}"
+                                             styleClass="form-control" rows="4"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 p-2">
+                        <div class="form-outline">
+                            <h:outputLabel for="save" value="save:" styleClass="form-label"/>
+                            <h:inputText id="save" value="#{unitEdit.unit.save}"
+                                             styleClass="form-control" rows="4"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 p-2">
+                        <div class="form-outline">
+                            <h:outputLabel for="description" value="description:" styleClass="form-label"/>
+                            <h:inputTextarea id="description" value="#{unitEdit.unit.description}"
+                                             styleClass="form-control" rows="4"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2 p-2 text-center">
+                        <h:commandButton styleClass="btn btn-primary" value="Update"
+                                         action="#{unitEdit.saveAction()}"/>
+                    </div>
+                    <div class="col-2 p-2 text-center">
+                        <h:commandButton styleClass="btn btn-secondary" type="reset" value="Reset"/>
+                    </div>
+                </div>
+            </h:form>
+        </article>
+    </ui:define>
+
+</ui:composition>

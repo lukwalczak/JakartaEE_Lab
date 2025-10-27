@@ -25,6 +25,8 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class PatchUnitRequest {
 
+    private String name;
+
     private String description;
 
     private Integer movement;

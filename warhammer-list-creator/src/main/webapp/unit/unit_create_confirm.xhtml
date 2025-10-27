@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{unitCreate.init()}"/>
+    </f:metadata>
+
+    <ui:define name="content">
+        <article>
+            <header><h2>Create unit - basic information</h2></header>
+            <h:form styleClass="container" onreset="onReset()" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-2 p-2 text-center">
+                        <h:commandButton styleClass="btn" value="Previous" immediate="true"
+                                         action="#{unitCreate.goToPortraitAction()}"/>
+                    </div>
+                    <div class="col-2 p-2 text-center">
+                        <h:button styleClass="btn" value="Next" disabled="true"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                Name
+                            </div>
+                            <div class="col-6">
+                                <h:outputText value="#{unitCreate.unit.name}"/>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                Description
+                            </div>
+                            <div class="col-6">
+                                <h:outputText value="#{unitCreate.unit.description}"/>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                Wounds
+                            </div>
+                            <div class="col-6">
+                                <h:outputText value="#{unitCreate.unit.wounds}"/>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                Leadership
+                            </div>
+                            <div class="col-6">
+                                <h:outputText value="#{unitCreate.unit.leadership}"/>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                Movement
+                            </div>
+                            <div class="col-6">
+                                <h:outputText value="#{unitCreate.unit.movement}"/>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                Save
+                            </div>
+                            <div class="col-6">
+                                <h:outputText value="#{unitCreate.unit.save}"/>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                Toughness
+                            </div>
+                            <div class="col-6">
+                                <h:outputText value="#{unitCreate.unit.toughness}"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-3">
+                        <h:graphicImage alt="unit portrait"
+                                        rendered="#{unitCreate.unit.portrait != null}"
+                                        value="#{unitCreate.unitPortraitUrl}"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2 p-2 text-center">
+                        <h:commandButton styleClass="btn btn-primary" value="Create"
+                                         action="#{unitCreate.saveAction()}"/>
+                    </div>
+                    <div class="col-2 p-2 text-center">
+                        <h:commandButton styleClass="btn btn-secondary" value="Cancel"
+                                         action="#{unitCreate.cancelAction()}"/>
+                    </div>
+                </div>
+            </h:form>
+        </article>
+    </ui:define>
+
+</ui:composition>
