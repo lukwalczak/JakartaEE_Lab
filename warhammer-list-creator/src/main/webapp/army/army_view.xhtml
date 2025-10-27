@@ -1,37 +1,56 @@
-<!DOCTYPE html>
-<ui:composition template="/templates/base.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <ui:define name="title">Podgląd armii</ui:define>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{armyView.id}" required="true"/>
+        <f:viewAction action="#{armyView.init()}"/>
+    </f:metadata>
+
     <ui:define name="content">
-        <h2>Armia - szczegóły</h2>
-        <h:panelGrid columns="2">
-            <h:outputLabel value="ID:"/>
-            <h:outputText value="#{armyBean.selected.id}"/>
-            <h:outputLabel value="Nazwa:"/>
-            <h:outputText value="#{armyBean.selected.name}"/>
-            <h:outputLabel value="Właściciel:"/>
-            <h:outputText value="#{armyBean.selected.owner != null ? armyBean.selected.owner.name : ''}"/>
-        </h:panelGrid>
+        <h:outputStylesheet library="army" name="css/army_view.css"/>
 
-        <h3>Squady w tej armii</h3>
-        <h:form>
-            <h:dataTable value="#{armyBean.selected.squads}" var="s" border="1">
-                <h:column><f:facet name="header">ID</f:facet>#{s.id}</h:column>
-                <h:column><f:facet name="header">Nazwa</f:facet>#{s.name}</h:column>
-                <h:column>
-                    <f:facet name="header">Akcje</f:facet>
-                    <h:commandLink value="Podgląd" action="#{squadBean.view(s)}"/>
-                    &nbsp;|&nbsp;
-                    <h:commandLink value="Edytuj" action="#{squadBean.prepareEdit(s)}"/>
-                    &nbsp;|&nbsp;
-                    <h:commandButton value="Usuń" action="#{squadBean.delete(s)}" onclick="return confirm('Usuń squad?');"/>
-                </h:column>
-            </h:dataTable>
-        </h:form>
+        <article class="text--justified">
+            <header>
+                <h2>Army details</h2>
+            </header>
 
-        <br/>
-        <h:link outcome="/armies/list.xhtml" value="Powrót do listy"/>
+            <section class="army-card">
+                <dl>
+                    <dt>Name</dt>
+                    <dd><h:outputText value="#{armyView.armyModel != null ? armyView.armyModel.name : ''}"/></dd>
+
+                    <dt>Description</dt>
+                    <dd><h:outputText value="#{armyView.armyModel != null ? armyView.armyModel.description : ''}" escape="false"/></dd>
+                </dl>
+
+                <h3>Squads</h3>
+                <h:dataTable value="#{armyView.armyModel.squads}" var="s" rendered="#{not empty armyView.armyModel.squads}">
+                    <h:column>
+                        <f:facet name="header">Unit</f:facet>
+                        <h:outputText value="#{s.unitName}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Count</f:facet>
+                        <h:outputText value="#{s.count}"/>
+                    </h:column>
+                </h:dataTable>
+                <p rendered="#{empty armyView.armyModel.squads}">No squads in this army.</p>
+
+                <div class="button-group">
+                    <div class="btn-item" style="display:inline-block; margin-right:1rem;">
+                        <h:link outcome="/army/army_edit.xhtml" value="Edit" class="btn btn-primary">
+                            <f:param name="id" value="#{armyView.armyModel != null ? armyView.armyModel.id : ''}"/>
+                        </h:link>
+                    </div>
+                    <div class="btn-item" style="display:inline-block;">
+                        <h:link outcome="/army/army_list.xhtml" value="Back to list" class="btn btn-primary"/>
+                    </div>
+                </div>
+            </section>
+        </article>
     </ui:define>
 </ui:composition>

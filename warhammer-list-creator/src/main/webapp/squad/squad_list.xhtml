@@ -1,27 +1,46 @@
-<!DOCTYPE html>
-<ui:composition template="/templates/base.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <ui:define name="title">Lista squadów</ui:define>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
     <ui:define name="content">
-        <h2>Squady</h2>
-        <h:form>
-            <h:commandButton value="Dodaj squad" action="#{squadBean.prepareCreate}"/>
-            <br/><br/>
-            <h:dataTable value="#{squadBean.items}" var="s" border="1">
-                <h:column><f:facet name="header">ID</f:facet>#{s.id}</h:column>
-                <h:column><f:facet name="header">Nazwa</f:facet>#{s.name}</h:column>
-                <h:column><f:facet name="header">Armia</f:facet>#{s.army != null ? s.army.name : ''}</h:column>
+        <h:outputStylesheet library="squad" name="css/squad_list.css"/>
+        <article class="text--justified">
+            <header><h2>Squads</h2></header>
+
+            <h:dataTable value="#{squadList.squadsModel.squads}" var="squad" styleClass="table align-middle mb-0 bg-white"
+                         headerClass="bg-light">
                 <h:column>
-                    <f:facet name="header">Akcje</f:facet>
-                    <h:commandLink value="Podgląd" action="#{squadBean.view(s)}"/>
-                    &nbsp;|&nbsp;
-                    <h:commandLink value="Edytuj" action="#{squadBean.prepareEdit(s)}"/>
-                    &nbsp;|&nbsp;
-                    <h:commandButton value="Usuń" action="#{squadBean.delete(s)}" onclick="return confirm('Usuń squad?');"/>
+                    <f:facet name="header">Army</f:facet>
+                    <h:outputText value="#{squad.armyName}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Unit</f:facet>
+                    <h:outputText value="#{squad.unitName}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Count</f:facet>
+                    <h:outputText value="#{squad.count}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Actions</f:facet>
+                    <h:link outcome="/squad/squad_view.xhtml" value="View" class="btn btn-primary">
+                        <f:param name="id" value="#{squad.id}"/>
+                    </h:link>
+                    <h:link outcome="/squad/squad_edit.xhtml" value="Edit" class="btn btn-secondary">
+                        <f:param name="id" value="#{squad.id}"/>
+                    </h:link>
                 </h:column>
             </h:dataTable>
-        </h:form>
+
+            <div style="margin-top:1rem;">
+                <h:link outcome="/squad/squad_create.xhtml" value="Create new squad" class="btn btn-primary"/>
+            </div>
+        </article>
     </ui:define>
 </ui:composition>

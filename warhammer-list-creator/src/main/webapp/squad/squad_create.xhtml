@@ -6,36 +6,33 @@
                 template="/WEB-INF/template/main.xhtml">
 
     <f:metadata>
-        <f:viewParam name="id" value="#{squadEdit.id}" required="true"/>
-        <f:viewAction action="#{squadEdit.init()}"/>
+        <f:viewAction action="#{squadCreate.init()}"/>
     </f:metadata>
 
     <ui:define name="content">
         <article>
-            <header><h2>Edit squad</h2></header>
+            <header><h2>Create squad</h2></header>
             <h:form>
                 <h:panelGrid columns="2">
                     <h:outputLabel for="army" value="Army:"/>
-                    <h:selectOneMenu id="army" value="#{squadEdit.squad.armyId}" required="true">
-                        <f:selectItems value="#{squadEdit.availableArmies.armies}" var="a"
+                    <h:selectOneMenu id="army" value="#{squadCreate.squad.armyId}" required="true">
+                        <f:selectItems value="#{squadCreate.availableArmies.armies}" var="a"
                                        itemLabel="#{a.name}" itemValue="#{a.id}"/>
                     </h:selectOneMenu>
 
                     <h:outputLabel for="unit" value="Unit:"/>
-                    <h:selectOneMenu id="unit" value="#{squadEdit.squad.unitId}" required="true">
-                        <f:selectItems value="#{squadEdit.availableUnits.units}" var="u"
+                    <h:selectOneMenu id="unit" value="#{squadCreate.squad.unitId}" required="true">
+                        <f:selectItems value="#{squadCreate.availableUnits.units}" var="u"
                                        itemLabel="#{u.name}" itemValue="#{u.id}"/>
                     </h:selectOneMenu>
 
                     <h:outputLabel for="count" value="Count:"/>
-                    <h:inputText id="count" value="#{squadEdit.squad.count}" required="true"/>
+                    <h:inputText id="count" value="#{squadCreate.squad.count}" required="true"/>
                 </h:panelGrid>
 
                 <div style="margin-top:1rem;">
-                    <h:commandButton value="Save" action="#{squadEdit.saveAction()}"/>
-                    <h:link value="Back" outcome="/squad/squad_view.xhtml">
-                        <f:param name="id" value="#{squadEdit.squad.id}"/>
-                    </h:link>
+                    <h:commandButton value="Cancel" action="#{squadCreate.cancelAction()}"/>
+                    <h:commandButton value="Save" action="#{squadCreate.saveAction()}"/>
                 </div>
             </h:form>
         </article>
