@@ -98,7 +98,7 @@ public class ApiServlet extends HttpServlet {
         public static final Pattern ARMY = Pattern.compile("/armies/(%s)".formatted(UUID.pattern()));
 
         /*
-            * All armies.
+         * All armies.
          */
 
         public static final Pattern ARMIES = Pattern.compile("/armies/?");
@@ -161,10 +161,16 @@ public class ApiServlet extends HttpServlet {
             } else if (path.matches(Patterns.UNIT_PORTRAIT.pattern())) {
                 response.setContentType("image/png");
                 UUID uuid = extractUuid(Patterns.UNIT_PORTRAIT, path);
-                byte[] portrait = unitController.getunitPortrait(uuid);
-                response.setContentLength(portrait.length);
-                response.getOutputStream().write(portrait);
-                return;
+                try {
+                    byte[] portrait = unitController.getunitPortrait(uuid);
+                    response.setContentLength(portrait.length);
+                    response.getOutputStream().write(portrait);
+                    return;
+                } catch (Exception e) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
+
             } else if (path.matches(Patterns.ARMIES.pattern())) {
                 response.setContentType("application/json");
                 response.getWriter().write(jsonb.toJson(armyController.getArmies()));
@@ -174,12 +180,12 @@ public class ApiServlet extends HttpServlet {
                 UUID uuid = extractUuid(Patterns.ARMY, path);
                 response.getWriter().write(jsonb.toJson(armyController.getArmy(uuid)));
                 return;
-            } else if (path.matches(Patterns.USER.pattern())){
+            } else if (path.matches(Patterns.USER.pattern())) {
                 response.setContentType("application/json");
                 UUID uuid = extractUuid(Patterns.USER, path);
                 response.getWriter().write(jsonb.toJson(userController.getUser(uuid)));
                 return;
-            } else if (path.matches(Patterns.USERS.pattern())){
+            } else if (path.matches(Patterns.USERS.pattern())) {
                 response.setContentType("application/json");
                 response.getWriter().write(jsonb.toJson(userController.getUsers()));
                 return;
@@ -208,7 +214,7 @@ public class ApiServlet extends HttpServlet {
                 UUID uuid = extractUuid(Patterns.UNIT_PORTRAIT, path);
                 unitController.putunitPortrait(uuid, request.getPart("portrait").getInputStream());
                 return;
-            } else if (path.matches(Patterns.USER_ARMY.pattern())){
+            } else if (path.matches(Patterns.USER_ARMY.pattern())) {
                 Matcher m = Patterns.USER_ARMY.matcher(path);
                 if (!m.matches()) {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -240,7 +246,7 @@ public class ApiServlet extends HttpServlet {
                     response.addHeader("Location", createUrl(request, Paths.API, "users", uuid.toString(), "portrait"));
                 }
                 return;
-            } else if (path.matches(Patterns.USER.pattern())){
+            } else if (path.matches(Patterns.USER.pattern())) {
                 UUID uuid = extractUuid(Patterns.USER, path);
                 boolean existed = userController.userExists(uuid);
                 response.setStatus(existed ? HttpServletResponse.SC_NO_CONTENT : HttpServletResponse.SC_CREATED);
@@ -268,8 +274,7 @@ public class ApiServlet extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 unitController.deleteunit(uuid);
                 return;
-            }
-            else if (path.matches(Patterns.USER_ARMY.pattern())){
+            } else if (path.matches(Patterns.USER_ARMY.pattern())) {
                 Matcher m = Patterns.USER_ARMY.matcher(path);
                 if (!m.matches()) {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST);
