@@ -7,5 +7,6 @@
         <feature>cdi-4.0</feature>
         <feature>mpConfig-3.0</feature>
         <feature>faces-4.0</feature>
+        <feature>restfulWS-3.1</feature>
     </featureManager>
 </server>
