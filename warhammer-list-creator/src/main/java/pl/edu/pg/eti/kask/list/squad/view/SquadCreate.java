@@ -18,6 +18,7 @@ import pl.edu.pg.eti.kask.list.unit.model.function.ToUnitsModelFunction;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -73,16 +74,15 @@ public class SquadCreate implements Serializable {
         }
 
         try {
-            System.out.println("DUPA2");
             var units = unitService.findAll();
             if (units == null) {
                 availableUnits = new UnitsModel();
+                availableUnits.setUnits(new ArrayList<>());
             } else {
                 var nonNullIdUnits = units.stream()
                         .filter(u -> u.getId() != null)
                         .collect(Collectors.toList());
                 if (nonNullIdUnits.size() != units.size()) {
-                    log.warning("Filtered out " + (units.size() - nonNullIdUnits.size()) + " unit(s) with null id");
                 }
                 availableUnits = toUnitsModelFunction.apply(nonNullIdUnits);
             }
