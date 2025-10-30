@@ -4,11 +4,12 @@ import jakarta.enterprise.context.Dependent;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.model.UnitsModel;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
 
 @Dependent
-public class ToUnitsModelFunction implements Function<List<Unit>, UnitsModel> {
+public class ToUnitsModelFunction implements Function<List<Unit>, UnitsModel>, Serializable {
 
 
     @Override

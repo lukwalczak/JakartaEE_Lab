@@ -6,63 +6,38 @@
                 template="/WEB-INF/template/main.xhtml">
 
     <f:metadata>
-        <f:viewParam name="id" value="#{unitEdit.id}" required="true"/>
-        <f:viewAction action="#{unitEdit.init()}"/>
+        <f:viewParam name="id" value="#{squadEdit.id}" required="true"/>
+        <f:viewAction action="#{squadEdit.init()}"/>
     </f:metadata>
 
     <ui:define name="content">
         <article>
-            <header><h2>Edit unit info</h2></header>
-            <h:form styleClass="container" onreset="onReset()" enctype="multipart/form-data">
-                <div class="row">
-                    <div class="col-4 p-2">
-                        <div class="form-outline">
-                            <h:inputText id="name" value="#{unitEdit.unit.name}" styleClass="form-control"/>
-                            <h:outputLabel for="name" value="Name:" styleClass="form-label"/>
-                        </div>
-                    </div>
-                </div>
+            <header><h2>Edit squad</h2></header>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="army" value="Army:" class=" "/>
+                    <h:selectOneMenu id="army" value="#{squadEdit.squad.armyId}" required="true" class="list-group form-control">
+                        <f:selectItems value="#{squadEdit.availableArmies.armies}" var="a"
+                                       itemLabel="#{a.name}" itemValue="#{a.id}" class="list-group-item"/>
+                    </h:selectOneMenu>
 
-                <div class="row">
-                    <div class="col-4 p-2">
-                        <div class="form-outline">
-                            <h:inputText id="age" value="#{unitEdit.unit.age}" styleClass="form-control"/>
-                            <h:outputLabel for="age" value="Age:" styleClass="form-label"/>
-                        </div>
-                    </div>
-                </div>
+                    <h:outputLabel for="unit" value="Unit:"/>
+                    <h:selectOneMenu id="unit" value="#{squadEdit.squad.unitId}" required="true" class="list-group form-control">
+                        <f:selectItems value="#{squadEdit.availableUnits.units}" var="u"
+                                       itemLabel="#{u.name}" itemValue="#{u.id}" class="list-group-item"/>
+                    </h:selectOneMenu>
 
-                <div class="row">
-                    <div class="col-4 p-2">
-                        <div class="form-outline">
-                            <h:inputFile id="portrait" value="#{unitEdit.unit.portrait}"
-                                         styleClass="form-control active"/>
-                            <h:outputLabel for="portrait" value="Portrait:" styleClass="form-label"/>
-                        </div>
-                    </div>
-                </div>
+                    <h:outputLabel for="count" value="Count:"/>
+                    <h:inputText id="count" value="#{squadEdit.squad.count}" required="true" class="form-control"/>
+                </h:panelGrid>
 
-                <div class="row">
-                    <div class="col-4 p-2">
-                        <div class="form-outline">
-                            <h:inputTextarea id="background" value="#{unitEdit.unit.background}"
-                                             styleClass="form-control" rows="4"/>
-                            <h:outputLabel for="background" value="Background:" styleClass="form-label"/>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-2 p-2 text-center">
-                        <h:commandButton styleClass="btn btn-primary" value="Update"
-                                         action="#{unitEdit.saveAction()}"/>
-                    </div>
-                    <div class="col-2 p-2 text-center">
-                        <h:commandButton styleClass="btn btn-secondary" type="reset" value="Reset"/>
-                    </div>
+                <div style="margin-top:1rem;">
+                    <h:commandButton value="Save" action="#{squadEdit.saveAction()}" class="btn btn-primary"/>
+                    <h:link value="Back" outcome="/squad/squad_view.xhtml" class="btn btn-secondary" style="margin-left:1rem;">
+                        <f:param name="id" value="#{squadEdit.squad.id}"/>
+                    </h:link>
                 </div>
             </h:form>
         </article>
     </ui:define>
-
 </ui:composition>

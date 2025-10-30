@@ -1,27 +1,57 @@
-<!DOCTYPE html>
-<ui:composition template="/templates/base.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <ui:define name="title">Edycja armii</ui:define>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{armyEdit.id}" required="true"/>
+        <f:viewAction action="#{armyEdit.init()}"/>
+    </f:metadata>
+
     <ui:define name="content">
-        <h2>Dodaj / Edytuj armię</h2>
-        <h:form>
-            <h:panelGrid columns="2">
-                <h:outputLabel for="name" value="Nazwa:"/>
-                <h:inputText id="name" value="#{armyBean.selected.name}" required="true"/>
+        <article>
+            <header><h2>Edit army</h2></header>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="name" value="Name:" class="form-group"/>
+                    <h:inputText id="name" value="#{armyEdit.army.name}" required="true" class="form-control"/>
 
-                <h:outputLabel for="owner" value="Właściciel (użytkownik):"/>
-                <h:selectOneMenu id="owner" value="#{armyBean.selected.owner}" converter="userConverter">
-                    <f:selectItem itemLabel="-- wybierz --" itemValue="#{null}"/>
-                    <f:selectItems value="#{armyBean.allUsers}" var="u" itemValue="#{u}" itemLabel="#{u.name}"/>
-                </h:selectOneMenu>
-            </h:panelGrid>
+                    <h:outputLabel for="desc" value="Description:" class="form-group"/>
+                    <h:inputTextarea id="desc" value="#{armyEdit.army.description}" rows="4" class="form-control"/>
+                </h:panelGrid>
 
-            <br/>
-            <h:commandButton value="Zapisz" action="#{armyBean.save}"/>
-            <h:link outcome="/armies/list.xhtml" value="Anuluj"/>
-        </h:form>
+                <h3>Squads</h3>
+                <h:dataTable value="#{armyEdit.army.squads}" var="s">
+                    <h:column>
+                        <f:facet name="header">Unit</f:facet>
+                        <h:selectOneMenu value="#{s.unitId}" class="list-group form-control">
+                            <f:selectItems value="#{armyEdit.availableUnits.units}" var="u"
+                                           itemLabel="#{u.name}" itemValue="#{u.id}" class="list-group-item"/>
+                        </h:selectOneMenu>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header" class="form-group">Count</f:facet>
+                        <h:inputText value="#{s.count}" class="form-control"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Remove</f:facet>
+                        <h:commandButton value="Remove" action="#{armyEdit.removeSquadRow(armyEdit.army.squads.indexOf(s))}" class="btn btn-danger"/>
+                    </h:column>
+                </h:dataTable>
+
+                <div style="margin-top:0.5rem;">
+                    <h:commandButton value="Add squad" action="#{armyEdit.addSquadRow}" class="btn btn-primary" />
+                </div>
+
+                <div style="margin-top:1rem;">
+                    <h:commandButton value="Save" action="#{armyEdit.saveAction()}" class="btn btn-primary"/>
+                    <h:link value="Back" outcome="/army/army_view.xhtml" class="btn btn-secondary" style="margin-left:1rem;">
+                        <f:param name="id" value="#{armyEdit.army.id}"/>
+                    </h:link>
+                </div>
+            </h:form>
+        </article>
     </ui:define>
 </ui:composition>

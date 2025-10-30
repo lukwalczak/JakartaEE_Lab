@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.repository.api.ArmyRepository;
+import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.repository.api.UnitRepository;
 import pl.edu.pg.eti.kask.list.user.repository.api.UserRepository;
 
@@ -22,11 +23,17 @@ public class ArmyService {
 
     private final UserRepository userRepository;
 
+    private final SquadService squadService;
+
     @Inject
-    public ArmyService(ArmyRepository armyRepository, UnitRepository unitRepository, UserRepository userRepository) {
+    public ArmyService(ArmyRepository armyRepository,
+                       UnitRepository unitRepository,
+                       UserRepository userRepository,
+                       SquadService squadService) {
         this.armyRepository = armyRepository;
         this.unitRepository = unitRepository;
         this.userRepository = userRepository;
+        this.squadService = squadService;
     }
 
     public Optional<Army> find(UUID id){
@@ -44,11 +51,17 @@ public class ArmyService {
         armyRepository.create(army);
     }
 
-    public void delete(Army army){ armyRepository.delete(army); }
+    public void delete(UUID id){
+        squadService.findByArmyId(id).forEach(sq -> {
+            squadService.delete(sq.getId());
+        });
+
+        armyRepository.delete(armyRepository.find(id).orElseThrow());
+    }
+
+    public void delete(Army army){ delete(army.getId()); }
 
     public void update(Army army){ armyRepository.update(army); }
-
-    public void delete(UUID id){ armyRepository.delete(armyRepository.find(id).orElseThrow());}
 
     public boolean exists(UUID id) {
         return armyRepository.exists(id);

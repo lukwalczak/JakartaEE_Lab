@@ -171,6 +171,8 @@ public class DataStore {
     }
 
     public synchronized void deleteArmy(UUID id) throws IllegalArgumentException {
+        squads.removeIf(squad -> squad.getArmy() != null && squad.getArmy().getId().equals(id));
+
         if (!armies.removeIf(army -> army.getId().equals(id))) {
             throw new IllegalArgumentException("The army with id \"%s\" does not exist".formatted(id));
         }

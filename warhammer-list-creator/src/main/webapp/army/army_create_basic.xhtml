@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <f:metadata>
+        <f:viewAction action="#{armyCreate.init()}"/>
+    </f:metadata>
+
+    <ui:define name="content">
+        <article>
+            <header><h2>Create army</h2></header>
+            <h:form styleClass="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel for="name" value="Name:"/>
+                            <h:inputText id="name" value="#{armyCreate.army.name}" required="true"/>
+
+                            <h:outputLabel for="desc" value="Description:"/>
+                            <h:inputTextarea id="desc" value="#{armyCreate.army.description}" rows="4"/>
+                        </h:panelGrid>
+
+                        <h3>Squads</h3>
+
+                        <!-- binding="#{null}" removed -->
+                        <h:dataTable value="#{armyCreate.army.squads}" var="squad">
+                            <h:column>
+                                <f:facet name="header">Unit</f:facet>
+                                <h:selectOneMenu value="#{squad.unitId}" class="list-group">
+                                    <f:selectItems value="#{armyCreate.availableUnits.units}" var="u"
+                                                   itemLabel="#{u.name}" itemValue="#{u.id}" class="list-item"/>
+                                </h:selectOneMenu>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Count</f:facet>
+                                <h:inputText value="#{squad.count}" class="input"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Remove</f:facet>
+                                <h:commandButton value="Remove" action="#{armyCreate.removeSquadRow(armyCreate.army.squads.indexOf(squad))}" immediate="true" class="btn btn-danger"/>
+                            </h:column>
+                        </h:dataTable>
+
+                        <div style="margin-top:0.5rem;">
+                            <h:commandButton value="Add squad" action="#{armyCreate.addSquadRow}" class="btn btn-primary"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:1rem;">
+                    <h:commandButton value="Cancel" action="#{armyCreate.cancelAction()}" class="btn btn-secondary"/>
+                    <h:commandButton value="Next" action="#{armyCreate.goToConfirmAction()}" class="btn btn-primary"/>
+                </div>
+            </h:form>
+        </article>
+    </ui:define>
+</ui:composition>
