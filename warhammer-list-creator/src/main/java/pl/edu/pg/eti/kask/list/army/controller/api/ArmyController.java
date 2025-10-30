@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.list.army.controller.api;
 
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import pl.edu.pg.eti.kask.list.army.dto.GetArmiesResponse;
 import pl.edu.pg.eti.kask.list.army.dto.GetArmyResponse;
 import pl.edu.pg.eti.kask.list.army.dto.PatchArmyRequest;
@@ -7,21 +9,39 @@ import pl.edu.pg.eti.kask.list.army.dto.PutArmyRequest;
 
 import java.util.UUID;
 
+@Path("")
 public interface ArmyController {
 
-    GetArmyResponse getArmy(UUID id);
+    @GET
+    @Path("/armies/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    GetArmyResponse getArmy(@PathParam("id") UUID id);
 
+    @GET
+    @Path("/armies")
+    @Produces(MediaType.APPLICATION_JSON)
     GetArmiesResponse getArmies();
 
-    GetArmiesResponse getArmies(UUID id);
+    @GET
+    @Path("/users/{id}/armies")
+    @Produces(MediaType.APPLICATION_JSON)
+    GetArmiesResponse getArmies(@PathParam("id") UUID id);
 
-    void putArmy(UUID id, PutArmyRequest request);
+    @PUT
+    @Path("/armies/{id}")
+    void putArmy(@PathParam("id") UUID id, PutArmyRequest request);
 
-    void putArmy(UUID id, PutArmyRequest request, UUID userId);
+    @PUT
+    @Path("/users/{userId}/armies/{id}")
+    void putArmy(@PathParam("id") UUID id, PutArmyRequest request, @PathParam("userId") UUID userId);
 
-    void patchArmy(UUID id, PatchArmyRequest request);
+    @PATCH
+    @Path("/armies/{id}")
+    void patchArmy(@PathParam("id") UUID id, PatchArmyRequest request);
 
-    void deleteArmy(UUID id);
+    @DELETE
+    @Path("/armies/{id}")
+    void deleteArmy(@PathParam("id") UUID id);
 
     boolean armyExists(UUID id);
 

@@ -2,37 +2,37 @@
 
 # Get all units.
 
-GET http://localhost:9080/list-creator/api/units
+GET http://localhost:9080/list-creator/api/v1/units
 
 ###
 
 # Get single unit.
 
-GET http://localhost:9080/list-creator/api/units/a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f
+GET http://localhost:9080/list-creator/api/v1/units/a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f
 
 ###
 
 # Get single unit. Not existing, created later.
 
-GET http://localhost:9080/list-creator/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+GET http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
 
 ###
 
 # Get single unit portrait.
 
-GET http://localhost:9080/list-creator/api/units/a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f/portrait
+GET http://localhost:9080/list-creator/api/v1/units/a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f/portrait
 
 ###
 
 # Get single unit portrait. Not existing, created later.
 
-GET http://localhost:9080/list-creator/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83/portrait
+GET http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83/portrait
 
 ###
 
 # Create new unit.
 
-PUT http://localhost:9080/list-creator/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+PUT http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
 Content-Type: application/json
 
 {
@@ -47,26 +47,26 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:9080/list-creator/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+GET http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
 
 
 ###
 # Create unit portrait.
 
-PUT http://localhost:9080/list-creator/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83/portrait
+PUT http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83/portrait
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="portrait"; filename="sigrid.png'
+Content-Disposition: form-data; name="portrait"; filename="apothecary.jpg'
 
-< warhammer-list-creator/src/main/resources/pl/edu/pg/eti/kask/list/configuration/avatar/sigrid.png
+< warhammer-list-creator/src/main/resources/pl/edu/pg/eti/kask/list/configuration/avatar/apothecary.jpg
 --boundary--
 
 ###
 
 # Update unit.
 
-PATCH http://localhost:9080/list-creator/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+PATCH http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
 Content-Type: application/json
 
 {
@@ -83,7 +83,7 @@ Content-Type: application/json
 
 # Delete unit.
 
-DELETE http://localhost:9080/list-creator/api/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+DELETE http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
 
 ###
 
@@ -102,25 +102,25 @@ DELETE http://localhost:9080/list-creator/api/units/3c6f1eb1-8069-44ab-988f-d7fe
 
 # Get all armies.
 
-GET http://localhost:9080/list-creator/api/armies
+GET http://localhost:9080/list-creator/api/v1/armies
 
 ###
 
 # Get single army.
 
-GET http://localhost:9080/list-creator/api/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b
+GET http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b
 ###
 
 
 # Get all user armies.
 
-GET http://localhost:9080/list-creator/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/armies
+GET http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/armies
 
 ###
 
 # Create new army.
 
-PUT http://localhost:9080/list-creator/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+PUT http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
 Content-Type: application/json
 
 {
@@ -131,10 +131,10 @@ Content-Type: application/json
 
 #Get created army.
 
-GET http://localhost:9080/list-creator/api/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+GET http://localhost:9080/list-creator/api/v1/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
 ###
 
-GET http://localhost:9080/list-creator/api/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b
+GET http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b
 
 ###
 
@@ -142,7 +142,7 @@ GET http://localhost:9080/list-creator/api/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e
 
 ## Put 15 scouts to squad.
 
-PUT http://localhost:9080/list-creator/api/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a54
+PUT http://localhost:9080/list-creator/api/v1/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a54
 Content-Type: application/json
 
 {
@@ -155,7 +155,7 @@ Content-Type: application/json
 # Put 6 Intercessors to squad.
 ###
 
-PUT http://localhost:9080/list-creator/api/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a21
+PUT http://localhost:9080/list-creator/api/v1/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a21
 Content-Type: application/json
 
 {
@@ -166,13 +166,13 @@ Content-Type: application/json
 ###
 
 # Delete squad.
-
-DELETE http://localhost:9080/list-creator/api/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a21
+###TODO
+DELETE http://localhost:9080/list-creator/api/v1/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a21
 
 ###
 #Delete army.
 
-DELETE http://localhost:9080/list-creator/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+DELETE http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
 
 
 
@@ -184,23 +184,23 @@ DELETE http://localhost:9080/list-creator/api/users/c4804e0f-769e-4ab9-9ebe-0578
 
 # Get users.
 
-GET http://localhost:9080/list-creator/api/users
+GET http://localhost:9080/list-creator/api/v1/users
 
 ###
 
 # Get single user.
 
-GET http://localhost:9080/list-creator/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6
+GET http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6
 
 ###
 #Get non existing user
 
-GET http://localhost:9080/list-creator/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
+GET http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
 ###
 
 # Create new user
 
-PUT http://localhost:9080/list-creator/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
+PUT http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
 Content-Type: application/json
 
 {
@@ -215,31 +215,31 @@ Content-Type: application/json
 
 # Delete user
 
-DELETE http://localhost:9080/list-creator/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
+DELETE http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
 
 ###
 
 # Create user portrait.
 
-PUT http://localhost:9080/list-creator/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/portrait
+PUT http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/portrait
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="portrait"; filename="sigrid.png'
+Content-Disposition: form-data; name="portrait"; filename="apothecary.jpg'
 
-< warhammer-list-creator/src/main/resources/pl/edu/pg/eti/kask/list/configuration/avatar/zereni.png
+< warhammer-list-creator/src/main/resources/pl/edu/pg/eti/kask/list/configuration/avatar/apothecary.jpg
 --boundary--
 
 ###
 
 # Get user portrait.
 
-GET http://localhost:9080/list-creator/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/portrait
+GET http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/portrait
 
 ###
 
 # Delete user portrait.
 
-DELETE http://localhost:9080/list-creator/api/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/portrait
+DELETE http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/portrait
 
 ###

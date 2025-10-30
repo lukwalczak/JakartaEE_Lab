@@ -1,22 +1,23 @@
-package pl.edu.pg.eti.kask.list.user.controller.simple;
+package pl.edu.pg.eti.kask.list.user.controller.rest;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.Path;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
-import pl.edu.pg.eti.kask.list.controller.servlet.exception.BadRequestException;
-import pl.edu.pg.eti.kask.list.controller.servlet.exception.NotFoundException;
 import pl.edu.pg.eti.kask.list.user.controller.api.UserController;
 import pl.edu.pg.eti.kask.list.user.dto.GetUserResponse;
 import pl.edu.pg.eti.kask.list.user.dto.GetUsersResponse;
 import pl.edu.pg.eti.kask.list.user.dto.PutUserRequest;
 import pl.edu.pg.eti.kask.list.user.repository.api.AvatarRepository;
 import pl.edu.pg.eti.kask.list.user.service.UserService;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-@RequestScoped
+@Path("")
 public class UserSimpleController implements UserController {
 
     private final UserService userService;

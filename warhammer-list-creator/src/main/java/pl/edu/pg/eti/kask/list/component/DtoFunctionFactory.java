@@ -5,6 +5,8 @@ import pl.edu.pg.eti.kask.list.army.dto.function.ArmiesToResponseFunction;
 import pl.edu.pg.eti.kask.list.army.dto.function.ArmyToResponseFunction;
 import pl.edu.pg.eti.kask.list.army.dto.function.RequestToArmyFunction;
 import pl.edu.pg.eti.kask.list.army.dto.function.UpdateArmyWithRequestFunction;
+import pl.edu.pg.eti.kask.list.squad.dto.function.SquadToResponseFunction;
+import pl.edu.pg.eti.kask.list.squad.dto.function.SquadsToResponseFunction;
 import pl.edu.pg.eti.kask.list.unit.dto.GetUnitResponse;
 import pl.edu.pg.eti.kask.list.unit.dto.GetUnitsResponse;
 import pl.edu.pg.eti.kask.list.unit.dto.PutUnitRequest;
@@ -117,6 +119,8 @@ public class DtoFunctionFactory {
 
     public ArmyToResponseFunction armyToResponse() {return new ArmyToResponseFunction();}
     public ArmiesToResponseFunction armiesToResponseFunction() {return new ArmiesToResponseFunction();}
+    public SquadToResponseFunction squadToResponseFunction() {return new SquadToResponseFunction();}
+    public SquadsToResponseFunction squadsToResponseFunction() {return new SquadsToResponseFunction();}
     public RequestToArmyFunction  requestToArmy() {return new RequestToArmyFunction();}
     public UpdateArmyWithRequestFunction  updateArmy() {return new UpdateArmyWithRequestFunction();}
 

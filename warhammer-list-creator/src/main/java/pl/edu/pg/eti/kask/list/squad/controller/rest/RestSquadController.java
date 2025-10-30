@@ -1,11 +1,14 @@
-package pl.edu.pg.eti.kask.list.squad.controller.simple;
+package pl.edu.pg.eti.kask.list.squad.controller.rest;
 
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.Path;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
-import pl.edu.pg.eti.kask.list.controller.servlet.exception.BadRequestException;
-import pl.edu.pg.eti.kask.list.controller.servlet.exception.NotFoundException;
+import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
 import pl.edu.pg.eti.kask.list.squad.controller.api.SquadContoller;
+import pl.edu.pg.eti.kask.list.squad.dto.GetSquadResponse;
+import pl.edu.pg.eti.kask.list.squad.dto.GetSquadsResponse;
 import pl.edu.pg.eti.kask.list.squad.dto.PutSquadRequest;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
@@ -15,47 +18,74 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
-@RequestScoped
-public class SquadSimpleController implements SquadContoller {
+@Path("")
+public class RestSquadController implements SquadContoller {
 
     private final SquadService squadService;
     private final ArmyService armyService;
     private final UnitService unitService;
+    private final DtoFunctionFactory factory;
 
     @Inject
-    public SquadSimpleController(SquadService squadService, ArmyService armyService, UnitService unitService) {
+    public RestSquadController(SquadService squadService, ArmyService armyService, UnitService unitService, DtoFunctionFactory dtoFunctionFactory) {
         this.squadService = squadService;
         this.armyService = armyService;
         this.unitService = unitService;
+        this.factory = dtoFunctionFactory;
     }
 
+
+    @Override
+    public GetSquadResponse getSquad(UUID id) {
+        return squadService.findById(id)
+                .map(factory.squadToResponseFunction())
+                .map(squad -> GetSquadResponse.builder()
+                        .id(squad.getId())
+                        .army(
+                                GetSquadResponse.Army
+                                        .builder()
+                                        .id(squad.getArmy().getId())
+                                        .name(squad.getArmy().getName())
+                                        .build()
+                        )
+                        .unit(
+                                GetSquadResponse.Unit
+                                        .builder()
+                                        .id(squad.getUnit().getId())
+                                        .name(squad.getUnit().getName())
+                                        .build()
+                        )
+                        .count(squad.getCount())
+                        .build())
+                .orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public GetSquadsResponse getSquads() {
+        return factory.squadsToResponseFunction()
+                .apply(squadService.findAll());
+    }
 
     @Override
     public void putSquad(UUID id, PutSquadRequest request) {
         validate(id, request);
 
         try {
-            // If exists -> replace; else -> create
             if (squadService.findById(id).isPresent()) {
-                // Replace by delete+create to ensure Army side-effects are applied (create updates army repo)
                 squadService.delete(id);
             }
-
             Squad squad = Squad.builder()
                     .id(id)
                     .count(request.getCount())
                     .build();
-
-            // Use service to assign relations and persist (ensures armyRepository.update is called)
             squadService.create(squad, request.getArmyId(), request.getUnitId());
         } catch (NoSuchElementException e) {
-            // Thrown when armyId/unitId do not exist in repositories
             throw new BadRequestException(new IllegalArgumentException("Invalid armyId or unitId", e));
         } catch (IllegalArgumentException e) {
-            // Wrap low-level validation errors
             throw new BadRequestException(e);
         }
     }
+
     @Override
     public void deleteSquad(UUID id) {
         if (squadService.findById(id).isEmpty()) {
