@@ -136,7 +136,7 @@ public class InitializedData {
                 .toughness(3)
                 .wounds(3)
                 .description("Intercessor is the wound.")
-                .portrait(getResourceAsByteArray("../avatar/calvian.png"))//package relative path
+                .portrait(getResourceAsByteArray("../avatar/intercessor.jpg"))//package relative path
                 .build();
 
         Intercessor.addSkill(heavyAttack);
@@ -150,26 +150,104 @@ public class InitializedData {
                 .toughness(2)
                 .wounds(2)
                 .description("Scout is the eyes and ears.")
-                .portrait(getResourceAsByteArray("../avatar/calvian.png"))//package relative path
+                .portrait(getResourceAsByteArray("../avatar/scouts.png"))//package relative path
                 .build();
         scout.addSkill(attack);
 
-        Unit medic = Unit.builder()
+        Unit apothecary = Unit.builder()
                 .id(UUID.fromString("a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f"))
-                .name("Medic")
+                .name("apothecary")
                 .movement(1)
                 .save(3)
                 .leadership(1)
                 .toughness(2)
                 .wounds(2)
-                .description("Medic is the life saver.")
-                .portrait(getResourceAsByteArray("../avatar/calvian.png"))//package relative path
+                .description("apothecary is the life saver.")
+                .portrait(getResourceAsByteArray("../avatar/apothecary.jpg"))//package relative path
                 .build();
-        medic.addSkill(heal);
+        apothecary.addSkill(heal);
+
+        Unit aggressor = Unit.builder()
+                .id(UUID.fromString("b1c2d3e4-f5a6-7b8c-9d0e-f1a2b3c4d5e6"))
+                .name("Aggressor")
+                .movement(1)
+                .save(1)
+                .leadership(2)
+                .toughness(4)
+                .wounds(4)
+                .description("Aggressor is the frontline powerhouse.")
+                .portrait(getResourceAsByteArray("../avatar/aggressors.jpg"))
+                .build();
+
+        Unit bloodclaw = Unit.builder()
+                .id(UUID.fromString("c1d2e3f4-a5b6-7c8d-9e0f-a1b2c3d4e5f6"))
+                .name("Bloodclaw")
+                .movement(2)
+                .save(2)
+                .leadership(3)
+                .toughness(3)
+                .wounds(3)
+                .description("Bloodclaw is a swift and deadly warrior.")
+                .portrait(getResourceAsByteArray("../avatar/bloodclaw.jpg"))
+                .build();
+
+        Unit wg_battle_leader = Unit.builder()
+                .id(UUID.fromString("d1e2f3a4-b5c6-7d8e-9f0a-b1c2d3e4f5a6"))
+                .name("Wolf Guard Battle Leader")
+                .movement(1)
+                .save(1)
+                .leadership(4)
+                .toughness(4)
+                .wounds(5)
+                .description("Wolf Guard Battle Leader commands the pack with unmatched ferocity.")
+                .portrait(getResourceAsByteArray("../avatar/wg_battle_leader.jpg"))
+                .build();
+
+        Unit wg_terminator = Unit.builder()
+                .id(UUID.fromString("e1f2a3b4-c5d6-7e8f-9a0b-c1d2e3f4a5b6"))
+                .name("Wolf Guard Terminator")
+                .movement(1)
+                .save(1)
+                .leadership(3)
+                .toughness(5)
+                .wounds(6)
+                .description("Wolf Guard Terminator is clad in the heaviest armor, ready to face any foe.")
+                .portrait(getResourceAsByteArray("../avatar/wg_terminators.jpg"))
+                .build();
+
+        Unit wg_headtaker = Unit.builder()
+                .id(UUID.fromString("f1a2b3c4-d5e6-7f8a-9b0c-d1e2f3a4b5c6"))
+                .name("Wolf Guard Headtaker")
+                .movement(2)
+                .save(2)
+                .leadership(2)
+                .toughness(4)
+                .wounds(4)
+                .description("Wolf Guard Headtaker is known for his brutal efficiency in battle.")
+                .portrait(getResourceAsByteArray("../avatar/wg_headtakers.jpg"))
+                .build();
+
+        Unit chaplain = Unit.builder()
+                .id(UUID.fromString("a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d7"))
+                .name("Chaplain")
+                .movement(1)
+                .save(2)
+                .leadership(5)
+                .toughness(3)
+                .wounds(3)
+                .description("Chaplain inspires his brethren to fight with unwavering faith.")
+                .portrait(getResourceAsByteArray("../avatar/chaplain.jpg"))
+                .build();
 
         unitService.create(scout);
         unitService.create(Intercessor);
-        unitService.create(medic);
+        unitService.create(apothecary);
+        unitService.create(aggressor);
+        unitService.create(bloodclaw);
+        unitService.create(wg_battle_leader);
+        unitService.create(wg_terminator);
+        unitService.create(wg_headtaker);
+        unitService.create(chaplain);
 
         Army AstraMilitarum = Army.builder()
                 .id(UUID.fromString("f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b"))
@@ -218,7 +296,7 @@ public class InitializedData {
         Squad squad2 = Squad.builder()
                 .id(UUID.fromString("523e4567-e89b-12d3-a456-426614174004"))
                 .army(AstraMilitarum)
-                .unit(medic)
+                .unit(apothecary)
                 .count(2)
                 .build();
 
