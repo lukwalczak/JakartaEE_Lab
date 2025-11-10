@@ -12,16 +12,17 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "units")
 public class Unit implements Serializable {
 
     @Id
+    @Column(columnDefinition = "uuid")
     @EqualsAndHashCode.Include
     private UUID id;
 
@@ -37,15 +38,14 @@ public class Unit implements Serializable {
 
     private Integer leadership;
 
+    @Column(name = "save_value")
     private Integer save;
 
     @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "unit_skills",
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "unit_skill",
             joinColumns = @JoinColumn(name = "unit_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "skill_id"))
     private List<Skill> skillList = new ArrayList<>();
 
     public void addSkill(Skill skill) {

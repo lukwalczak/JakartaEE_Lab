@@ -1,8 +1,6 @@
 package pl.edu.pg.eti.kask.list.unit.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,10 +25,18 @@ import java.util.UUID;
 public class Skill implements Serializable {
 
     @Id
+    @Column(columnDefinition = "uuid")
     @EqualsAndHashCode.Include
     private UUID id;
 
     private String name;
 
     private String description;
+
+    @PrePersist
+    public void ensureId(){
+        if (this.id == null){
+            this.id = UUID.randomUUID();
+        }
+    }
 }
