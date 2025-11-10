@@ -140,29 +140,42 @@ GET http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-3c4
 
 ## SQUADS
 
-## Put 15 scouts to squad.
 
-PUT http://localhost:9080/list-creator/api/v1/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a54
+## Get single army squad.
+GET http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b/squads/423e4567-e89b-12d3-a456-426614174003
+
+###
+
+GET http://localhost:9080/list-creator/api/v1/squads
+
+###
+###
+
+## Put 5 intercessors to squad.
+
+PUT http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b/squads/423e4567-e89b-12d3-a456-426614174003
 Content-Type: application/json
 
 {
-  "armyId": "c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6",
-  "unitId": "d3f3b1e4-2f4a-4f0a-8e2e-6f5e8f1c9b7a",
-  "count": 15
+  "unitId": "525d3e7b-bb1f-4c13-bf17-926d1a12e4c0",
+  "count": 5
 }
 ###
 
 # Put 6 Intercessors to squad.
 ###
 
-PUT http://localhost:9080/list-creator/api/v1/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a21
+PUT http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a21
 Content-Type: application/json
 
 {
-  "armyId": "f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b",
   "unitId": "525d3e7b-bb1f-4c13-bf17-926d1a12e4c0",
   "count": 6
 }
+###
+
+GET http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b/squads
+
 ###
 
 # Delete squad.
