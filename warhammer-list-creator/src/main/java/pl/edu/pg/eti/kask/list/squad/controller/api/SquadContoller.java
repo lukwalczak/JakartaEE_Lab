@@ -4,6 +4,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import pl.edu.pg.eti.kask.list.squad.dto.GetSquadResponse;
 import pl.edu.pg.eti.kask.list.squad.dto.GetSquadsResponse;
+import pl.edu.pg.eti.kask.list.squad.dto.PatchSquadRequest;
 import pl.edu.pg.eti.kask.list.squad.dto.PutSquadRequest;
 
 import java.util.UUID;
@@ -32,6 +33,11 @@ public interface SquadContoller {
     @Path("/armies/{army_id}/squads/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     void putSquad(@PathParam("army_id") UUID army_id, @PathParam("id") UUID id, PutSquadRequest request);
+
+    @PATCH
+    @Path("/armies/{army_id}/squads/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    void patchSquad(@PathParam("army_id") UUID army_id, @PathParam("id") UUID id, PatchSquadRequest request);
 
     @DELETE
     @Path("/armies/{army_id}/squads/{id}")

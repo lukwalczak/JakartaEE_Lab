@@ -9,6 +9,7 @@ import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
 import pl.edu.pg.eti.kask.list.squad.controller.api.SquadContoller;
 import pl.edu.pg.eti.kask.list.squad.dto.GetSquadResponse;
 import pl.edu.pg.eti.kask.list.squad.dto.GetSquadsResponse;
+import pl.edu.pg.eti.kask.list.squad.dto.PatchSquadRequest;
 import pl.edu.pg.eti.kask.list.squad.dto.PutSquadRequest;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
@@ -88,6 +89,20 @@ public class RestSquadController implements SquadContoller {
                     .count(request.getCount())
                     .build();
             squadService.create(squad, army_id, request.getUnitId());
+        } catch (NoSuchElementException e) {
+            throw new BadRequestException(new IllegalArgumentException("Invalid armyId or unitId", e));
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException(e);
+        }
+    }
+
+    @Override
+    public void patchSquad(UUID army_id, UUID id, PatchSquadRequest request) {
+
+        Squad squad = squadService.findById(id).orElseThrow(NotFoundException::new);
+        squad.setCount(request.getCount());
+        try {
+            squadService.update(squad);
         } catch (NoSuchElementException e) {
             throw new BadRequestException(new IllegalArgumentException("Invalid armyId or unitId", e));
         } catch (IllegalArgumentException e) {
