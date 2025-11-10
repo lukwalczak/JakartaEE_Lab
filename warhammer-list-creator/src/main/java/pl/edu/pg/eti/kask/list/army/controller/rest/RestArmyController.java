@@ -1,7 +1,10 @@
-package pl.edu.pg.eti.kask.list.army.controller.simple;
+package pl.edu.pg.eti.kask.list.army.controller.rest;
 
-import jakarta.enterprise.context.RequestScoped;
+
 import jakarta.inject.Inject;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.Path;
 import pl.edu.pg.eti.kask.list.army.controller.api.ArmyController;
 import pl.edu.pg.eti.kask.list.army.dto.GetArmiesResponse;
 import pl.edu.pg.eti.kask.list.army.dto.GetArmyResponse;
@@ -9,15 +12,12 @@ import pl.edu.pg.eti.kask.list.army.dto.PatchArmyRequest;
 import pl.edu.pg.eti.kask.list.army.dto.PutArmyRequest;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
-import pl.edu.pg.eti.kask.list.controller.servlet.exception.BadRequestException;
-import pl.edu.pg.eti.kask.list.controller.servlet.exception.NotFoundException;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 
 import java.util.UUID;
 
-@RequestScoped
-public class ArmySimpleController implements ArmyController {
-
+@Path("")
+public class RestArmyController implements ArmyController {
     private final ArmyService service;
 
     private final SquadService squadService;
@@ -25,7 +25,7 @@ public class ArmySimpleController implements ArmyController {
     private final DtoFunctionFactory factory;
 
     @Inject
-    public ArmySimpleController(ArmyService armyService, SquadService squadService, DtoFunctionFactory factory) {
+    public RestArmyController(ArmyService armyService, SquadService squadService, DtoFunctionFactory factory) {
         this.service = armyService;
         this.squadService = squadService;
         this.factory = factory;

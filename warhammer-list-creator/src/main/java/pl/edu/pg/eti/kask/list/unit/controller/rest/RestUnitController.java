@@ -1,7 +1,8 @@
-package pl.edu.pg.eti.kask.list.unit.controller.simple;
+package pl.edu.pg.eti.kask.list.unit.controller.rest;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.Path;
 import pl.edu.pg.eti.kask.list.unit.controller.api.UnitController;
 import pl.edu.pg.eti.kask.list.unit.dto.GetUnitResponse;
 import pl.edu.pg.eti.kask.list.unit.dto.GetUnitsResponse;
@@ -10,8 +11,8 @@ import pl.edu.pg.eti.kask.list.unit.dto.PutUnitRequest;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
-import pl.edu.pg.eti.kask.list.controller.servlet.exception.BadRequestException;
-import pl.edu.pg.eti.kask.list.controller.servlet.exception.NotFoundException;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 
 import java.io.InputStream;
 import java.util.UUID;
@@ -19,8 +20,8 @@ import java.util.UUID;
 /**
  * Simple framework agnostic implementation of controller.
  */
-@RequestScoped
-public class UnitSimpleController implements UnitController {
+@Path("")
+public class RestUnitController implements UnitController {
 
     /**
      * unit service.
@@ -37,7 +38,7 @@ public class UnitSimpleController implements UnitController {
      * @param factory factory producing functions for conversion between DTO and entities
      */
     @Inject
-    public UnitSimpleController(UnitService service, DtoFunctionFactory factory) {
+    public RestUnitController(UnitService service, DtoFunctionFactory factory) {
         this.service = service;
         this.factory = factory;
     }
