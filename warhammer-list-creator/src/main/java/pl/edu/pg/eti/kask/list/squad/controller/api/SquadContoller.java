@@ -11,22 +11,30 @@ import java.util.UUID;
 @Path("")
 public interface SquadContoller {
 
+//    Get squad by id within an army
     @GET
-    @Path("/squads/{id}")
+    @Path("/armies/{army_id}/squads/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    GetSquadResponse getSquad(@PathParam("id") UUID id);
+    GetSquadResponse getSquad(@PathParam("army_id") UUID army_id, @PathParam("id") UUID id);
 
+//  Get all squads
     @GET
     @Path("/squads")
     @Produces(MediaType.APPLICATION_JSON)
     GetSquadsResponse getSquads();
 
+    @GET
+    @Path("/armies/{army_id}/squads")
+    @Produces(MediaType.APPLICATION_JSON)
+    GetSquadsResponse getSquadsByArmy(@PathParam("army_id") UUID army_id);
+
     @PUT
-    @Path("/squads/{id}")
-    void putSquad(@PathParam("id") UUID id, PutSquadRequest request);
+    @Path("/armies/{army_id}/squads/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    void putSquad(@PathParam("army_id") UUID army_id, @PathParam("id") UUID id, PutSquadRequest request);
 
     @DELETE
-    @Path("/squads/{id}")
-    void deleteSquad(UUID id);
+    @Path("/armies/{army_id}/squads/{id}")
+    void deleteSquad(@PathParam("army_id") UUID army_id, @PathParam("id") UUID id);
 
 }

@@ -36,7 +36,7 @@ public class RestSquadController implements SquadContoller {
 
 
     @Override
-    public GetSquadResponse getSquad(UUID id) {
+    public GetSquadResponse getSquad(UUID army_id, UUID id) {
         return squadService.findById(id)
                 .map(factory.squadToResponseFunction())
                 .map(squad -> GetSquadResponse.builder()
@@ -44,7 +44,7 @@ public class RestSquadController implements SquadContoller {
                         .army(
                                 GetSquadResponse.Army
                                         .builder()
-                                        .id(squad.getArmy().getId())
+                                        .id(army_id)
                                         .name(squad.getArmy().getName())
                                         .build()
                         )
@@ -67,7 +67,16 @@ public class RestSquadController implements SquadContoller {
     }
 
     @Override
-    public void putSquad(UUID id, PutSquadRequest request) {
+    public GetSquadsResponse getSquadsByArmy(UUID army_id) {
+        if (armyService.find(army_id).isEmpty()) {
+            throw new NotFoundException();
+        }
+        return factory.squadsToResponseFunction()
+                .apply(squadService.findByArmyId(army_id));
+    }
+
+    @Override
+    public void putSquad(UUID army_id, UUID id, PutSquadRequest request) {
         validate(id, request);
 
         try {
@@ -78,7 +87,7 @@ public class RestSquadController implements SquadContoller {
                     .id(id)
                     .count(request.getCount())
                     .build();
-            squadService.create(squad, request.getArmyId(), request.getUnitId());
+            squadService.create(squad, army_id, request.getUnitId());
         } catch (NoSuchElementException e) {
             throw new BadRequestException(new IllegalArgumentException("Invalid armyId or unitId", e));
         } catch (IllegalArgumentException e) {
@@ -87,7 +96,7 @@ public class RestSquadController implements SquadContoller {
     }
 
     @Override
-    public void deleteSquad(UUID id) {
+    public void deleteSquad(UUID army_id, UUID id) {
         if (squadService.findById(id).isEmpty()) {
             throw new NotFoundException();
         }
@@ -100,9 +109,6 @@ public class RestSquadController implements SquadContoller {
         }
         if (request == null) {
             throw new BadRequestException(new IllegalArgumentException("Request body must not be null"));
-        }
-        if (Objects.isNull(request.getArmyId())) {
-            throw new BadRequestException(new IllegalArgumentException("armyId must not be null"));
         }
         if (Objects.isNull(request.getUnitId())) {
             throw new BadRequestException(new IllegalArgumentException("unitId must not be null"));
