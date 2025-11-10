@@ -180,7 +180,7 @@ GET http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-3c4
 
 # Delete squad.
 ###TODO
-DELETE http://localhost:9080/list-creator/api/v1/squads/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a21
+DELETE http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b/squads/423e4567-e89b-12d3-a456-426614174003
 
 ###
 #Delete army.

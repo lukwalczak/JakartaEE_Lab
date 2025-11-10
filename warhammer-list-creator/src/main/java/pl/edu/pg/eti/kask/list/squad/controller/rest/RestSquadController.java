@@ -97,6 +97,10 @@ public class RestSquadController implements SquadContoller {
 
     @Override
     public void deleteSquad(UUID army_id, UUID id) {
+        if (armyService.find(army_id).isEmpty()) {
+            throw new NotFoundException();
+        }
+
         if (squadService.findById(id).isEmpty()) {
             throw new NotFoundException();
         }
