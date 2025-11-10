@@ -47,7 +47,7 @@ public class InitializedData {
     }
 
     public void contextInitialized(@Observes @Initialized(ApplicationScoped.class) Object init) {
-        init();
+//        init();
     }
 
     @SneakyThrows

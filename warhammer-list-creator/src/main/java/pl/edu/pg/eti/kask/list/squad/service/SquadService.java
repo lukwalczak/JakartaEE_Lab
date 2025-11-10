@@ -2,6 +2,7 @@ package pl.edu.pg.eti.kask.list.squad.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.army.repository.api.ArmyRepository;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
@@ -37,23 +38,23 @@ public class SquadService {
     public Optional<Squad> findById(UUID id){
         return squadRepository.find(id);
     }
-
+    @Transactional
     public void create(Squad squad, UUID armyId, UUID unitId){
         squad.setArmy(armyRepository.find(armyId).orElseThrow());
         squad.setUnit(unitRepository.find(unitId).orElseThrow());
         squadRepository.create(squad);
         armyRepository.update(squad.getArmy());
     }
-
+    @Transactional
     public void create(Squad squad){
         squadRepository.create(squad);
         armyRepository.update(squad.getArmy());
     }
-
+    @Transactional
     public void delete(Squad squad){ squadRepository.delete(squad); }
-
+    @Transactional
     public void update(Squad squad){ squadRepository.update(squad); }
-
+    @Transactional
     public void delete(UUID id){ squadRepository.delete(squadRepository.find(id).orElseThrow());}
 
     public List<Squad> findByArmyId(UUID armyId){ return squadRepository.findByArmyId(armyId); }

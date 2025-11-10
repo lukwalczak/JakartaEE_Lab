@@ -2,6 +2,7 @@ package pl.edu.pg.eti.kask.list.army.service;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.repository.api.ArmyRepository;
@@ -43,14 +44,14 @@ public class ArmyService {
     public List<Army> findAll(){ return armyRepository.findAll();}
 
     public List<Army> findAll(UUID userId){ return armyRepository.findByUserId(userId);}
-
+    @Transactional
     public void create(Army army){ armyRepository.create(army); }
-
+    @Transactional
     public void create(Army army, UUID userId){
         army.setOwner(userRepository.find(userId).orElseThrow());
         armyRepository.create(army);
     }
-
+    @Transactional
     public void delete(UUID id){
         squadService.findByArmyId(id).forEach(sq -> {
             squadService.delete(sq.getId());
@@ -58,9 +59,9 @@ public class ArmyService {
 
         armyRepository.delete(armyRepository.find(id).orElseThrow());
     }
-
+    @Transactional
     public void delete(Army army){ delete(army.getId()); }
-
+    @Transactional
     public void update(Army army){ armyRepository.update(army); }
 
     public boolean exists(UUID id) {

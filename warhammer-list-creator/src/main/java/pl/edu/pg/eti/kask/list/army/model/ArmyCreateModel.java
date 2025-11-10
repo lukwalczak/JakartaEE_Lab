@@ -19,7 +19,7 @@ public class ArmyCreateModel implements Serializable {
     private String name;
     private String description;
 
-    @Singular
+    @Builder.Default
     private List<Squad> squads = new ArrayList<>();
 
     @Getter

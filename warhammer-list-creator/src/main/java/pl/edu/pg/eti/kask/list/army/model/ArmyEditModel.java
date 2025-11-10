@@ -13,7 +13,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
@@ -23,7 +22,11 @@ public class ArmyEditModel implements Serializable {
     private String description;
 
     @Singular
-    private List<Squad> squads = new ArrayList<>();
+    private List<Squad> squads;
+
+    public ArmyEditModel() {
+        this.squads = new ArrayList<>();
+    }
 
     @Getter
     @Setter

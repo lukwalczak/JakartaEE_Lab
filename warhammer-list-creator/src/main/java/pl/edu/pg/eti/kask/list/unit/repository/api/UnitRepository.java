@@ -13,21 +13,4 @@ import java.util.UUID;
  */
 public interface UnitRepository extends Repository<Unit, UUID> {
 
-    /**
-     * Seeks for single user's character.
-     *
-     * @param id   character's id
-     * @param user character's owner
-     * @return container (can be empty) with character
-     */
-    Optional<Unit> findByIdAndUser(UUID id, User user);
-
-    /**
-     * Seeks for all user's characters.
-     *
-     * @param user characters' owner
-     * @return list (can be empty) of user's characters
-     */
-    List<Unit> findAllByUser(User user);
-
 }

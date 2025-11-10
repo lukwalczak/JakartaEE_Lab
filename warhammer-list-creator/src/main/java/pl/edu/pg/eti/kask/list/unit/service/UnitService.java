@@ -2,6 +2,7 @@ package pl.edu.pg.eti.kask.list.unit.service;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
@@ -46,22 +47,17 @@ public class UnitService {
         return unitRepository.findAll();
     }
 
-
-    public List<Unit> findAll(User user) {
-        return unitRepository.findAllByUser(user);
-    }
-
-
+    @Transactional
     public void create(Unit unit) {
         unitRepository.create(unit);
     }
 
-
+    @Transactional
     public void update(Unit unit) {
         unitRepository.update(unit);
     }
 
-
+    @Transactional
     public void delete(UUID id) {
         Unit unit = unitRepository.find(id).orElseThrow();
         // delete squads that reference this unit to avoid orphan squads
@@ -72,7 +68,7 @@ public class UnitService {
         unitRepository.delete(unit);
     }
 
-
+    @Transactional
     public void delete(Unit unit) {
         if (unit == null || unit.getId() == null) {
             throw new IllegalArgumentException("Unit or unit.id must not be null");
@@ -83,7 +79,7 @@ public class UnitService {
         unitRepository.delete(unit);
     }
 
-
+    @Transactional
     public void updatePortrait(UUID id, InputStream is) {
         unitRepository.find(id).ifPresent(unit -> {
             try {
@@ -95,8 +91,4 @@ public class UnitService {
         });
     }
 
-    public Optional<List<Unit>> findAllByUser(UUID id) {
-        return userRepository.find(id)
-                .map(unitRepository::findAllByUser);
-    }
 }

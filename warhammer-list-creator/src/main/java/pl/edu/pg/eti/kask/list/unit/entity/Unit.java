@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.unit.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import pl.edu.pg.eti.kask.list.user.entity.User;
@@ -11,13 +12,17 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-@EqualsAndHashCode()
+@EqualsAndHashCode
+@Entity
+@Table(name = "units")
 public class Unit implements Serializable {
 
+    @Id
+    @EqualsAndHashCode.Include
     private UUID id;
 
     private String name;
@@ -35,6 +40,12 @@ public class Unit implements Serializable {
     private Integer save;
 
     @Builder.Default
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "unit_skills",
+            joinColumns = @JoinColumn(name = "unit_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
     private List<Skill> skillList = new ArrayList<>();
 
     public void addSkill(Skill skill) {
@@ -47,8 +58,8 @@ public class Unit implements Serializable {
     /**
      * Creature's portrait. Images in database are stored as blobs (binary large objects).
      */
-    @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @Lob
     private byte[] portrait;
 
 }
