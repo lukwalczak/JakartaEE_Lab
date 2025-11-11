@@ -199,11 +199,15 @@ DELETE http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-
 ###
 #Delete army.
 
-DELETE http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+DELETE http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b
 
+###
 
+GET http://localhost:9080/list-creator/api/v1/armies/f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b
 
+###
 
+GET http://localhost:9080/list-creator/api/v1/squads
 
 # USERS
 
