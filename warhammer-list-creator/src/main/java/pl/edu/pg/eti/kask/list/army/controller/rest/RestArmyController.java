@@ -1,6 +1,7 @@
 package pl.edu.pg.eti.kask.list.army.controller.rest;
 
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
@@ -14,10 +15,12 @@ import pl.edu.pg.eti.kask.list.army.dto.PutArmyRequest;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
+import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
 
 import java.util.UUID;
 
 @Path("")
+@RolesAllowed(UserRoles.USER)
 public class RestArmyController implements ArmyController {
     private ArmyService service;
 

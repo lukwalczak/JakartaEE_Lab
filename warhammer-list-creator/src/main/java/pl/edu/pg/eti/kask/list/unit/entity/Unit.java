@@ -55,10 +55,6 @@ public class Unit implements Serializable {
         skillList.add(skill);
     }
 
-    /**
-     * Creature's portrait. Images in database are stored as blobs (binary large objects).
-     */
-    @EqualsAndHashCode.Exclude
     @Lob
     private byte[] portrait;
 

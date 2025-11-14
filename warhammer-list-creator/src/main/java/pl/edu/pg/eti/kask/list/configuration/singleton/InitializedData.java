@@ -1,18 +1,17 @@
-package pl.edu.pg.eti.kask.list.configuration.observer;
+package pl.edu.pg.eti.kask.list.configuration.singleton;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.ejb.EJB;
-import jakarta.ejb.Singleton;
-import jakarta.ejb.Startup;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.Initialized;
-import jakarta.enterprise.context.control.RequestContextController;
-import jakarta.enterprise.event.Observes;
+import jakarta.annotation.security.DeclareRoles;
+import jakarta.annotation.security.RunAs;
+import jakarta.ejb.*;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.SecurityContext;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
+import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import pl.edu.pg.eti.kask.list.model.Faction;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
@@ -31,7 +30,12 @@ import java.util.UUID;
 
 @Singleton
 @Startup
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 @NoArgsConstructor
+@DependsOn("InitializeAdminService")
+@DeclareRoles({UserRoles.ADMIN, UserRoles.USER})
+@RunAs(UserRoles.ADMIN)
+@Log
 public class InitializedData {
 
     private UserService userService;
@@ -41,6 +45,12 @@ public class InitializedData {
     private UnitService unitService;
 
     private SquadService squadService;
+
+    @Inject
+    private Pbkdf2PasswordHash passwordHash;
+
+    @Inject
+    private SecurityContext securityContext;
 
     @EJB
     public void setUserService(UserService userService) {
@@ -65,6 +75,9 @@ public class InitializedData {
 
     @PostConstruct
     private void init() {
+        if (userService.find("admin").isPresent()) {
+            return;
+        }
         User admin = User.builder()
                 .id(UUID.fromString("c4804e0f-769e-4ab9-9ebe-0578fb4f00a6"))
                 .login("admin")
@@ -72,7 +85,7 @@ public class InitializedData {
                 .surname("Admin")
                 .birthDate(LocalDate.of(1990, 10, 21))
                 .email("admin@simplerpg.example.com")
-                .password("adminadmin")
+                .password("testtest")
                 .roles(List.of(UserRoles.ADMIN, UserRoles.USER))
                 .build();
 
@@ -94,7 +107,7 @@ public class InitializedData {
                 .surname("Pear")
                 .birthDate(LocalDate.of(2001, 1, 16))
                 .email("kevin@example.com")
-                .password("useruser")
+                .password("testtest")
                 .roles(List.of(UserRoles.USER))
                 .build();
 
@@ -105,15 +118,14 @@ public class InitializedData {
                 .surname("Grape")
                 .birthDate(LocalDate.of(2002, 3, 19))
                 .email("alice@example.com")
-                .password("useruser")
+                .password("testtest")
                 .roles(List.of(UserRoles.USER))
                 .build();
-        if (userService.findAll().isEmpty()) {
-            userService.create(admin);
-            userService.create(kevin);
-            userService.create(alice);
-            userService.create(test);
-        }
+
+        userService.create(admin);
+        userService.create(kevin);
+        userService.create(alice);
+        userService.create(test);
 
         Skill attack = Skill.builder()
                 .id(UUID.randomUUID())
@@ -257,7 +269,6 @@ public class InitializedData {
                 .portrait(getResourceAsByteArray("../avatar/chaplain.jpg"))
                 .build();
 
-        if (unitService.findAll().isEmpty()) {
             unitService.create(scout);
             unitService.create(Intercessor);
             unitService.create(apothecary);
@@ -267,14 +278,13 @@ public class InitializedData {
             unitService.create(wg_terminator);
             unitService.create(wg_headtaker);
             unitService.create(chaplain);
-        }
 
         Army AstraMilitarum = Army.builder()
                 .id(UUID.fromString("f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b"))
                 .name("Astra Militarum Leman Russ Spam")
                 .description("Tried a new list with Rogal Dorn as a commander. Lots of tanks, maily Leman Russ.")
                 .faction(Faction.IMPERIUM)
-                .owner(admin)
+                .owner(test)
                 .build();
 
         Army Orks = Army.builder()
@@ -282,7 +292,7 @@ public class InitializedData {
                 .name("Ork Waaagh!")
                 .description("A horde of Orks led by Warboss Gorgutz.")
                 .faction(Faction.XENOS)
-                .owner(admin)
+                .owner(test)
                 .build();
 
         Army Aeldari = Army.builder()
@@ -301,12 +311,10 @@ public class InitializedData {
                 .owner(alice)
                 .build();
 
-        if (armyService.findAll().isEmpty()) {
-            armyService.create(AstraMilitarum);
             armyService.create(Orks);
+            armyService.create(AstraMilitarum);
             armyService.create(Aeldari);
             armyService.create(ThousandSons);
-        }
 
         Squad squad1 = Squad.builder()
                 .id(UUID.fromString("423e4567-e89b-12d3-a456-426614174003"))
@@ -321,10 +329,10 @@ public class InitializedData {
                 .unit(apothecary)
                 .count(2)
                 .build();
-        if (squadService.findAll().isEmpty()) {
-            squadService.create(squad1);
+//        if (squadService.findAll().isEmpty()) {
+//        }
             squadService.create(squad2);
-        }
+            squadService.create(squad1);
 
 
     }

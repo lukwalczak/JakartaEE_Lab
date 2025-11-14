@@ -32,7 +32,7 @@ public class Army implements Serializable {
     @Enumerated(EnumType.STRING)
     private Faction faction;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "owner_id")
     private User owner;
 
