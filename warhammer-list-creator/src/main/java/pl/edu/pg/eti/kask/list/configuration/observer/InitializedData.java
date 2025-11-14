@@ -96,33 +96,39 @@ public class InitializedData {
                 .password("useruser")
                 .roles(List.of(UserRoles.USER))
                 .build();
-
-        userService.create(admin);
-        userService.create(kevin);
-        userService.create(alice);
-        userService.create(test);
+        if (userService.findAll().isEmpty()) {
+            userService.create(admin);
+            userService.create(kevin);
+            userService.create(alice);
+            userService.create(test);
+        }
 
         Skill attack = Skill.builder()
+                .id(UUID.randomUUID())
                 .name("Attack")
                 .description("Attacks an enemy with light attack.")
                 .build();
 
         Skill backStab = Skill.builder()
+                .id(UUID.randomUUID())
                 .name("Back stab")
                 .description("Attacks an enemy from behind with medium attack.")
                 .build();
 
         Skill heal = Skill.builder()
+                .id(UUID.randomUUID())
                 .name("Heal self")
                 .description("Heals self.")
                 .build();
 
         Skill charm = Skill.builder()
+                .id(UUID.randomUUID())
                 .name("Charm creature")
                 .description("Charm creature and convinces to run away.")
                 .build();
 
         Skill heavyAttack = Skill.builder()
+                .id(UUID.randomUUID())
                 .name("Heavy attack")
                 .description("Attacks an enemy with heavy attack.")
                 .build();
@@ -239,15 +245,17 @@ public class InitializedData {
                 .portrait(getResourceAsByteArray("../avatar/chaplain.jpg"))
                 .build();
 
-        unitService.create(scout);
-        unitService.create(Intercessor);
-        unitService.create(apothecary);
-        unitService.create(aggressor);
-        unitService.create(bloodclaw);
-        unitService.create(wg_battle_leader);
-        unitService.create(wg_terminator);
-        unitService.create(wg_headtaker);
-        unitService.create(chaplain);
+        if (unitService.findAll().isEmpty()) {
+            unitService.create(scout);
+            unitService.create(Intercessor);
+            unitService.create(apothecary);
+            unitService.create(aggressor);
+            unitService.create(bloodclaw);
+            unitService.create(wg_battle_leader);
+            unitService.create(wg_terminator);
+            unitService.create(wg_headtaker);
+            unitService.create(chaplain);
+        }
 
         Army AstraMilitarum = Army.builder()
                 .id(UUID.fromString("f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b"))
@@ -281,10 +289,12 @@ public class InitializedData {
                 .owner(alice)
                 .build();
 
-        armyService.create(AstraMilitarum);
-        armyService.create(Orks);
-        armyService.create(Aeldari);
-        armyService.create(ThousandSons);
+        if (armyService.findAll().isEmpty()) {
+            armyService.create(AstraMilitarum);
+            armyService.create(Orks);
+            armyService.create(Aeldari);
+            armyService.create(ThousandSons);
+        }
 
         Squad squad1 = Squad.builder()
                 .id(UUID.fromString("423e4567-e89b-12d3-a456-426614174003"))
@@ -299,9 +309,11 @@ public class InitializedData {
                 .unit(apothecary)
                 .count(2)
                 .build();
+        if (squadService.findAll().isEmpty()) {
+            squadService.create(squad1);
+            squadService.create(squad2);
+        }
 
-        squadService.create(squad1);
-        squadService.create(squad2);
 
         requestContextController.deactivate();
 

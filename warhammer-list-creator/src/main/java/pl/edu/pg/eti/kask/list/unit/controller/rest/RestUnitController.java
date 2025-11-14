@@ -48,14 +48,6 @@ public class RestUnitController implements UnitController {
         return factory.unitsToResponse().apply(service.findAll());
     }
 
-
-    @Override
-    public GetUnitsResponse getUserUnits(UUID id) {
-        return service.findAllByUser(id)
-                .map(factory.unitsToResponse())
-                .orElseThrow(NotFoundException::new);
-    }
-
     @Override
     public GetUnitResponse getUnit(UUID uuid) {
         return service.find(uuid)

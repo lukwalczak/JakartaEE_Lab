@@ -1,16 +1,12 @@
 package pl.edu.pg.eti.kask.list.user.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,16 +16,17 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
+@Entity
+@Table(name = "users")
 public class User implements Serializable {
 
-    /**
-     * Unique id (primary key).
-     */
+    @Id
+    @EqualsAndHashCode.Include
     private UUID id;
 
     /**
@@ -63,12 +60,14 @@ public class User implements Serializable {
      */
     private String email;
 
-    /**
-     * User's security roles.
-     */
-    private List<String> roles;
+    @Builder.Default
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    private List<String> roles = new ArrayList<>();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @Lob
     private byte[] portrait;
 }

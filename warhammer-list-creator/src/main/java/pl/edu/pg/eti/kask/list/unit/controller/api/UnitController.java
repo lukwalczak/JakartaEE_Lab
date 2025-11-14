@@ -19,11 +19,6 @@ public interface UnitController {
     GetUnitsResponse getUnits();
 
     @GET
-    @Path("/users/{id}/units")
-    @Produces(MediaType.APPLICATION_JSON)
-    GetUnitsResponse getUserUnits(@PathParam("id") UUID id);
-
-    @GET
     @Path("/units/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     GetUnitResponse getUnit(@PathParam("id") UUID id);
