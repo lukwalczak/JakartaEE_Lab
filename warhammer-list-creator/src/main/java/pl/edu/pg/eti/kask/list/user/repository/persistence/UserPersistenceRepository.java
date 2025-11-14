@@ -1,8 +1,7 @@
 package pl.edu.pg.eti.kask.list.user.repository.persistence;
 
-import jakarta.ejb.Stateless;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.repository.api.UserRepository;
@@ -11,28 +10,25 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Stateless
+@ApplicationScoped
 public class UserPersistenceRepository implements UserRepository {
 
-    @PersistenceContext(unitName = "listPu")
     private EntityManager entityManager;
 
-//    public void setEntityManager(EntityManager entityManager) {
-//        this.entityManager = entityManager;
-//    }
+    @PersistenceContext(unitName = "listPu")
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public Optional<User> findByLogin(String login) {
-        try {
-            return Optional.of(entityManager.createQuery("select u from User u where u.login = :login", User.class)
-                    .setParameter("login", login)
-                    .getSingleResult());
-        } catch (NoResultException ex) {
-            return Optional.empty();
-        }
+        List<User> users = entityManager
+                .createQuery("SELECT u FROM User u WHERE u.login = :login", User.class)
+                .setParameter("login", login)
+                .setMaxResults(1)
+                .getResultList();
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
-
-
 
     @Override
     public Optional<User> find(UUID id) {

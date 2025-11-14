@@ -53,6 +53,8 @@ public class InitializeAdminService {
                     .build();
 
             userRepository.create(admin);
+
+
         }
     }
 

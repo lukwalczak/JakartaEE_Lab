@@ -1,0 +1,20 @@
+// @no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies
+Authorization: Basic a2V2aW46dGVzdHRlc3Q=
+
+###
+GET http://localhost:9080/list-creator/api/v1/armies
+Authorization: Basic YWRtaW46dGVzdHRlc3Q=
+
+###
+# Get all units.
+
+GET http://localhost:9080/list-creator/api/v1/units
+
+
+###
+GET http://localhost:9080/list-creator/api/v1/debug/whoami
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
+
+###
+GET http://localhost:9080/list-creator/api/v1/debug/whoami

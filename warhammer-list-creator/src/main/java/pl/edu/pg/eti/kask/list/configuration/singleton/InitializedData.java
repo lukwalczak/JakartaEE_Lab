@@ -24,15 +24,13 @@ import pl.edu.pg.eti.kask.list.user.service.UserService;
 
 import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Singleton
 @Startup
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 @NoArgsConstructor
-@DependsOn("InitializeAdminService")
 @DeclareRoles({UserRoles.ADMIN, UserRoles.USER})
 @RunAs(UserRoles.ADMIN)
 @Log
@@ -47,6 +45,7 @@ public class InitializedData {
     private SquadService squadService;
 
     @Inject
+    @SuppressWarnings("CdiInjectionPointsInspection")
     private Pbkdf2PasswordHash passwordHash;
 
     @Inject
@@ -75,9 +74,8 @@ public class InitializedData {
 
     @PostConstruct
     private void init() {
-        if (userService.find("admin").isPresent()) {
-            return;
-        }
+
+
         User admin = User.builder()
                 .id(UUID.fromString("c4804e0f-769e-4ab9-9ebe-0578fb4f00a6"))
                 .login("admin")
@@ -85,7 +83,7 @@ public class InitializedData {
                 .surname("Admin")
                 .birthDate(LocalDate.of(1990, 10, 21))
                 .email("admin@simplerpg.example.com")
-                .password("testtest")
+                .password("adminadmin")
                 .roles(List.of(UserRoles.ADMIN, UserRoles.USER))
                 .build();
 
@@ -96,7 +94,7 @@ public class InitializedData {
                 .surname("Testowy")
                 .birthDate(LocalDate.of(1995, 5, 15))
                 .email("test@test.example.com")
-                .password("testtest")
+                .password("useruser")
                 .roles(List.of(UserRoles.USER))
                 .build();
 
@@ -107,7 +105,7 @@ public class InitializedData {
                 .surname("Pear")
                 .birthDate(LocalDate.of(2001, 1, 16))
                 .email("kevin@example.com")
-                .password("testtest")
+                .password("useruser")
                 .roles(List.of(UserRoles.USER))
                 .build();
 
@@ -118,14 +116,22 @@ public class InitializedData {
                 .surname("Grape")
                 .birthDate(LocalDate.of(2002, 3, 19))
                 .email("alice@example.com")
-                .password("testtest")
+                .password("useruser")
                 .roles(List.of(UserRoles.USER))
                 .build();
 
-        userService.create(admin);
-        userService.create(kevin);
-        userService.create(alice);
-        userService.create(test);
+        if (!userService.find("admin").isPresent()) {
+            userService.create(admin);
+        }
+        if (!userService.find("test").isPresent()) {
+            userService.create(test);
+        }
+        if (!userService.find("kevin").isPresent()) {
+            userService.create(kevin);
+        }
+        if (!userService.find("alice").isPresent()) {
+            userService.create(alice);
+        }
 
         Skill attack = Skill.builder()
                 .id(UUID.randomUUID())
@@ -269,6 +275,7 @@ public class InitializedData {
                 .portrait(getResourceAsByteArray("../avatar/chaplain.jpg"))
                 .build();
 
+        if (unitService.findAll().isEmpty()) {
             unitService.create(scout);
             unitService.create(Intercessor);
             unitService.create(apothecary);
@@ -278,6 +285,9 @@ public class InitializedData {
             unitService.create(wg_terminator);
             unitService.create(wg_headtaker);
             unitService.create(chaplain);
+
+        }
+
 
         Army AstraMilitarum = Army.builder()
                 .id(UUID.fromString("f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b"))
@@ -311,10 +321,18 @@ public class InitializedData {
                 .owner(alice)
                 .build();
 
-            armyService.create(Orks);
-            armyService.create(AstraMilitarum);
-            armyService.create(Aeldari);
-            armyService.create(ThousandSons);
+        if (armyService.find(Orks.getId()).isEmpty()) {
+            armyService.create(Orks, test.getId());
+        }
+        if (armyService.find(AstraMilitarum.getId()).isEmpty()) {
+            armyService.create(AstraMilitarum, test.getId());
+        }
+        if (armyService.find(Aeldari.getId()).isEmpty()) {
+            armyService.create(Aeldari, kevin.getId());
+        }
+        if (armyService.find(ThousandSons.getId()).isEmpty()) {
+            armyService.create(ThousandSons, alice.getId());
+        }
 
         Squad squad1 = Squad.builder()
                 .id(UUID.fromString("423e4567-e89b-12d3-a456-426614174003"))
@@ -329,10 +347,13 @@ public class InitializedData {
                 .unit(apothecary)
                 .count(2)
                 .build();
-//        if (squadService.findAll().isEmpty()) {
-//        }
-            squadService.create(squad2);
+        if (squadService.findById(squad1.getId()).isEmpty()) {
             squadService.create(squad1);
+
+        }
+        if (squadService.findById(squad2.getId()).isEmpty()) {
+            squadService.create(squad2);
+        }
 
 
     }

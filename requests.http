@@ -274,3 +274,11 @@ GET http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578
 DELETE http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/portrait
 
 ###
+
+GET http://localhost:9080/list-creator/api/v1/users
+
+###
+
+GET http://localhost:9080/list-creator/api/v1/units
+#Authorization: Basic a2V2aW46dXNlcnVzZXI=
+

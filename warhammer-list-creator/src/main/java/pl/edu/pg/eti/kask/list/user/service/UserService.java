@@ -4,9 +4,9 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
-import pl.edu.pg.eti.kask.list.crypto.component.Pbkdf2PasswordHash;
 import pl.edu.pg.eti.kask.list.user.entity.User;
 import pl.edu.pg.eti.kask.list.user.repository.api.UserRepository;
 
@@ -37,7 +37,7 @@ public class UserService {
      * @param passwordHash hash mechanism used for storing users' passwords
      */
     @Inject
-    public UserService(UserRepository repository, Pbkdf2PasswordHash passwordHash) {
+    public UserService(UserRepository repository, @SuppressWarnings("CdiInjectionPointsInspection") Pbkdf2PasswordHash passwordHash) {
         this.repository = repository;
         this.passwordHash = passwordHash;
     }

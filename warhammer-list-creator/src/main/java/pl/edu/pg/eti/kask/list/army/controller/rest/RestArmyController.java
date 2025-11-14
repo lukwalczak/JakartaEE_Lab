@@ -20,7 +20,6 @@ import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
 import java.util.UUID;
 
 @Path("")
-@RolesAllowed(UserRoles.USER)
 public class RestArmyController implements ArmyController {
     private ArmyService service;
 

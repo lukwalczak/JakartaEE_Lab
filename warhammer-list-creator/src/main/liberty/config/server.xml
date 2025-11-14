@@ -30,7 +30,7 @@
                     javax.sql.ConnectionPoolDataSource="org.h2.jdbcx.JdbcDataSource"
                     javax.sql.DataSource="org.h2.jdbcx.JdbcDataSource"
                     libraryRef="H2JDBCLib"/>
-        <properties URL="jdbc:h2:mem:list-creator"/>
+        <properties URL="jdbc:h2:file:${server.config.dir}/data/list-creator"/>
     </dataSource>
 
     <library id="H2JDBCLib">

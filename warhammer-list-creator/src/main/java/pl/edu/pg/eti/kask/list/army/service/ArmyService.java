@@ -45,12 +45,12 @@ public class ArmyService {
         this.squadService = squadService;
     }
 
-    @RolesAllowed(UserRoles.USER)
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public Optional<Army> find(UUID id) {
         return armyRepository.find(id);
     }
 
-    @RolesAllowed(UserRoles.USER)
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public List<Army> findAll() {
         if (securityContext.isCallerInRole(UserRoles.USER)) {
             return armyRepository.findAll();
@@ -58,24 +58,24 @@ public class ArmyService {
         return List.of();
     }
 
-    @RolesAllowed(UserRoles.USER)
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public List<Army> findAll(UUID userId) {
 
         return armyRepository.findByUserId(userId);
     }
 
-    @RolesAllowed(UserRoles.USER)
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void create(Army army) {
         armyRepository.create(army);
     }
 
-    @RolesAllowed(UserRoles.USER)
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void create(Army army, UUID userId) {
         army.setOwner(userRepository.find(userId).orElseThrow());
         armyRepository.create(army);
     }
 
-    @RolesAllowed(UserRoles.USER)
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void delete(UUID id) {
         squadService.findByArmyId(id).forEach(sq -> {
             squadService.delete(sq.getId());
@@ -84,17 +84,17 @@ public class ArmyService {
         armyRepository.delete(armyRepository.find(id).orElseThrow());
     }
 
-    @RolesAllowed(UserRoles.USER)
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void delete(Army army) {
         delete(army.getId());
     }
 
-    @RolesAllowed(UserRoles.USER)
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void update(Army army) {
         armyRepository.update(army);
     }
 
-    @RolesAllowed(UserRoles.USER)
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public boolean exists(UUID id) {
         return armyRepository.exists(id);
     }
