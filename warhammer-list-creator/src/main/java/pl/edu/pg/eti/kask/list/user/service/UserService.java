@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.list.user.service;
 
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -14,10 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * Service layer for all business actions regarding user entity.
- */
-@ApplicationScoped
+
+@LocalBean
+@Stateless
 @NoArgsConstructor(force = true)
 public class UserService {
 
@@ -68,32 +69,30 @@ public class UserService {
      *
      * @param user new user to be saved
      */
-    @Transactional
     public void create(User user) {
         user.setPassword(passwordHash.generate(user.getPassword().toCharArray()));
         repository.create(user);
     }
-    @Transactional
+
     public void update(User user) {
         repository.update(user);
     }
-    @Transactional
+
     public void delete(UUID id) {
         repository.find(id).ifPresent(repository::delete);
     }
+
     /**
      * @param login    user's login
      * @param password user's password
      * @return true if provided login and password are correct
      */
-    @Transactional
     public boolean verify(String login, String password) {
         return find(login)
                 .map(user -> passwordHash.verify(password.toCharArray(), user.getPassword()))
                 .orElse(false);
     }
 
-    @Transactional
     public void deletePortrait(UUID id) {
         repository.find(id).ifPresent(character -> {
             character.setPortrait(null);
@@ -101,7 +100,6 @@ public class UserService {
         });
     }
 
-    @Transactional
     public void updatePortrait(UUID id, InputStream is) {
         repository.find(id).ifPresent(character -> {
             try {

@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.squad.controller.rest;
 
+import jakarta.ejb.EJB;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -22,17 +23,29 @@ import java.util.UUID;
 @Path("")
 public class RestSquadController implements SquadContoller {
 
-    private final SquadService squadService;
-    private final ArmyService armyService;
-    private final UnitService unitService;
+    private SquadService squadService;
+    private ArmyService armyService;
+    private UnitService unitService;
     private final DtoFunctionFactory factory;
 
     @Inject
-    public RestSquadController(SquadService squadService, ArmyService armyService, UnitService unitService, DtoFunctionFactory dtoFunctionFactory) {
-        this.squadService = squadService;
-        this.armyService = armyService;
-        this.unitService = unitService;
+    public RestSquadController( DtoFunctionFactory dtoFunctionFactory) {
         this.factory = dtoFunctionFactory;
+    }
+
+    @EJB
+    public void setSquadService(SquadService squadService) {
+        this.squadService = squadService;
+    }
+
+    @EJB
+    public void setArmyService(ArmyService armyService) {
+        this.armyService = armyService;
+    }
+
+    @EJB
+    public void setUnitService(UnitService unitService) {
+        this.unitService = unitService;
     }
 
 

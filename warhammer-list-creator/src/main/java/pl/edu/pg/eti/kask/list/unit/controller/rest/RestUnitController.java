@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.unit.controller.rest;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Path;
@@ -26,21 +27,21 @@ public class RestUnitController implements UnitController {
     /**
      * unit service.
      */
-    private final UnitService service;
+    private UnitService service;
 
     /**
      * Factory producing functions for conversion between DTO and entities.
      */
     private final DtoFunctionFactory factory;
 
-    /**
-     * @param service unit service
-     * @param factory factory producing functions for conversion between DTO and entities
-     */
     @Inject
-    public RestUnitController(UnitService service, DtoFunctionFactory factory) {
-        this.service = service;
+    public RestUnitController( DtoFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setService(UnitService service) {
+        this.service = service;
     }
 
     @Override

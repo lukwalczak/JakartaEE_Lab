@@ -1,10 +1,15 @@
 package pl.edu.pg.eti.kask.list.configuration.observer;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Initialized;
 import jakarta.enterprise.context.control.RequestContextController;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
@@ -24,35 +29,42 @@ import java.util.List;
 import java.util.UUID;
 
 
-@ApplicationScoped
+@Singleton
+@Startup
+@NoArgsConstructor
 public class InitializedData {
 
-    private final UserService userService;
+    private UserService userService;
 
-    private final ArmyService armyService;
+    private ArmyService armyService;
 
-    private final UnitService unitService;
+    private UnitService unitService;
 
-    private final SquadService squadService;
+    private SquadService squadService;
 
-    private final RequestContextController requestContextController;
-
-    @Inject
-    public InitializedData(UserService userService, ArmyService armyService, UnitService unitService, SquadService squadService, RequestContextController requestContextController) {
+    @EJB
+    public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @EJB
+    public void setArmyService(ArmyService armyService) {
         this.armyService = armyService;
+    }
+
+    @EJB
+    public void setUnitService(UnitService unitService) {
         this.unitService = unitService;
+    }
+
+    @EJB
+    public void setSquadService(SquadService squadService) {
         this.squadService = squadService;
-        this.requestContextController = requestContextController;
     }
 
-    public void contextInitialized(@Observes @Initialized(ApplicationScoped.class) Object init) {
-        init();
-    }
 
-    @SneakyThrows
+    @PostConstruct
     private void init() {
-        requestContextController.activate();
         User admin = User.builder()
                 .id(UUID.fromString("c4804e0f-769e-4ab9-9ebe-0578fb4f00a6"))
                 .login("admin")
@@ -314,8 +326,6 @@ public class InitializedData {
             squadService.create(squad2);
         }
 
-
-        requestContextController.deactivate();
 
     }
 

@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.unit.view;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Named
 @RequestScoped
 public class UnitView {
-    private final UnitService unitService;
+    private  UnitService unitService;
 
     @Getter
     private UnitModel unitModel;
@@ -31,9 +32,13 @@ public class UnitView {
     private UUID id;
 
     @Inject
-    public UnitView(UnitService unitService, ToUnitModelFunction function) {
-        this.unitService = unitService;
+    public UnitView( ToUnitModelFunction function) {
         this.function = function;
+    }
+
+    @EJB
+    public void setUnitService(UnitService unitService) {
+        this.unitService = unitService;
     }
 
     public void init() throws IOException {

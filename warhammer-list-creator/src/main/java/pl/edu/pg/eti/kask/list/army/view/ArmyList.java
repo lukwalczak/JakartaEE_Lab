@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.army.view;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -11,15 +12,19 @@ import pl.edu.pg.eti.kask.list.army.service.ArmyService;
 @Named
 public class ArmyList {
 
-    private final ArmyService armyService;
+    private ArmyService armyService;
 
     private ArmiesModel armiesModel;
 
     private final ToArmiesModelFunction function;
     @Inject
-    public ArmyList(ArmyService armyService, ToArmiesModelFunction function) {
-        this.armyService = armyService;
+    public ArmyList(ToArmiesModelFunction function) {
         this.function = function;
+    }
+
+    @EJB
+    public void setArmyService(ArmyService armyService) {
+        this.armyService = armyService;
     }
 
     public ArmiesModel getArmiesModel() {

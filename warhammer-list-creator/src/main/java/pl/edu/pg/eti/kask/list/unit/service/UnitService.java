@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.list.unit.service;
 
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -17,7 +19,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-@RequestScoped
+@LocalBean
+@Stateless
 @NoArgsConstructor(force = true)
 public class UnitService {
 
@@ -47,17 +50,16 @@ public class UnitService {
         return unitRepository.findAll();
     }
 
-    @Transactional
+
     public void create(Unit unit) {
         unitRepository.create(unit);
     }
 
-    @Transactional
     public void update(Unit unit) {
         unitRepository.update(unit);
     }
 
-    @Transactional
+
     public void delete(UUID id) {
         Unit unit = unitRepository.find(id).orElseThrow();
         // delete squads that reference this unit to avoid orphan squads
@@ -68,7 +70,6 @@ public class UnitService {
         unitRepository.delete(unit);
     }
 
-    @Transactional
     public void delete(Unit unit) {
         if (unit == null || unit.getId() == null) {
             throw new IllegalArgumentException("Unit or unit.id must not be null");
@@ -79,7 +80,6 @@ public class UnitService {
         unitRepository.delete(unit);
     }
 
-    @Transactional
     public void updatePortrait(UUID id, InputStream is) {
         unitRepository.find(id).ifPresent(unit -> {
             try {

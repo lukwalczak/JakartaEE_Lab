@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.squad.view;
 
+import jakarta.ejb.EJB;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -26,12 +27,12 @@ import java.util.UUID;
 @ViewScoped
 public class SquadEdit implements Serializable {
 
-    private final SquadService squadService;
+    private SquadService squadService;
+    private UnitService unitService;
+    private ArmyService armyService;
     private final ToSquadEditModelFunction toSquadEditModelFunction;
     private final ModelToSquadFunction modelToSquadFunction;
-    private final UnitService unitService;
     private final ToUnitsModelFunction toUnitsModelFunction;
-    private final ArmyService armyService;
 
     @Getter
     @Setter
@@ -41,17 +42,24 @@ public class SquadEdit implements Serializable {
     private SquadEditModel squad;
 
     @Inject
-    public SquadEdit(SquadService squadService,
-                     ToSquadEditModelFunction toSquadEditModelFunction,
-                     ModelToSquadFunction modelToSquadFunction,
-                     UnitService unitService,
-                     ToUnitsModelFunction toUnitsModelFunction,
-                     ArmyService armyService) {
-        this.squadService = squadService;
+    public SquadEdit(ToSquadEditModelFunction toSquadEditModelFunction, ModelToSquadFunction modelToSquadFunction, ToUnitsModelFunction toUnitsModelFunction) {
         this.toSquadEditModelFunction = toSquadEditModelFunction;
         this.modelToSquadFunction = modelToSquadFunction;
-        this.unitService = unitService;
         this.toUnitsModelFunction = toUnitsModelFunction;
+    }
+
+    @EJB
+    public void setSquadService(SquadService squadService) {
+        this.squadService = squadService;
+    }
+
+    @EJB
+    public void setUnitService(UnitService unitService) {
+        this.unitService = unitService;
+    }
+
+    @EJB
+    public void setArmyService(ArmyService armyService) {
         this.armyService = armyService;
     }
 
@@ -84,10 +92,7 @@ public class SquadEdit implements Serializable {
         if (squadService.findById(id).isPresent()) {
             squadService.delete(id);
         }
-        Squad entity = Squad.builder()
-                .id(squad.getId())
-                .count(squad.getCount())
-                .build();
+        Squad entity = Squad.builder().id(squad.getId()).count(squad.getCount()).build();
         squadService.create(entity, squad.getArmyId(), squad.getUnitId());
         return "/squad/squad_view.xhtml?faces-redirect=true&amp;id=" + squad.getId();
     }

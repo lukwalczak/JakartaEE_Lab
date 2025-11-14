@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.unit.view;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @Named
 @ViewScoped
 public class UnitEdit implements Serializable {
-    private final UnitService unitService;
+    private UnitService unitService;
     private final ToUnitEditModelFunction toUnitEditModelFunction;
     private final UpdateUnitFunction updateUnitFunction;
 
@@ -35,13 +36,16 @@ public class UnitEdit implements Serializable {
 
     @Inject
     public UnitEdit(
-            UnitService service,
             ToUnitEditModelFunction toUnitEditModelFunction,
             UpdateUnitFunction updateUnitFunction
     ) {
-        this.unitService = service;
         this.toUnitEditModelFunction = toUnitEditModelFunction;
         this.updateUnitFunction = updateUnitFunction;
+    }
+
+    @EJB
+    public void setUnitService(UnitService unitService) {
+        this.unitService = unitService;
     }
 
     public void init() throws IOException {

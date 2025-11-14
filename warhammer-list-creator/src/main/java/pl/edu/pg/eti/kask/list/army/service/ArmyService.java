@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.list.army.service;
 
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -14,7 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequestScoped
+@LocalBean
+@Stateless
 @NoArgsConstructor(force = true)
 public class ArmyService {
 
@@ -37,32 +40,42 @@ public class ArmyService {
         this.squadService = squadService;
     }
 
-    public Optional<Army> find(UUID id){
-        return  armyRepository.find(id);
+    public Optional<Army> find(UUID id) {
+        return armyRepository.find(id);
     }
 
-    public List<Army> findAll(){ return armyRepository.findAll();}
+    public List<Army> findAll() {
+        return armyRepository.findAll();
+    }
 
-    public List<Army> findAll(UUID userId){ return armyRepository.findByUserId(userId);}
-    @Transactional
-    public void create(Army army){ armyRepository.create(army); }
-    @Transactional
-    public void create(Army army, UUID userId){
+    public List<Army> findAll(UUID userId) {
+        return armyRepository.findByUserId(userId);
+    }
+
+    public void create(Army army) {
+        armyRepository.create(army);
+    }
+
+    public void create(Army army, UUID userId) {
         army.setOwner(userRepository.find(userId).orElseThrow());
         armyRepository.create(army);
     }
-    @Transactional
-    public void delete(UUID id){
+
+    public void delete(UUID id) {
         squadService.findByArmyId(id).forEach(sq -> {
             squadService.delete(sq.getId());
         });
 
         armyRepository.delete(armyRepository.find(id).orElseThrow());
     }
-    @Transactional
-    public void delete(Army army){ delete(army.getId()); }
-    @Transactional
-    public void update(Army army){ armyRepository.update(army); }
+
+    public void delete(Army army) {
+        delete(army.getId());
+    }
+
+    public void update(Army army) {
+        armyRepository.update(army);
+    }
 
     public boolean exists(UUID id) {
         return armyRepository.exists(id);

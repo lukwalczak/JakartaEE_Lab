@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.squad.view;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Named
 @RequestScoped
 public class SquadView {
-    private final SquadService squadService;
+    private SquadService squadService;
 
     @Getter
     private SquadModel squadModel;
@@ -31,9 +32,13 @@ public class SquadView {
     private UUID id;
 
     @Inject
-    public SquadView(SquadService squadService, ToSquadModelFunction function) {
-        this.squadService = squadService;
+    public SquadView(ToSquadModelFunction function) {
         this.function = function;
+    }
+
+    @EJB
+    public void setSquadService(SquadService squadService) {
+        this.squadService = squadService;
     }
 
     public void init() throws IOException {

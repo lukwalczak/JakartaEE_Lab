@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.user.controller.rest;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Path;
@@ -20,17 +21,21 @@ import java.util.UUID;
 @Path("")
 public class UserSimpleController implements UserController {
 
-    private final UserService userService;
+    private UserService userService;
 
     private final AvatarRepository avatarRepository;
 
     private final DtoFunctionFactory factory;
 
     @Inject
-    public UserSimpleController(UserService userService, AvatarRepository avatarRepository, DtoFunctionFactory factory) {
-        this.userService = userService;
+    public UserSimpleController( AvatarRepository avatarRepository, DtoFunctionFactory factory) {
         this.avatarRepository = avatarRepository;
         this.factory = factory;
+    }
+
+    @EJB
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
@@ -94,6 +99,9 @@ public class UserSimpleController implements UserController {
 
     @Override
     public void putUser(UUID id, PutUserRequest putUserRequest) {
+        if (userExists(id)){
+            throw new BadRequestException();
+        }
         try{
             userService.create(factory.requestToUser().apply(id, putUserRequest));
         } catch (IllegalArgumentException e){
