@@ -47,7 +47,7 @@ public class ArmyPersistenceRepository implements ArmyRepository {
 
     @Override
     public void create(Army entity) {
-        entityManager.persist(entity);
+        entityManager.merge(entity);
     }
 
     @Override

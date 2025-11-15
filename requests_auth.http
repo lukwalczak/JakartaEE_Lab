@@ -1,10 +1,9 @@
-// @no-cookie-jar
 GET http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies
-Authorization: Basic a2V2aW46dGVzdHRlc3Q=
+Authorization: Basic a2V2aW46dXNlcnVzZXI=
 
 ###
 GET http://localhost:9080/list-creator/api/v1/armies
-Authorization: Basic YWRtaW46dGVzdHRlc3Q=
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
 
 ###
 # Get all units.
@@ -18,3 +17,46 @@ Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
 
 ###
 GET http://localhost:9080/list-creator/api/v1/debug/whoami
+
+###
+
+PUT http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
+Content-Type: application/json
+
+{
+  "login": "lukasz",
+  "password": "lukasz",
+  "email": "lukasz@example.com",
+  "name": "lukasz",
+  "surname": "Walczak",
+  "birthDate": "1990-01-01"
+}
+
+###
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
+
+###
+//@no-cookie-jar
+PUT http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+Content-Type: application/json
+
+{
+  "name": "Space Wolves",
+  "description": "Bloodclaw Legion"
+}
+###
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/debug/whoami
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
+
+###
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
+
+###
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2/armies/
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==

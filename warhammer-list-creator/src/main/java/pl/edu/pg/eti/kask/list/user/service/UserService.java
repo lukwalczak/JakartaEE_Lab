@@ -8,6 +8,7 @@ import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.user.entity.User;
+import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
 import pl.edu.pg.eti.kask.list.user.repository.api.UserRepository;
 
 import java.io.IOException;
@@ -71,6 +72,7 @@ public class UserService {
      */
     public void create(User user) {
         user.setPassword(passwordHash.generate(user.getPassword().toCharArray()));
+        user.setRoles(List.of(UserRoles.USER));
         repository.create(user);
     }
 

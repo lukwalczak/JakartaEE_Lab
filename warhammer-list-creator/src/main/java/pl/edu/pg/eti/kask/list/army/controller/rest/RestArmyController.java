@@ -16,6 +16,7 @@ import pl.edu.pg.eti.kask.list.army.service.ArmyService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
+import pl.edu.pg.eti.kask.list.user.service.UserService;
 
 import java.util.UUID;
 
@@ -25,10 +26,13 @@ public class RestArmyController implements ArmyController {
 
     private SquadService squadService;
 
+    private UserService userService;
+
     private final DtoFunctionFactory factory;
 
     @Inject
-    public RestArmyController(ArmyService armyService, SquadService squadService, DtoFunctionFactory factory) {
+    public RestArmyController(ArmyService armyService, SquadService squadService, UserService userService, DtoFunctionFactory factory) {
+        this.userService = userService;
         this.service = armyService;
         this.squadService = squadService;
         this.factory = factory;

@@ -71,7 +71,6 @@ public class InitializedData {
         this.squadService = squadService;
     }
 
-
     @PostConstruct
     private void init() {
 

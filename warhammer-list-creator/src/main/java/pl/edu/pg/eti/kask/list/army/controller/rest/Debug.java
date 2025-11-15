@@ -7,6 +7,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -25,8 +26,8 @@ public class Debug {
         Map<String,Object> m = new HashMap<>();
         Principal p = sc.getUserPrincipal();
         m.put("principal", p == null ? null : p.getName());
-        m.put("isUser", sc.isUserInRole("user"));
-        m.put("isAdmin", sc.isUserInRole("admin"));
+        m.put("isUser", sc.isUserInRole(UserRoles.USER));
+        m.put("isAdmin", sc.isUserInRole(UserRoles.ADMIN));
         return m;
     }
 }
