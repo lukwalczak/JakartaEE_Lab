@@ -42,7 +42,7 @@ public class SquadPersistanceRepository implements SquadRepository {
 
     @Override
     public void create(Squad entity) {
-        entityManager.persist(entity);
+        entityManager.merge(entity);
     }
 
     @Override

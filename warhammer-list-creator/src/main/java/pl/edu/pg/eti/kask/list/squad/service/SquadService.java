@@ -74,5 +74,10 @@ public class SquadService {
         return squadRepository.findByArmyId(armyId);
     }
 
+    public void initCreate(Squad squad) {
+        squadRepository.create(squad);
+        armyRepository.update(squad.getArmy());
+    }
+
 
 }

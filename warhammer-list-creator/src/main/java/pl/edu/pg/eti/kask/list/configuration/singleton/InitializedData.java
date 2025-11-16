@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.security.DeclareRoles;
 import jakarta.annotation.security.RunAs;
 import jakarta.ejb.*;
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.SecurityContext;
 import lombok.NoArgsConstructor;
@@ -29,10 +30,8 @@ import java.util.*;
 
 @Singleton
 @Startup
-@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
+@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 @NoArgsConstructor
-@DeclareRoles({UserRoles.ADMIN, UserRoles.USER})
-@RunAs(UserRoles.ADMIN)
 @Log
 public class InitializedData {
 
@@ -119,18 +118,10 @@ public class InitializedData {
                 .roles(List.of(UserRoles.USER))
                 .build();
 
-        if (!userService.find("admin").isPresent()) {
-            userService.create(admin);
-        }
-        if (!userService.find("test").isPresent()) {
-            userService.create(test);
-        }
-        if (!userService.find("kevin").isPresent()) {
-            userService.create(kevin);
-        }
-        if (!userService.find("alice").isPresent()) {
-            userService.create(alice);
-        }
+            userService.initCreate(admin);
+            userService.initCreate(test);
+            userService.initCreate(kevin);
+            userService.initCreate(alice);
 
         Skill attack = Skill.builder()
                 .id(UUID.randomUUID())
@@ -274,18 +265,16 @@ public class InitializedData {
                 .portrait(getResourceAsByteArray("../avatar/chaplain.jpg"))
                 .build();
 
-        if (unitService.findAll().isEmpty()) {
-            unitService.create(scout);
-            unitService.create(Intercessor);
-            unitService.create(apothecary);
-            unitService.create(aggressor);
-            unitService.create(bloodclaw);
-            unitService.create(wg_battle_leader);
-            unitService.create(wg_terminator);
-            unitService.create(wg_headtaker);
-            unitService.create(chaplain);
+            unitService.initCreate(scout);
+            unitService.initCreate(Intercessor);
+            unitService.initCreate(apothecary);
+            unitService.initCreate(aggressor);
+            unitService.initCreate(bloodclaw);
+            unitService.initCreate(wg_battle_leader);
+            unitService.initCreate(wg_terminator);
+            unitService.initCreate(wg_headtaker);
+            unitService.initCreate(chaplain);
 
-        }
 
 
         Army AstraMilitarum = Army.builder()
@@ -320,18 +309,10 @@ public class InitializedData {
                 .owner(alice)
                 .build();
 
-        if (armyService.find(Orks.getId()).isEmpty()) {
-            armyService.create(Orks, test.getId());
-        }
-        if (armyService.find(AstraMilitarum.getId()).isEmpty()) {
-            armyService.create(AstraMilitarum, test.getId());
-        }
-        if (armyService.find(Aeldari.getId()).isEmpty()) {
-            armyService.create(Aeldari, kevin.getId());
-        }
-        if (armyService.find(ThousandSons.getId()).isEmpty()) {
-            armyService.create(ThousandSons, alice.getId());
-        }
+            armyService.initCreate(Orks, test.getId());
+            armyService.initCreate(AstraMilitarum, test.getId());
+            armyService.initCreate(Aeldari, kevin.getId());
+            armyService.initCreate(ThousandSons, alice.getId());
 
         Squad squad1 = Squad.builder()
                 .id(UUID.fromString("423e4567-e89b-12d3-a456-426614174003"))
@@ -346,13 +327,8 @@ public class InitializedData {
                 .unit(apothecary)
                 .count(2)
                 .build();
-        if (squadService.findById(squad1.getId()).isEmpty()) {
-            squadService.create(squad1);
-
-        }
-        if (squadService.findById(squad2.getId()).isEmpty()) {
-            squadService.create(squad2);
-        }
+            squadService.initCreate(squad1);
+            squadService.initCreate(squad2);
 
 
     }

@@ -113,4 +113,10 @@ public class UserService {
         });
     }
 
+    public void initCreate(User user) {
+        user.setPassword(passwordHash.generate(user.getPassword().toCharArray()));
+        user.setRoles(List.of(UserRoles.USER));
+        repository.create(user);
+    }
+
 }

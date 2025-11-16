@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.unit.controller.rest;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -14,6 +15,7 @@ import pl.edu.pg.eti.kask.list.unit.service.UnitService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
+import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
 
 import java.io.InputStream;
 import java.util.UUID;
@@ -45,11 +47,13 @@ public class RestUnitController implements UnitController {
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public GetUnitsResponse getUnits() {
         return factory.unitsToResponse().apply(service.findAll());
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public GetUnitResponse getUnit(UUID uuid) {
         return service.find(uuid)
                 .map(factory.unitToResponse())
@@ -57,6 +61,7 @@ public class RestUnitController implements UnitController {
     }
 
     @Override
+    @RolesAllowed({UserRoles.ADMIN})
     public void putunit(UUID id, PutUnitRequest request) {
         try {
             service.create(factory.requestToUnit().apply(id, request));
@@ -66,6 +71,7 @@ public class RestUnitController implements UnitController {
     }
 
     @Override
+    @RolesAllowed({UserRoles.ADMIN})
     public void patchunit(UUID id, PatchUnitRequest request) {
         service.find(id).ifPresentOrElse(
                 entity -> service.update(factory.updateUnit().apply(entity, request)),
@@ -76,6 +82,7 @@ public class RestUnitController implements UnitController {
     }
 
     @Override
+    @RolesAllowed({UserRoles.ADMIN})
     public void deleteunit(UUID id) {
         service.find(id).ifPresentOrElse(
                 entity -> service.delete(id),
@@ -86,6 +93,7 @@ public class RestUnitController implements UnitController {
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public byte[] getunitPortrait(UUID id) {
         return service.find(id)
                 .map(Unit::getPortrait)
@@ -93,6 +101,7 @@ public class RestUnitController implements UnitController {
     }
 
     @Override
+    @RolesAllowed({UserRoles.ADMIN})
     public void putunitPortrait(UUID id, InputStream portrait) {
         service.find(id).ifPresentOrElse(
                 entity -> service.updatePortrait(id, portrait),

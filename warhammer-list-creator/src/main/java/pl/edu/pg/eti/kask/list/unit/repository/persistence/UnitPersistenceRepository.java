@@ -36,7 +36,7 @@ public class UnitPersistenceRepository implements UnitRepository {
 
     @Override
     public void create(Unit entity) {
-        entityManager.persist(entity);
+        entityManager.merge(entity);
     }
 
     @Override

@@ -98,4 +98,14 @@ public class ArmyService {
     public boolean exists(UUID id) {
         return armyRepository.exists(id);
     }
+
+
+    public void initCreate(Army army, UUID userId) {
+        army.setOwner(userRepository.find(userId).orElseThrow());
+        armyRepository.create(army);
+    }
+
+    public void initCreate(Army army) {
+        armyRepository.create(army);
+    }
 }

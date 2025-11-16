@@ -42,7 +42,7 @@ public class UserPersistenceRepository implements UserRepository {
 
     @Override
     public void create(User entity) {
-        entityManager.persist(entity);
+        entityManager.merge(entity);
     }
 
     @Override

@@ -14,16 +14,8 @@
     </featureManager>
 
     <application type="war" location="warhammer-list-creator-1.0-SNAPSHOT.war">
-        <application-bnd>
-            <security-role name="admin">
-                <group name="admin" access-id="group:jdbc/ListCreatorDS/admin"/>
-                <run-as userid="admin-service"/>
-            </security-role>
-            <security-role name="user">
-                <group name="user" access-id="group:jdbc/ListCreatorDS/user"/>
-            </security-role>
-        </application-bnd>
     </application>
+
 
     <dataSource id="ListCreatorDS" jndiName="jdbc/ListCreatorDS">
         <jdbcDriver javax.sql.XADataSource="org.h2.jdbcx.JdbcDataSource"
