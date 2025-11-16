@@ -5,6 +5,8 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.SecurityContext;
+import jakarta.ws.rs.ForbiddenException;
+import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.repository.api.ArmyRepository;
@@ -47,36 +49,63 @@ public class ArmyService {
 
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public Optional<Army> find(UUID id) {
-        return armyRepository.find(id);
+        if(securityContext.isCallerInRole(UserRoles.ADMIN)) {
+            return armyRepository.find(id);
+        }
+        if(armyRepository.find(id).isPresent()) {
+            Army army = armyRepository.find(id).orElseThrow();
+            if(army.getOwner().getId().equals(getUserIdFromSecurityContext())) {
+                return armyRepository.find(id);
+            }else {
+                throw new ForbiddenException();
+            }
+        }
+        return Optional.empty();
     }
 
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public List<Army> findAll() {
-        if (securityContext.isCallerInRole(UserRoles.USER)) {
+        System.out.println("User: " + securityContext.isCallerInRole(UserRoles.ADMIN));
+        System.out.println("User: " + securityContext.isCallerInRole(UserRoles.USER));
+        if (securityContext.isCallerInRole(UserRoles.ADMIN)) {
             return armyRepository.findAll();
         }
-        return List.of();
+        return armyRepository.findByUserId(getUserIdFromSecurityContext());
     }
 
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public List<Army> findAll(UUID userId) {
-
         return armyRepository.findByUserId(userId);
     }
 
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void create(Army army) {
+        army.setOwner(userRepository.find(getUserIdFromSecurityContext()).orElseThrow());
+        System.out.println("User: " + securityContext.getCallerPrincipal().getName());
         armyRepository.create(army);
     }
 
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void create(Army army, UUID userId) {
+        if(!userId.equals(getUserIdFromSecurityContext())
+                && !securityContext.isCallerInRole(UserRoles.ADMIN)) {
+            throw new ForbiddenException();
+        }
         army.setOwner(userRepository.find(userId).orElseThrow());
         armyRepository.create(army);
     }
 
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void delete(UUID id) {
+        if(!armyRepository.find(id).isPresent()) {
+            throw new NotFoundException();
+        }
+        if(!securityContext.isCallerInRole(UserRoles.ADMIN)) {
+            Army army = armyRepository.find(id).orElseThrow();
+            if(!army.getOwner().getId().equals(getUserIdFromSecurityContext())) {
+                throw new ForbiddenException();
+            }
+        }
         squadService.findByArmyId(id).forEach(sq -> {
             squadService.delete(sq.getId());
         });
@@ -86,15 +115,31 @@ public class ArmyService {
 
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void delete(Army army) {
+        if(!armyRepository.find(army.getId()).isPresent()) {
+            throw new NotFoundException();
+        }
+        if(!securityContext.isCallerInRole(UserRoles.ADMIN)) {
+            if(!army.getOwner().getId().equals(getUserIdFromSecurityContext())) {
+                throw new ForbiddenException();
+            }
+        }
         delete(army.getId());
     }
 
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void update(Army army) {
+
+        if(!armyRepository.find(army.getId()).isPresent()) {
+            throw new NotFoundException();
+        }
+        if(!securityContext.isCallerInRole(UserRoles.ADMIN)) {
+            if(!army.getOwner().getId().equals(getUserIdFromSecurityContext())) {
+                throw new ForbiddenException();
+            }
+        }
         armyRepository.update(army);
     }
 
-    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public boolean exists(UUID id) {
         return armyRepository.exists(id);
     }
@@ -107,5 +152,13 @@ public class ArmyService {
 
     public void initCreate(Army army) {
         armyRepository.create(army);
+    }
+
+    private UUID getUserIdFromSecurityContext() {
+        try{
+            return userRepository.findByLogin(securityContext.getCallerPrincipal().getName()).orElseThrow().getId();
+        }catch(NotFoundException e) {
+            throw new NotFoundException();
+        }
     }
 }

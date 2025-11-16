@@ -21,6 +21,7 @@ public class UpdateArmyWithRequestFunction implements BiFunction<Army, PatchArmy
                 .description(request.getDescription())
                 .faction(request.getFaction())
                 .squads(request.getSquads())
+                .owner(entity.getOwner())
                 .build();
     }
 

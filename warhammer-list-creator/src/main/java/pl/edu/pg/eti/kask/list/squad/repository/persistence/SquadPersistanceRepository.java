@@ -31,6 +31,13 @@ public class SquadPersistanceRepository implements SquadRepository {
     }
 
     @Override
+    public List<Squad> findByUserId(UUID userId) {
+        return entityManager.createQuery("SELECT s from Squad s WHERE s.army.owner.id = :userId", Squad.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
+    @Override
     public Optional<Squad> find(UUID id) {
         return Optional.ofNullable(entityManager.find(Squad.class, id));
     }
