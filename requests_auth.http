@@ -256,6 +256,20 @@ GET http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426
 
 ###
 
+#Get created squad - wrong user
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003/squads/423e4567-e89b-12d3-a456-426614174001
+Authorization: Basic dGVzdDp1c2VydXNlcg==
+
+###
+
+#Get created squad - admin
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003/squads/423e4567-e89b-12d3-a456-426614174001
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
+
+###
+
 #Get created squad
 //@no-cookie-jar
 GET http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003/squads/423e4567-e89b-12d3-a456-426614174001
@@ -325,6 +339,13 @@ Content-Type: application/json
 #Get created unit
 //@no-cookie-jar
 GET http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+
+###
+
+#Get created unit
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
 Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
 
 ###
@@ -332,6 +353,13 @@ Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
 #Delete created unit - no auth
 //@no-cookie-jar
 DELETE http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+
+###
+
+#Delete created unit - not admin
+//@no-cookie-jar
+DELETE http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
 
 ###
 
