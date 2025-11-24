@@ -10,9 +10,10 @@
         <article class="text--justified">
             <header><h2>Squads</h2></header>
 
-            <!-- Formularz otaczający tabelę, potrzebny do wykonania akcji (commandButton) -->
-            <h:form>
-                <h:dataTable value="#{squadList.squadsModel.squads}" var="squad" styleClass="table align-middle mb-0 bg-white"
+            <h:form id="squadListForm">
+
+                <h:dataTable id="squadsTable" value="#{squadList.squadsModel.squads}" var="squad"
+                             styleClass="table align-middle mb-0 bg-white"
                              headerClass="bg-light">
                     <h:column>
                         <f:facet name="header">Army</f:facet>
@@ -39,7 +40,9 @@
                         </h:link>
 
                         <h:commandButton value="Delete" styleClass="btn btn-danger"
-                                         action="#{squadList.deleteSquad(squad)}"/>
+                                         action="#{squadList.deleteSquad(squad)}">
+                            <f:ajax execute="@this" render=":squadListForm:squadsTable"/>
+                        </h:commandButton>
                     </h:column>
                 </h:dataTable>
             </h:form>

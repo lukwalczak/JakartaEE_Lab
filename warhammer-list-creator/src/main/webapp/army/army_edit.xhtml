@@ -13,7 +13,8 @@
     <ui:define name="content">
         <article>
             <header><h2>#{messages.edit} #{messages['nav.armies']}</h2></header>
-            <h:form>
+
+            <h:form id="armyForm">
                 <h:panelGrid columns="2">
                     <h:outputLabel for="name" value="#{messages.name}:" class="form-group"/>
                     <h:inputText id="name" value="#{armyEdit.army.name}" required="true" class="form-control"/>
@@ -23,7 +24,8 @@
                 </h:panelGrid>
 
                 <h3>#{messages['nav.squads']}</h3>
-                <h:dataTable value="#{armyEdit.army.squads}" var="s">
+
+                <h:dataTable id="squadsTable" value="#{armyEdit.army.squads}" var="s">
                     <h:column>
                         <f:facet name="header">#{messages['nav.units']}</f:facet>
                         <h:selectOneMenu value="#{s.unitId}" class="list-group form-control">
@@ -37,12 +39,17 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">#{messages.delete}</f:facet>
-                        <h:commandButton value="#{messages.delete}" action="#{armyEdit.removeSquadRow(armyEdit.army.squads.indexOf(s))}" class="btn btn-danger"/>
+
+                        <h:commandButton value="#{messages.delete}" action="#{armyEdit.removeSquadRow(armyEdit.army.squads.indexOf(s))}" class="btn btn-danger">
+                            <f:ajax execute="@this" render=":armyForm:squadsTable"/>
+                        </h:commandButton>
                     </h:column>
                 </h:dataTable>
 
                 <div style="margin-top:0.5rem;">
-                    <h:commandButton value="#{messages.create} #{messages['nav.squads']}" action="#{armyEdit.addSquadRow}" class="btn btn-primary" />
+                    <h:commandButton value="#{messages.create} #{messages['nav.squads']}" action="#{armyEdit.addSquadRow}" class="btn btn-primary">
+                        <f:ajax execute="@this" render=":armyForm:squadsTable"/>
+                    </h:commandButton>
                 </div>
 
                 <div style="margin-top:1rem;">

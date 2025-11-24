@@ -26,4 +26,7 @@
         <fileset dir="${wlp.install.dir}/usr/servers/defaultServer/lib/global/" includes="h2-2.2.220.jar"/>
     </library>
 
+    <interceptors>
+        <class>pl.edu.pg.eti.kask.list.interceptor.logging.LoggingInterceptor</class>
+    </interceptors>
 </server>

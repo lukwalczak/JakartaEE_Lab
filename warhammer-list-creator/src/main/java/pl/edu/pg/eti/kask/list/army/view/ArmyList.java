@@ -30,12 +30,19 @@ public class ArmyList {
     public ArmiesModel getArmiesModel() {
         if (armiesModel == null) {
             armiesModel = function.apply(armyService.findAll());
+            if (armiesModel.getArmies() != null) {
+                armiesModel.setArmies(new java.util.ArrayList<>(armiesModel.getArmies()));
+            }
         }
         return armiesModel;
     }
 
-    public String deleteArmy(ArmiesModel.Army army) {
+
+    public void deleteArmy(ArmiesModel.Army army) {
         armyService.delete(army.getId());
-        return "/army/army_list.xhtml?faces-redirect=true";
+        if (armiesModel != null && armiesModel.getArmies() != null) {
+            armiesModel.getArmies().removeIf(a -> a.getId().equals(army.getId()));
+        }
+
     }
 }

@@ -9,8 +9,11 @@
         <h:outputStylesheet library="unit" name="css/unit_list.css"/>
         <article class="text--justified">
             <header><h2>Units</h2></header>
-            <h:form>
-                <h:dataTable value="#{unitList.unitsModel.units}" var="unit" styleClass="table align-middle mb-0 bg-white"
+
+            <h:form id="unitListForm">
+
+                <h:dataTable id="unitsTable" value="#{unitList.unitsModel.units}" var="unit"
+                             styleClass="table align-middle mb-0 bg-white"
                              headerClass="bg-light">
                     <h:column>
                         <f:facet name="header">Portrait</f:facet>
@@ -33,7 +36,9 @@
                         </h:link>
 
                         <h:commandButton value="Delete" styleClass="btn btn-danger"
-                                         action="#{unitList.deleteUnit(unit)}" rendered="#{request.isUserInRole('admin')}"/>
+                                         action="#{unitList.deleteUnit(unit)}" rendered="#{request.isUserInRole('admin')}">
+                            <f:ajax execute="@this" render=":unitListForm:unitsTable"/>
+                        </h:commandButton>
                     </h:column>
                 </h:dataTable>
             </h:form>

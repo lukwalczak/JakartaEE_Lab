@@ -10,6 +10,7 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.repository.api.ArmyRepository;
+import pl.edu.pg.eti.kask.list.interceptor.logging.LogOperation;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.repository.api.UnitRepository;
 import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
@@ -77,14 +78,14 @@ public class ArmyService {
     public List<Army> findAll(UUID userId) {
         return armyRepository.findByUserId(userId);
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void create(Army army) {
         army.setOwner(userRepository.find(getUserIdFromSecurityContext()).orElseThrow());
         System.out.println("User: " + securityContext.getCallerPrincipal().getName());
         armyRepository.create(army);
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void create(Army army, UUID userId) {
         if(!userId.equals(getUserIdFromSecurityContext())
@@ -95,6 +96,7 @@ public class ArmyService {
         armyRepository.create(army);
     }
 
+    @LogOperation
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void delete(UUID id) {
         if(!armyRepository.find(id).isPresent()) {
@@ -112,7 +114,7 @@ public class ArmyService {
 
         armyRepository.delete(armyRepository.find(id).orElseThrow());
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void delete(Army army) {
         if(!armyRepository.find(army.getId()).isPresent()) {
@@ -125,7 +127,7 @@ public class ArmyService {
         }
         delete(army.getId());
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void update(Army army) {
 

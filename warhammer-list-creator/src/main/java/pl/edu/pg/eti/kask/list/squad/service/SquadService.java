@@ -12,6 +12,7 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.repository.api.ArmyRepository;
+import pl.edu.pg.eti.kask.list.interceptor.logging.LogOperation;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 import pl.edu.pg.eti.kask.list.squad.repository.api.SquadRepository;
 import pl.edu.pg.eti.kask.list.unit.repository.api.UnitRepository;
@@ -71,7 +72,7 @@ public class SquadService {
         }
         return squadRepository.find(id);
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void create(Squad squad, UUID armyId, UUID unitId) {
         Army army = armyRepository.find(armyId).orElseThrow(NotFoundException::new);
@@ -85,7 +86,7 @@ public class SquadService {
         squadRepository.create(squad);
         armyRepository.update(squad.getArmy());
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void create(Squad squad) {
         if(!squad.getArmy().getOwner().getId().equals(getUserIdFromSecurityContext()) && !securityContext.isCallerInRole(UserRoles.ADMIN)){
@@ -94,7 +95,7 @@ public class SquadService {
         squadRepository.create(squad);
         armyRepository.update(squad.getArmy());
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void delete(Squad squad) {
         if(!squad.getArmy().getOwner().getId().equals(getUserIdFromSecurityContext()) && !securityContext.isCallerInRole(UserRoles.ADMIN)){
@@ -102,7 +103,7 @@ public class SquadService {
         }
         squadRepository.delete(squad);
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void update(Squad squad) {
         if(!squad.getArmy().getOwner().getId().equals(getUserIdFromSecurityContext()) && !securityContext.isCallerInRole(UserRoles.ADMIN)){
@@ -110,7 +111,7 @@ public class SquadService {
         }
         squadRepository.update(squad);
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void delete(UUID id) {
         if(!squadRepository.find(id).isPresent()) {

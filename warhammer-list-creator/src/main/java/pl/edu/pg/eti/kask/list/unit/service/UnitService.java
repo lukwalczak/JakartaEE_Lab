@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotAuthorizedException;
 import lombok.NoArgsConstructor;
+import pl.edu.pg.eti.kask.list.interceptor.logging.LogOperation;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.repository.api.UnitRepository;
@@ -58,17 +59,17 @@ public class UnitService {
     public List<Unit> findAll() {
         return unitRepository.findAll();
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.ADMIN})
     public void create(Unit unit) {
         unitRepository.create(unit);
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.ADMIN})
     public void update(Unit unit) {
         unitRepository.update(unit);
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.ADMIN})
     public void delete(UUID id) {
         Unit unit = unitRepository.find(id).orElseThrow();
@@ -77,7 +78,7 @@ public class UnitService {
                 .forEach(sq -> squadService.delete(sq.getId()));
         unitRepository.delete(unit);
     }
-
+    @LogOperation
     @RolesAllowed({UserRoles.ADMIN})
     public void delete(Unit unit) {
         if (unit == null || unit.getId() == null) {
@@ -88,6 +89,7 @@ public class UnitService {
                 .forEach(sq -> squadService.delete(sq.getId()));
         unitRepository.delete(unit);
     }
+    @LogOperation
     @RolesAllowed({UserRoles.ADMIN})
     public void updatePortrait(UUID id, InputStream is) {
         unitRepository.find(id).ifPresent(unit -> {

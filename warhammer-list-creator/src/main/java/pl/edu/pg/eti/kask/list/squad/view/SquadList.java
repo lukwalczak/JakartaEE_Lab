@@ -8,6 +8,8 @@ import pl.edu.pg.eti.kask.list.squad.model.SquadsModel;
 import pl.edu.pg.eti.kask.list.squad.model.function.ToSquadsModelFunction;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 
+import java.util.ArrayList;
+
 @RequestScoped
 @Named
 public class SquadList {
@@ -31,14 +33,21 @@ public class SquadList {
     public SquadsModel getSquadsModel() {
         if (squadsModel == null) {
             squadsModel = function.apply(squadService.findAll());
+
+            if (squadsModel.getSquads() != null) {
+                squadsModel.setSquads(new ArrayList<>(squadsModel.getSquads()));
+            }
         }
         return squadsModel;
     }
 
-    public String deleteSquad(SquadsModel.Squad squad) {
+    public void deleteSquad(SquadsModel.Squad squad) {
         if (squad != null && squad.getId() != null) {
             squadService.delete(squad.getId());
+
+            if (squadsModel != null && squadsModel.getSquads() != null) {
+                squadsModel.getSquads().removeIf(s -> s.getId().equals(squad.getId()));
+            }
         }
-        return "/squad/squad_list.xhtml?faces-redirect=true";
     }
 }
