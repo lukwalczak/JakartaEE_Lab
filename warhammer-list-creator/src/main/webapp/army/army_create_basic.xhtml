@@ -16,16 +16,15 @@
                 <div class="row">
                     <div class="col-12">
                         <h:panelGrid columns="2">
-                            <h:outputLabel for="name" value="Name:"/>
+                            <h:outputLabel for="name" value="#{messages.name}:"/>
                             <h:inputText id="name" value="#{armyCreate.army.name}" required="true"/>
 
                             <h:outputLabel for="desc" value="Description:"/>
                             <h:inputTextarea id="desc" value="#{armyCreate.army.description}" rows="4"/>
                         </h:panelGrid>
 
-                        <h3>Squads</h3>
+                        <h3>#{messages['nav.squads']}</h3>
 
-                        <!-- binding="#{null}" removed -->
                         <h:dataTable value="#{armyCreate.army.squads}" var="squad">
                             <h:column>
                                 <f:facet name="header">Unit</f:facet>
@@ -35,24 +34,24 @@
                                 </h:selectOneMenu>
                             </h:column>
                             <h:column>
-                                <f:facet name="header">Count</f:facet>
+                                <f:facet name="header">#{messages.count}</f:facet>
                                 <h:inputText value="#{squad.count}" class="input"/>
                             </h:column>
                             <h:column>
-                                <f:facet name="header">Remove</f:facet>
+                                <f:facet name="header">#{messages.delete}</f:facet>
                                 <h:commandButton value="Remove" action="#{armyCreate.removeSquadRow(armyCreate.army.squads.indexOf(squad))}" immediate="true" class="btn btn-danger"/>
                             </h:column>
                         </h:dataTable>
 
                         <div style="margin-top:0.5rem;">
-                            <h:commandButton value="Add squad" action="#{armyCreate.addSquadRow}" class="btn btn-primary"/>
+                            <h:commandButton value="#{messages.create} #{messages['nav.squads']}" action="#{armyCreate.addSquadRow}" class="btn btn-primary"/>
                         </div>
                     </div>
                 </div>
 
                 <div style="margin-top:1rem;">
-                    <h:commandButton value="Cancel" action="#{armyCreate.cancelAction()}" class="btn btn-secondary"/>
-                    <h:commandButton value="Next" action="#{armyCreate.goToConfirmAction()}" class="btn btn-primary"/>
+                    <h:commandButton value="#{messages.cancel}" action="#{armyCreate.cancelAction()}" class="btn btn-secondary"/>
+                    <h:commandButton value="#{messages.next}" action="#{armyCreate.goToConfirmAction()}" class="btn btn-primary"/>
                 </div>
             </h:form>
         </article>

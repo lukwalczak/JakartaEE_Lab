@@ -1,11 +1,15 @@
 package pl.edu.pg.eti.kask.list.unit.service;
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.SecurityContext;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.ForbiddenException;
+import jakarta.ws.rs.NotAuthorizedException;
 import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
@@ -35,11 +39,14 @@ public class UnitService {
 
     private final SquadService squadService;
 
+    private final SecurityContext securityContext;
+
     @Inject
-    public UnitService(UnitRepository unitRepository, UserRepository userRepository, SquadService squadService) {
+    public UnitService(UnitRepository unitRepository, UserRepository userRepository, SquadService squadService, SecurityContext securityContext) {
         this.unitRepository = unitRepository;
         this.userRepository = userRepository;
         this.squadService = squadService;
+        this.securityContext = securityContext;
     }
 
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
@@ -65,11 +72,9 @@ public class UnitService {
     @RolesAllowed({UserRoles.ADMIN})
     public void delete(UUID id) {
         Unit unit = unitRepository.find(id).orElseThrow();
-        // delete squads that reference this unit to avoid orphan squads
         squadService.findAll().stream()
                 .filter(sq -> sq.getUnit() != null && sq.getUnit().getId().equals(id))
                 .forEach(sq -> squadService.delete(sq.getId()));
-        // finally delete unit
         unitRepository.delete(unit);
     }
 

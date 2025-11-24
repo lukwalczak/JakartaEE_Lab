@@ -12,28 +12,28 @@
             <header><h2>Confirm create army</h2></header>
             <h:form>
                 <h:panelGrid columns="2">
-                    <h:outputLabel value="Name:"/>
+                    <h:outputLabel value="#{messages.name}:"/>
                     <h:outputText value="#{armyCreate.army.name}"/>
 
-                    <h:outputLabel value="Description:"/>
+                    <h:outputLabel value="#{messages.description}:"/>
                     <h:outputText value="#{armyCreate.army.description}" escape="false"/>
                 </h:panelGrid>
 
-                <h3>Squads</h3>
+                <h3>#{messages['nav.squads']}</h3>
                 <h:dataTable value="#{armyCreate.army.squads}" var="s" rendered="#{not empty armyCreate.army.squads}">
                     <h:column>
-                        <f:facet name="header">Unit</f:facet>
+                        <f:facet name="header">#{messages['nav.units']}</f:facet>
                         <h:outputText value="#{s.unitId}"/>
                     </h:column>
                     <h:column>
-                        <f:facet name="header">Count</f:facet>
+                        <f:facet name="header">#{messages.count}</f:facet>
                         <h:outputText value="#{s.count}"/>
                     </h:column>
                 </h:dataTable>
 
                 <div style="margin-top:1rem;">
-                    <h:commandButton value="Back" action="/army/army_create_basic.xhtml?faces-redirect=true" class="btn btn-secondary"/>
-                    <h:commandButton value="Save" action="#{armyCreate.saveAction()}" class="btn btn-primary"/>
+                    <h:commandButton value="#{messages.back}" action="/army/army_create_basic.xhtml?faces-redirect=true" class="btn btn-secondary"/>
+                    <h:commandButton value="#{messages.save}" action="#{armyCreate.saveAction()}" class="btn btn-primary"/>
                 </div>
             </h:form>
         </article>

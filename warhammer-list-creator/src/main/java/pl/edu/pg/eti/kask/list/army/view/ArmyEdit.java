@@ -18,6 +18,7 @@ import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.model.UnitsModel;
 import pl.edu.pg.eti.kask.list.unit.model.function.ToUnitsModelFunction;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
+import pl.edu.pg.eti.kask.list.user.entity.User;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -100,7 +101,8 @@ public class ArmyEdit implements Serializable {
     }
 
     public String saveAction() {
-        Army updated = ModelToArmyFunctionHolder.apply(army);
+        Army originalArmy = armyService.find(army.getId()).orElseThrow();
+        Army updated = ModelToArmyFunctionHolder.apply(army, originalArmy.getOwner());
         armyService.update(updated);
 
         army.getSquads().forEach(s -> {
@@ -123,10 +125,11 @@ public class ArmyEdit implements Serializable {
     }
 
     private static class ModelToArmyFunctionHolder {
-        static pl.edu.pg.eti.kask.list.army.entity.Army apply(ArmyEditModel m) {
+        static pl.edu.pg.eti.kask.list.army.entity.Army apply(ArmyEditModel m, User userId) {
             return pl.edu.pg.eti.kask.list.army.entity.Army.builder()
                     .id(m.getId())
                     .name(m.getName())
+                    .owner(userId)
                     .description(m.getDescription())
                     .build();
         }

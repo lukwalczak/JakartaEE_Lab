@@ -2,7 +2,6 @@ package pl.edu.pg.eti.kask.list.unit.controller.rest;
 
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Path;
 import pl.edu.pg.eti.kask.list.unit.controller.api.UnitController;

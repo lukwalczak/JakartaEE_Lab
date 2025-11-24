@@ -11,14 +11,14 @@
         <div class="container d-flex  align-items-center justify-content-end">
             <h:form styleClass="d-flex align-items-center me-3">
                 <h:panelGroup rendered="#{not empty request.remoteUser}">
-                    <span class="me-2">Zalogowany: <strong>#{request.remoteUser}</strong></span>
+                    <span class="me-2">#{messages.logged}: <strong>#{request.remoteUser}</strong></span>
                     <h:commandButton value="Wyloguj" action="#{userLogout.logoutAction}" styleClass="btn btn-outline-secondary btn-sm"/>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{empty request.remoteUser}">
-                    <h:link value="Zaloguj" outcome="/auth/custom/login.xhtml" styleClass="btn btn-outline-primary btn-sm"/>
+                    <h:link value="#{messages.login}" outcome="/auth/custom/login.xhtml" styleClass="btn btn-outline-primary btn-sm"/>
                 </h:panelGroup>
             </h:form>
-            <h:graphicImage styleClass="flag" library="images" name="flag_pl.png" style="height:50px;"/>
+            <h:graphicImage styleClass="flag" library="images" name="#{messages.flag}" style="height:50px;"/>
         </div>
     </header>
 </ui:composition>

@@ -48,21 +48,23 @@
 
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>squads</web-resource-name>
-            <url-pattern>/squads/*</url-pattern>
+            <web-resource-name>squad</web-resource-name>
+            <url-pattern>/squad/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>user</role-name>
+            <role-name>admin</role-name>
         </auth-constraint>
     </security-constraint>
 
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>armies</web-resource-name>
-            <url-pattern>/armies/*</url-pattern>
+            <web-resource-name>army</web-resource-name>
+            <url-pattern>/army/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>user</role-name>
+            <role-name>admin</role-name>
         </auth-constraint>
     </security-constraint>
 
@@ -72,6 +74,17 @@
             <url-pattern>/users/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>unit</web-resource-name>
+            <url-pattern>/unit/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
             <role-name>admin</role-name>
         </auth-constraint>
     </security-constraint>

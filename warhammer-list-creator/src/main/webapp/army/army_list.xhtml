@@ -8,7 +8,7 @@
     <ui:define name="content">
         <h:outputStylesheet library="army" name="css/army_list.css"/>
         <article class="text--justified">
-            <header><h2>armies</h2></header>
+            <header><h2>#{messages['nav.armies']}</h2></header>
 
             <h:form>
                 <h:dataTable value="#{armyList.armiesModel.armies}" var="army" styleClass="table align-middle mb-0 bg-white"
@@ -20,20 +20,20 @@
 
                     <h:column>
                         <f:facet name="header">Actions</f:facet>
-                        <h:link outcome="/army/army_view.xhtml" value="View" class="btn btn-primary">
+                        <h:link outcome="/army/army_view.xhtml" value="#{messages.view}" class="btn btn-primary">
                             <f:param name="id" value="#{army.id}"/>
                         </h:link>
-                        <h:link outcome="/army/army_edit.xhtml" value="Edit" class="btn btn-secondary">
+                        <h:link outcome="/army/army_edit.xhtml" value="#{messages.edit}" class="btn btn-secondary">
                             <f:param name="id" value="#{army.id}"/>
                         </h:link>
-                        <h:commandButton value="Delete" styleClass="btn btn-danger"
+                        <h:commandButton value="#{messages.delete}" styleClass="btn btn-danger"
                                          action="#{armyList.deleteArmy(army)}"/>
                     </h:column>
                 </h:dataTable>
             </h:form>
 
             <div style="margin-top:1rem;">
-                <h:link outcome="/army/army_create_basic.xhtml" value="Create new army" class="btn btn-primary"/>
+                <h:link outcome="/army/army_create_basic.xhtml" value="#{messages.create}" class="btn btn-primary"/>
             </div>
         </article>
     </ui:define>

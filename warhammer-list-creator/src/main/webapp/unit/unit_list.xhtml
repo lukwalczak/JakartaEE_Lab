@@ -9,8 +9,6 @@
         <h:outputStylesheet library="unit" name="css/unit_list.css"/>
         <article class="text--justified">
             <header><h2>Units</h2></header>
-
-            <!-- Wrap table in a form so commandButton actions work (Delete etc.) -->
             <h:form>
                 <h:dataTable value="#{unitList.unitsModel.units}" var="unit" styleClass="table align-middle mb-0 bg-white"
                              headerClass="bg-light">
@@ -30,12 +28,12 @@
                         <h:link outcome="/unit/unit_view.xhtml" value="View" class="btn btn-primary">
                             <f:param name="id" value="#{unit.id}"/>
                         </h:link>
-                        <h:link outcome="/unit/unit_edit.xhtml" value="Edit" class="btn btn-secondary">
+                        <h:link outcome="/unit/unit_edit.xhtml" value="Edit" class="btn btn-secondary" rendered="#{request.isUserInRole('admin')}">
                             <f:param name="id" value="#{unit.id}"/>
                         </h:link>
 
                         <h:commandButton value="Delete" styleClass="btn btn-danger"
-                                         action="#{unitList.deleteUnit(unit)}"/>
+                                         action="#{unitList.deleteUnit(unit)}" rendered="#{request.isUserInRole('admin')}"/>
                     </h:column>
                 </h:dataTable>
             </h:form>
