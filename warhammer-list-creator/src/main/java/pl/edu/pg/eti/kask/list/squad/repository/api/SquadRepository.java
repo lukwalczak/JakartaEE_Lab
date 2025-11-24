@@ -10,4 +10,6 @@ public interface SquadRepository extends Repository<Squad, UUID> {
 
     List<Squad> findByArmyId(UUID armyId);
 
+    List<Squad> findByUserId(UUID userId);
+
 }

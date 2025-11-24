@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.army.view;
 
+import jakarta.ejb.EJB;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -28,10 +29,10 @@ import java.util.UUID;
 @ViewScoped
 public class ArmyEdit implements Serializable {
 
-    private final ArmyService armyService;
+    private ArmyService armyService;
     private final ToArmyEditModelFunction toArmyEditModelFunction;
-    private final SquadService squadService;
-    private final UnitService unitService;
+    private SquadService squadService;
+    private UnitService unitService;
     private final ToUnitsModelFunction toUnitsModelFunction;
 
     @Getter
@@ -42,16 +43,25 @@ public class ArmyEdit implements Serializable {
     private ArmyEditModel army;
 
     @Inject
-    public ArmyEdit(ArmyService armyService,
+    public ArmyEdit(
                     ToArmyEditModelFunction toArmyEditModelFunction,
-                    SquadService squadService,
-                    UnitService unitService,
+
                     ToUnitsModelFunction toUnitsModelFunction) {
-        this.armyService = armyService;
         this.toArmyEditModelFunction = toArmyEditModelFunction;
-        this.squadService = squadService;
-        this.unitService = unitService;
         this.toUnitsModelFunction = toUnitsModelFunction;
+    }
+
+    @EJB
+    public void setArmyService(ArmyService armyService) {
+        this.armyService = armyService;
+    }
+    @EJB
+    public void setSquadService(SquadService squadService) {
+        this.squadService = squadService;
+    }
+    @EJB
+    public void setUnitService(UnitService unitService) {
+        this.unitService = unitService;
     }
 
     public void init() throws IOException {

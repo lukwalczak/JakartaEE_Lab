@@ -1,8 +1,6 @@
 package pl.edu.pg.eti.kask.list.user.repository.persistence;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import pl.edu.pg.eti.kask.list.user.entity.User;
@@ -24,7 +22,12 @@ public class UserPersistenceRepository implements UserRepository {
 
     @Override
     public Optional<User> findByLogin(String login) {
-        return Optional.ofNullable(entityManager.find(User.class, login));
+        List<User> users = entityManager
+                .createQuery("SELECT u FROM User u WHERE u.login = :login", User.class)
+                .setParameter("login", login)
+                .setMaxResults(1)
+                .getResultList();
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
 
     @Override
@@ -39,7 +42,7 @@ public class UserPersistenceRepository implements UserRepository {
 
     @Override
     public void create(User entity) {
-        entityManager.persist(entity);
+        entityManager.merge(entity);
     }
 
     @Override

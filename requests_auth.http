@@ -1,0 +1,369 @@
+# BASE64 encoded credentials
+# admin:adminadmin -> YWRtaW46YWRtaW5hZG1pbg==  | Role: ADMIN,USER | id: c4804e0f-769e-4ab9-9ebe-0578fb4f00a6
+# test:useruser -> dGVzdDp1c2VydXNlcg==         | Role: USER       | id: d290f1ee-6c54-4b01-90e6-d701748f0851
+# kevin:useruser -> a2V2aW46dXNlcnVzZXI=        | Role: USER       | id: 81e1c2a9-7f57-439b-b53d-6db88b071e4e
+# alice:useruser -> YWxpY2U6dXNlcnVzZXI=        | Role: USER       | id: ed6cfb2a-cad7-47dd-9b56-9d1e3c7a4197
+# lukasz:lukasz -> bHVrYXN6Omx1a2Fzeg==         | Role: USER       | id: c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
+#
+# Armies:
+# admin:
+# test: f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b, 123e4567-e89b-12d3-a456-426614174000
+# kevin 223e4567-e89b-12d3-a456-426614174001
+# alice: 323e4567-e89b-12d3-a456-426614174002
+
+
+###
+#Get all armies as user kevin
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies
+
+###
+#Get all armies as user kevin - no auth
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies
+
+###
+#Get all armies as user kevin
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies
+Authorization: Basic a2V2aW46dXNlcnVzZXI=
+
+###
+
+#Get all armies as user test
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies
+Authorization: Basic dGVzdDp1c2VydXNlcg==
+
+###
+
+#Get all armies as user kevin
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies
+Authorization: Basic a2V2aW46dXNlcnVzZXI=
+
+###
+
+#Get all armies as admin
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
+
+
+###
+
+#Get all armies as admin
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a6/armies
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
+
+###
+#Create new army for kevin - bad request (army id missing)
+//@no-cookie-jar
+PUT http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies/
+Authorization: Basic a2V2aW46dXNlcnVzZXI=
+Content-Type: application/json
+
+{
+  "name": "Space Wolves",
+  "description": "Bloodclaw Legion"
+}
+
+###
+
+#Create new army for kevin - unauthorized (no auth)
+//@no-cookie-jar
+PUT http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+Content-Type: application/json
+
+{
+  "name": "Space Wolves",
+  "description": "Bloodclaw Legion"
+}
+###
+
+#Create new army for kevin - unauthorized id =/= auth
+//@no-cookie-jar
+PUT http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+Authorization: Basic YWxpY2U6dXNlcnVzZXI=
+Content-Type: application/json
+
+{
+  "name": "Space Wolves",
+  "description": "Bloodclaw Legion"
+}
+
+###
+#Create new army for kevin
+//@no-cookie-jar
+PUT http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+Authorization: Basic a2V2aW46dXNlcnVzZXI=
+Content-Type: application/json
+
+{
+  "name": "Space Wolves",
+  "description": "Bloodclaw Legion"
+}
+
+###
+
+#Get all armies as user kevin
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies
+Authorization: Basic a2V2aW46dXNlcnVzZXI=
+
+###
+#Update army for kevin - unauthorized (no auth)
+
+//@no-cookie-jar
+PATCH http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+Content-Type: application/json
+
+{
+  "description": "Updated Description",
+  "name": "Space Wolves Updateddd"
+}
+
+
+###
+
+#Update army for kevin
+//@no-cookie-jar
+PATCH http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+Authorization: Basic a2V2aW46dXNlcnVzZXI=
+Content-Type: application/json
+
+{
+  "description": "Updated Description",
+  "name": "Space Wolves Updated"
+}
+
+###
+#Delete army for kevin - unauthorized (no auth)
+//@no-cookie-jar
+DELETE http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+
+###
+
+#Delete army for kevin
+//@no-cookie-jar
+DELETE http://localhost:9080/list-creator/api/v1/users/81e1c2a9-7f57-439b-b53d-6db88b071e4e/armies/c4804e0f-769e-4ab9-9ebe-0578fb4f0dd6
+Authorization: Basic a2V2aW46dXNlcnVzZXI=
+
+###
+
+#Get deleted army for kevin
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies/
+Authorization: Basic a2V2aW46dXNlcnVzZXI=
+
+###
+
+# Get all units.
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/units
+
+###
+
+# Get all units - auth
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/units
+Authorization: Basic a2V2aW46dXNlcnVzZXI=
+
+###
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/debug/whoami
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
+
+###
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/debug/whoami
+
+###
+//@no-cookie-jar
+PUT http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
+Content-Type: application/json
+
+{
+  "login": "lukasz",
+  "password": "lukasz",
+  "email": "lukasz@example.com",
+  "name": "lukasz",
+  "surname": "Walczak",
+  "birthDate": "1990-01-01"
+}
+
+###
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2
+
+###
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/debug/whoami
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+
+###
+# create lukasz army
+//@no-cookie-jar
+PUT http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2/armies/423e4567-e89b-12d3-a456-426614174003
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+Content-Type: application/json
+
+{
+  "name": "Imperial Guard",
+  "description": "Cadian Shock Troops"
+}
+
+###
+
+# get lukasz armies
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/users/c4804e0f-769e-4ab9-9ebe-0578fb4f00a2/armies
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+
+###
+
+#Add squad to new army - no auth
+//@no-cookie-jar
+PUT http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003/squads/423e4567-e89b-12d3-a456-426614174001
+Content-Type: application/json
+
+{
+  "unitId": "525d3e7b-bb1f-4c13-bf17-926d1a12e4c0",
+  "count": 5
+}
+
+###
+
+#Add squad to new army
+//@no-cookie-jar
+PUT http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003/squads/423e4567-e89b-12d3-a456-426614174001
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+Content-Type: application/json
+
+{
+  "unitId": "525d3e7b-bb1f-4c13-bf17-926d1a12e4c0",
+  "count": 5
+}
+
+
+###
+
+#Get created squad - no auth
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003/squads/423e4567-e89b-12d3-a456-426614174001
+
+
+###
+
+#Get created squad - wrong user
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003/squads/423e4567-e89b-12d3-a456-426614174001
+Authorization: Basic dGVzdDp1c2VydXNlcg==
+
+###
+
+#Get created squad - admin
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003/squads/423e4567-e89b-12d3-a456-426614174001
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
+
+###
+
+#Get created squad
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003/squads/423e4567-e89b-12d3-a456-426614174001
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+
+###
+
+# get lukasz army
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+
+
+###
+
+#Delete created squad - no auth
+//@no-cookie-jar
+DELETE http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003/squads/423e4567-e89b-12d3-a456-426614174001
+
+###
+
+#Delete created squad
+//@no-cookie-jar
+DELETE http://localhost:9080/list-creator/api/v1/armies/423e4567-e89b-12d3-a456-426614174003/squads/423e4567-e89b-12d3-a456-426614174001
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+
+###
+
+#create new unit - no auth
+//@no-cookie-jar
+PUT http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+Content-Type: application/json
+
+{
+  "name": "Medic2",
+  "description": "Medic is the life saver.",
+  "id": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f",
+  "leadership": 1,
+  "movement": 1,
+  "save": 3,
+  "toughness": 2,
+  "wounds": 2
+}
+
+###
+
+#create new unit
+//@no-cookie-jar
+PUT http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
+Content-Type: application/json
+
+{
+  "name": "Medic2",
+  "description": "Medic is the life saver.",
+  "id": "a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c56f",
+  "leadership": 1,
+  "movement": 1,
+  "save": 3,
+  "toughness": 2,
+  "wounds": 2
+}
+
+###
+
+#Get created unit
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+
+###
+
+#Get created unit
+//@no-cookie-jar
+GET http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==
+
+###
+
+#Delete created unit - no auth
+//@no-cookie-jar
+DELETE http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+
+###
+
+#Delete created unit - not admin
+//@no-cookie-jar
+DELETE http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+Authorization: Basic bHVrYXN6Omx1a2Fzeg==
+
+###
+
+#Delete created unit
+//@no-cookie-jar
+DELETE http://localhost:9080/list-creator/api/v1/units/3c6f1eb1-8069-44ab-988f-d7fed2b65d83
+Authorization: Basic YWRtaW46YWRtaW5hZG1pbg==

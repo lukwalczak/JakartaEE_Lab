@@ -1,5 +1,8 @@
 package pl.edu.pg.eti.kask.list.unit.service;
 
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -8,6 +11,7 @@ import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.repository.api.UnitRepository;
 import pl.edu.pg.eti.kask.list.user.entity.User;
+import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
 import pl.edu.pg.eti.kask.list.user.repository.api.UserRepository;
 
 import java.io.IOException;
@@ -17,7 +21,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-@RequestScoped
+@LocalBean
+@Stateless
 @NoArgsConstructor(force = true)
 public class UnitService {
 
@@ -37,27 +42,27 @@ public class UnitService {
         this.squadService = squadService;
     }
 
-
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public Optional<Unit> find(UUID id) {
         return unitRepository.find(id);
     }
 
-
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public List<Unit> findAll() {
         return unitRepository.findAll();
     }
 
-    @Transactional
+    @RolesAllowed({UserRoles.ADMIN})
     public void create(Unit unit) {
         unitRepository.create(unit);
     }
 
-    @Transactional
+    @RolesAllowed({UserRoles.ADMIN})
     public void update(Unit unit) {
         unitRepository.update(unit);
     }
 
-    @Transactional
+    @RolesAllowed({UserRoles.ADMIN})
     public void delete(UUID id) {
         Unit unit = unitRepository.find(id).orElseThrow();
         // delete squads that reference this unit to avoid orphan squads
@@ -68,7 +73,7 @@ public class UnitService {
         unitRepository.delete(unit);
     }
 
-    @Transactional
+    @RolesAllowed({UserRoles.ADMIN})
     public void delete(Unit unit) {
         if (unit == null || unit.getId() == null) {
             throw new IllegalArgumentException("Unit or unit.id must not be null");
@@ -78,8 +83,7 @@ public class UnitService {
                 .forEach(sq -> squadService.delete(sq.getId()));
         unitRepository.delete(unit);
     }
-
-    @Transactional
+    @RolesAllowed({UserRoles.ADMIN})
     public void updatePortrait(UUID id, InputStream is) {
         unitRepository.find(id).ifPresent(unit -> {
             try {
@@ -89,6 +93,10 @@ public class UnitService {
                 throw new IllegalStateException(ex);
             }
         });
+    }
+
+    public void initCreate(Unit unit) {
+        unitRepository.create(unit);
     }
 
 }

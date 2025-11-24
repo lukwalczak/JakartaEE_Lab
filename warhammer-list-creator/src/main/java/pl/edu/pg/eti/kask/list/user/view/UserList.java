@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.user.view;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -10,16 +11,20 @@ import pl.edu.pg.eti.kask.list.user.service.UserService;
 @Named
 @RequestScoped
 public class UserList {
-    private final UserService userService;
+    private UserService userService;
 
     private UsersModel usersModel;
 
     private final ToUsersModelFunction function;
 
     @Inject
-    public UserList(UserService userService, ToUsersModelFunction function) {
-        this.userService = userService;
+    public UserList( ToUsersModelFunction function) {
         this.function = function;
+    }
+
+    @EJB
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     public UsersModel getUsersModel() {

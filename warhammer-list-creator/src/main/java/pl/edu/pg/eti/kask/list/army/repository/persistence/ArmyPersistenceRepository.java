@@ -1,6 +1,7 @@
 package pl.edu.pg.eti.kask.list.army.repository.persistence;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@Dependent
 public class ArmyPersistenceRepository implements ArmyRepository {
 
     private EntityManager entityManager;
@@ -46,7 +47,7 @@ public class ArmyPersistenceRepository implements ArmyRepository {
 
     @Override
     public void create(Army entity) {
-        entityManager.persist(entity);
+        entityManager.merge(entity);
     }
 
     @Override

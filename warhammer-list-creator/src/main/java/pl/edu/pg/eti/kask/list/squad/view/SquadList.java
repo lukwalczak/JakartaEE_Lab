@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.squad.view;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -11,16 +12,20 @@ import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 @Named
 public class SquadList {
 
-    private final SquadService squadService;
+    private SquadService squadService;
 
     private SquadsModel squadsModel;
 
     private final ToSquadsModelFunction function;
 
     @Inject
-    public SquadList(SquadService squadService, ToSquadsModelFunction function) {
-        this.squadService = squadService;
+    public SquadList(ToSquadsModelFunction function) {
         this.function = function;
+    }
+
+    @EJB
+    public void setSquadService(SquadService squadService) {
+        this.squadService = squadService;
     }
 
     public SquadsModel getSquadsModel() {

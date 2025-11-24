@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.army.view;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.Conversation;
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.inject.Inject;
@@ -26,7 +27,7 @@ import java.util.UUID;
 @NoArgsConstructor(force = true)
 public class ArmyCreate implements Serializable {
 
-    private final ArmyService armyService;
+    private  ArmyService armyService;
 
     private final ModelToArmyFunction modelToArmyFunction;
 
@@ -36,27 +37,39 @@ public class ArmyCreate implements Serializable {
     @Getter
     private final Conversation conversation;
 
-    private final UnitService unitService;
+    private  UnitService unitService;
 
     private final ToUnitsModelFunction toUnitsModelFunction;
 
-    private final SquadService squadService;
+    private  SquadService squadService;
 
     @Inject
-    public ArmyCreate(ArmyService armyService,
+    public ArmyCreate(
                       ModelToArmyFunction modelToArmyFunction,
                       Conversation conversation,
-                      UnitService unitService,
-                      ToUnitsModelFunction toUnitsModelFunction,
-                      SquadService squadService) {
-        this.armyService = armyService;
+
+                      ToUnitsModelFunction toUnitsModelFunction
+                      ) {
         this.modelToArmyFunction = modelToArmyFunction;
         this.conversation = conversation;
-        this.unitService = unitService;
         this.toUnitsModelFunction = toUnitsModelFunction;
-        this.squadService = squadService;
         this.army = new ArmyCreateModel();
         this.army.setSquads(new ArrayList<>());
+    }
+
+    @EJB
+    public void setArmyService(ArmyService armyService) {
+        this.armyService = armyService;
+    }
+
+    @EJB
+    public void setSquadService(SquadService squadService) {
+        this.squadService = squadService;
+    }
+
+    @EJB
+    public void setUnitService(UnitService unitService) {
+        this.unitService = unitService;
     }
 
     public void init() {

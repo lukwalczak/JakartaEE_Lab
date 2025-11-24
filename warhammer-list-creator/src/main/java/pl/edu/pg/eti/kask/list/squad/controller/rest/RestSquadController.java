@@ -1,5 +1,7 @@
 package pl.edu.pg.eti.kask.list.squad.controller.rest;
 
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ejb.EJB;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -14,6 +16,7 @@ import pl.edu.pg.eti.kask.list.squad.dto.PutSquadRequest;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
+import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -22,21 +25,34 @@ import java.util.UUID;
 @Path("")
 public class RestSquadController implements SquadContoller {
 
-    private final SquadService squadService;
-    private final ArmyService armyService;
-    private final UnitService unitService;
+    private SquadService squadService;
+    private ArmyService armyService;
+    private UnitService unitService;
     private final DtoFunctionFactory factory;
 
     @Inject
-    public RestSquadController(SquadService squadService, ArmyService armyService, UnitService unitService, DtoFunctionFactory dtoFunctionFactory) {
-        this.squadService = squadService;
-        this.armyService = armyService;
-        this.unitService = unitService;
+    public RestSquadController(DtoFunctionFactory dtoFunctionFactory) {
         this.factory = dtoFunctionFactory;
+    }
+
+    @EJB
+    public void setSquadService(SquadService squadService) {
+        this.squadService = squadService;
+    }
+
+    @EJB
+    public void setArmyService(ArmyService armyService) {
+        this.armyService = armyService;
+    }
+
+    @EJB
+    public void setUnitService(UnitService unitService) {
+        this.unitService = unitService;
     }
 
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public GetSquadResponse getSquad(UUID army_id, UUID id) {
         return squadService.findById(id)
                 .map(factory.squadToResponseFunction())
@@ -62,12 +78,14 @@ public class RestSquadController implements SquadContoller {
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public GetSquadsResponse getSquads() {
         return factory.squadsToResponseFunction()
                 .apply(squadService.findAll());
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public GetSquadsResponse getSquadsByArmy(UUID army_id) {
         if (armyService.find(army_id).isEmpty()) {
             throw new NotFoundException();
@@ -77,18 +95,16 @@ public class RestSquadController implements SquadContoller {
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void putSquad(UUID army_id, UUID id, PutSquadRequest request) {
         validate(id, request);
 
         try {
-            if (squadService.findById(id).isPresent()) {
-                squadService.delete(id);
-            }
-            Squad squad = Squad.builder()
+                Squad squad = Squad.builder()
                     .id(id)
                     .count(request.getCount())
                     .build();
-            squadService.create(squad, army_id, request.getUnitId());
+                squadService.create(squad, army_id, request.getUnitId());
         } catch (NoSuchElementException e) {
             throw new BadRequestException(new IllegalArgumentException("Invalid armyId or unitId", e));
         } catch (IllegalArgumentException e) {
@@ -97,6 +113,7 @@ public class RestSquadController implements SquadContoller {
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void patchSquad(UUID army_id, UUID id, PatchSquadRequest request) {
 
         Squad squad = squadService.findById(id).orElseThrow(NotFoundException::new);
@@ -111,6 +128,7 @@ public class RestSquadController implements SquadContoller {
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void deleteSquad(UUID army_id, UUID id) {
         if (armyService.find(army_id).isEmpty()) {
             throw new NotFoundException();
@@ -122,7 +140,7 @@ public class RestSquadController implements SquadContoller {
         squadService.delete(id);
     }
 
-    private static void validate(UUID id, PutSquadRequest request) {
+    private void validate(UUID id, PutSquadRequest request) {
         if (id == null) {
             throw new BadRequestException(new IllegalArgumentException("Squad id must not be null"));
         }

@@ -1,6 +1,8 @@
 package pl.edu.pg.eti.kask.list.army.controller.rest;
 
 
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ejb.EJB;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
@@ -10,28 +12,45 @@ import pl.edu.pg.eti.kask.list.army.dto.GetArmiesResponse;
 import pl.edu.pg.eti.kask.list.army.dto.GetArmyResponse;
 import pl.edu.pg.eti.kask.list.army.dto.PatchArmyRequest;
 import pl.edu.pg.eti.kask.list.army.dto.PutArmyRequest;
+import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
 import pl.edu.pg.eti.kask.list.component.DtoFunctionFactory;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
+import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
+import pl.edu.pg.eti.kask.list.user.service.UserService;
 
 import java.util.UUID;
 
 @Path("")
 public class RestArmyController implements ArmyController {
-    private final ArmyService service;
+    private ArmyService service;
 
-    private final SquadService squadService;
+    private SquadService squadService;
+
+    private UserService userService;
 
     private final DtoFunctionFactory factory;
 
     @Inject
-    public RestArmyController(ArmyService armyService, SquadService squadService, DtoFunctionFactory factory) {
+    public RestArmyController(ArmyService armyService, SquadService squadService, UserService userService, DtoFunctionFactory factory) {
+        this.userService = userService;
         this.service = armyService;
         this.squadService = squadService;
         this.factory = factory;
     }
 
+    @EJB
+    public void setService(ArmyService service) {
+        this.service = service;
+    }
+
+    @EJB
+    public void setSquadService(SquadService squadService) {
+        this.squadService = squadService;
+    }
+
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public GetArmyResponse getArmy(UUID id) {
         return service.find(id)
                 .map(factory.armyToResponse())
@@ -53,16 +72,19 @@ public class RestArmyController implements ArmyController {
 
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public GetArmiesResponse getArmies() {
         return factory.armiesToResponseFunction().apply(service.findAll());
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public GetArmiesResponse getArmies(UUID id) {
         return factory.armiesToResponseFunction().apply(service.findAll(id));
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void putArmy(UUID id, PutArmyRequest request) {
         try {
             service.create(factory.requestToArmy().apply(id, request));
@@ -72,6 +94,7 @@ public class RestArmyController implements ArmyController {
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void putArmy(UUID id, PutArmyRequest request, UUID userId) {
         try {
             service.create(factory.requestToArmy().apply(id, request), userId);
@@ -81,14 +104,35 @@ public class RestArmyController implements ArmyController {
     }
 
     @Override
-    public void patchArmy(UUID id, PatchArmyRequest request) {
-
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
+    public void patchArmy(UUID id, UUID userId, PatchArmyRequest request) {
+        try {
+            Army army = service.find(id).orElseThrow(NotFoundException::new);
+            System.out.println(factory.armyToResponse().apply(army));
+            service.update(factory.updateArmy().apply(army, request));
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException(e);
+        }
     }
 
     @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void deleteArmy(UUID id) {
         service.find(id).ifPresentOrElse(
                 service::delete,
+                () -> {
+                    throw new NotFoundException();
+                }
+        );
+    }
+
+    @Override
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
+    public void deleteArmy(UUID id, UUID userId) {
+        service.find(id).ifPresentOrElse(
+                army -> {
+                    service.delete(army);
+                },
                 () -> {
                     throw new NotFoundException();
                 }

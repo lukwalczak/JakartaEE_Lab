@@ -1,6 +1,7 @@
 package pl.edu.pg.eti.kask.list.squad.repository.persistence;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@Dependent
 public class SquadPersistanceRepository implements SquadRepository {
 
     private EntityManager entityManager;
@@ -30,6 +31,13 @@ public class SquadPersistanceRepository implements SquadRepository {
     }
 
     @Override
+    public List<Squad> findByUserId(UUID userId) {
+        return entityManager.createQuery("SELECT s from Squad s WHERE s.army.owner.id = :userId", Squad.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
+    @Override
     public Optional<Squad> find(UUID id) {
         return Optional.ofNullable(entityManager.find(Squad.class, id));
     }
@@ -41,7 +49,7 @@ public class SquadPersistanceRepository implements SquadRepository {
 
     @Override
     public void create(Squad entity) {
-        entityManager.persist(entity);
+        entityManager.merge(entity);
     }
 
     @Override

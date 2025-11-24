@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.unit.view;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.Conversation;
 import jakarta.enterprise.context.ConversationScoped;
 import jakarta.inject.Inject;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Log
 @NoArgsConstructor(force = true)
 public class UnitCreate implements Serializable {
-    private final UnitService unitService;
+    private UnitService unitService;
 
 
     private final ModelToUnitFunction modelToUnitFunction;
@@ -31,14 +32,17 @@ public class UnitCreate implements Serializable {
 
     @Inject
     public UnitCreate(
-            UnitService unitService,
             ModelToUnitFunction modelToUnitFunction,
             Conversation conversation
     ) {
-        this.unitService = unitService;
         this.modelToUnitFunction = modelToUnitFunction;
         this.conversation = conversation;
         this.unit = new UnitCreateModel();
+    }
+
+    @EJB
+    public void setUnitService(UnitService unitService) {
+        this.unitService = unitService;
     }
 
     public void init(){

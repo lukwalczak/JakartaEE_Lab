@@ -1,13 +1,18 @@
-package pl.edu.pg.eti.kask.list.configuration.observer;
+package pl.edu.pg.eti.kask.list.configuration.singleton;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.Initialized;
-import jakarta.enterprise.context.control.RequestContextController;
-import jakarta.enterprise.event.Observes;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.DeclareRoles;
+import jakarta.annotation.security.RunAs;
+import jakarta.ejb.*;
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.SecurityContext;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
+import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import pl.edu.pg.eti.kask.list.model.Faction;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
@@ -20,39 +25,55 @@ import pl.edu.pg.eti.kask.list.user.service.UserService;
 
 import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
-@ApplicationScoped
+@Singleton
+@Startup
+@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
+@NoArgsConstructor
+@Log
 public class InitializedData {
 
-    private final UserService userService;
+    private UserService userService;
 
-    private final ArmyService armyService;
+    private ArmyService armyService;
 
-    private final UnitService unitService;
+    private UnitService unitService;
 
-    private final SquadService squadService;
-
-    private final RequestContextController requestContextController;
+    private SquadService squadService;
 
     @Inject
-    public InitializedData(UserService userService, ArmyService armyService, UnitService unitService, SquadService squadService, RequestContextController requestContextController) {
+    @SuppressWarnings("CdiInjectionPointsInspection")
+    private Pbkdf2PasswordHash passwordHash;
+
+    @Inject
+    private SecurityContext securityContext;
+
+    @EJB
+    public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @EJB
+    public void setArmyService(ArmyService armyService) {
         this.armyService = armyService;
+    }
+
+    @EJB
+    public void setUnitService(UnitService unitService) {
         this.unitService = unitService;
+    }
+
+    @EJB
+    public void setSquadService(SquadService squadService) {
         this.squadService = squadService;
-        this.requestContextController = requestContextController;
     }
 
-    public void contextInitialized(@Observes @Initialized(ApplicationScoped.class) Object init) {
-        init();
-    }
-
-    @SneakyThrows
+    @PostConstruct
     private void init() {
-        requestContextController.activate();
+
+
         User admin = User.builder()
                 .id(UUID.fromString("c4804e0f-769e-4ab9-9ebe-0578fb4f00a6"))
                 .login("admin")
@@ -71,7 +92,7 @@ public class InitializedData {
                 .surname("Testowy")
                 .birthDate(LocalDate.of(1995, 5, 15))
                 .email("test@test.example.com")
-                .password("testtest")
+                .password("useruser")
                 .roles(List.of(UserRoles.USER))
                 .build();
 
@@ -96,12 +117,11 @@ public class InitializedData {
                 .password("useruser")
                 .roles(List.of(UserRoles.USER))
                 .build();
-        if (userService.findAll().isEmpty()) {
-            userService.create(admin);
-            userService.create(kevin);
-            userService.create(alice);
-            userService.create(test);
-        }
+
+            userService.initCreate(admin);
+            userService.initCreate(test);
+            userService.initCreate(kevin);
+            userService.initCreate(alice);
 
         Skill attack = Skill.builder()
                 .id(UUID.randomUUID())
@@ -245,24 +265,24 @@ public class InitializedData {
                 .portrait(getResourceAsByteArray("../avatar/chaplain.jpg"))
                 .build();
 
-        if (unitService.findAll().isEmpty()) {
-            unitService.create(scout);
-            unitService.create(Intercessor);
-            unitService.create(apothecary);
-            unitService.create(aggressor);
-            unitService.create(bloodclaw);
-            unitService.create(wg_battle_leader);
-            unitService.create(wg_terminator);
-            unitService.create(wg_headtaker);
-            unitService.create(chaplain);
-        }
+            unitService.initCreate(scout);
+            unitService.initCreate(Intercessor);
+            unitService.initCreate(apothecary);
+            unitService.initCreate(aggressor);
+            unitService.initCreate(bloodclaw);
+            unitService.initCreate(wg_battle_leader);
+            unitService.initCreate(wg_terminator);
+            unitService.initCreate(wg_headtaker);
+            unitService.initCreate(chaplain);
+
+
 
         Army AstraMilitarum = Army.builder()
                 .id(UUID.fromString("f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b"))
                 .name("Astra Militarum Leman Russ Spam")
                 .description("Tried a new list with Rogal Dorn as a commander. Lots of tanks, maily Leman Russ.")
                 .faction(Faction.IMPERIUM)
-                .owner(admin)
+                .owner(test)
                 .build();
 
         Army Orks = Army.builder()
@@ -270,7 +290,7 @@ public class InitializedData {
                 .name("Ork Waaagh!")
                 .description("A horde of Orks led by Warboss Gorgutz.")
                 .faction(Faction.XENOS)
-                .owner(admin)
+                .owner(test)
                 .build();
 
         Army Aeldari = Army.builder()
@@ -289,12 +309,10 @@ public class InitializedData {
                 .owner(alice)
                 .build();
 
-        if (armyService.findAll().isEmpty()) {
-            armyService.create(AstraMilitarum);
-            armyService.create(Orks);
-            armyService.create(Aeldari);
-            armyService.create(ThousandSons);
-        }
+            armyService.initCreate(Orks, test.getId());
+            armyService.initCreate(AstraMilitarum, test.getId());
+            armyService.initCreate(Aeldari, kevin.getId());
+            armyService.initCreate(ThousandSons, alice.getId());
 
         Squad squad1 = Squad.builder()
                 .id(UUID.fromString("423e4567-e89b-12d3-a456-426614174003"))
@@ -309,13 +327,9 @@ public class InitializedData {
                 .unit(apothecary)
                 .count(2)
                 .build();
-        if (squadService.findAll().isEmpty()) {
-            squadService.create(squad1);
-            squadService.create(squad2);
-        }
+            squadService.initCreate(squad1);
+            squadService.initCreate(squad2);
 
-
-        requestContextController.deactivate();
 
     }
 

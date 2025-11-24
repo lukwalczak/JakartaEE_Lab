@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.kask.list.unit.view;
 
+import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -11,16 +12,20 @@ import pl.edu.pg.eti.kask.list.unit.service.UnitService;
 @Named
 public class UnitList {
 
-    private final UnitService unitService;
+    private UnitService unitService;
 
     private UnitsModel unitsModel;
 
     private final ToUnitsModelFunction function;
 
     @Inject
-    public UnitList(UnitService unitService, ToUnitsModelFunction function) {
-        this.unitService = unitService;
+    public UnitList( ToUnitsModelFunction function) {
         this.function = function;
+    }
+
+    @EJB
+    public void setUnitService(UnitService unitService) {
+        this.unitService = unitService;
     }
 
     public UnitsModel getUnitsModel() {

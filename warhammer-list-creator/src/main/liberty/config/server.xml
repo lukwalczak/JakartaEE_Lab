@@ -9,14 +9,16 @@
         <feature>faces-4.0</feature>
         <feature>restfulWS-3.1</feature>
         <feature>persistence-3.1</feature>
+        <feature>enterpriseBeans-4.0</feature>
+        <feature>appSecurity-5.0</feature>
     </featureManager>
 
-    <dataSource id="ListCreatorDataSource" jndiName="jdbc/ListCreatorDS">
+    <dataSource id="ListCreatorDS" jndiName="jdbc/ListCreatorDS">
         <jdbcDriver javax.sql.XADataSource="org.h2.jdbcx.JdbcDataSource"
                     javax.sql.ConnectionPoolDataSource="org.h2.jdbcx.JdbcDataSource"
                     javax.sql.DataSource="org.h2.jdbcx.JdbcDataSource"
                     libraryRef="H2JDBCLib"/>
-        <properties URL="jdbc:h2:mem:list-creator"/>
+        <properties URL="jdbc:h2:file:${server.config.dir}/data/list-creator"/>
     </dataSource>
 
     <library id="H2JDBCLib">

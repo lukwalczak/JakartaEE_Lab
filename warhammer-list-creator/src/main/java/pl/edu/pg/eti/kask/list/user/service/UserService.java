@@ -1,11 +1,14 @@
 package pl.edu.pg.eti.kask.list.user.service;
 
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
-import pl.edu.pg.eti.kask.list.crypto.component.Pbkdf2PasswordHash;
 import pl.edu.pg.eti.kask.list.user.entity.User;
+import pl.edu.pg.eti.kask.list.user.entity.UserRoles;
 import pl.edu.pg.eti.kask.list.user.repository.api.UserRepository;
 
 import java.io.IOException;
@@ -14,10 +17,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * Service layer for all business actions regarding user entity.
- */
-@ApplicationScoped
+
+@LocalBean
+@Stateless
 @NoArgsConstructor(force = true)
 public class UserService {
 
@@ -36,7 +38,7 @@ public class UserService {
      * @param passwordHash hash mechanism used for storing users' passwords
      */
     @Inject
-    public UserService(UserRepository repository, Pbkdf2PasswordHash passwordHash) {
+    public UserService(UserRepository repository, @SuppressWarnings("CdiInjectionPointsInspection") Pbkdf2PasswordHash passwordHash) {
         this.repository = repository;
         this.passwordHash = passwordHash;
     }
@@ -68,32 +70,31 @@ public class UserService {
      *
      * @param user new user to be saved
      */
-    @Transactional
     public void create(User user) {
         user.setPassword(passwordHash.generate(user.getPassword().toCharArray()));
+        user.setRoles(List.of(UserRoles.USER));
         repository.create(user);
     }
-    @Transactional
+
     public void update(User user) {
         repository.update(user);
     }
-    @Transactional
+
     public void delete(UUID id) {
         repository.find(id).ifPresent(repository::delete);
     }
+
     /**
      * @param login    user's login
      * @param password user's password
      * @return true if provided login and password are correct
      */
-    @Transactional
     public boolean verify(String login, String password) {
         return find(login)
                 .map(user -> passwordHash.verify(password.toCharArray(), user.getPassword()))
                 .orElse(false);
     }
 
-    @Transactional
     public void deletePortrait(UUID id) {
         repository.find(id).ifPresent(character -> {
             character.setPortrait(null);
@@ -101,7 +102,6 @@ public class UserService {
         });
     }
 
-    @Transactional
     public void updatePortrait(UUID id, InputStream is) {
         repository.find(id).ifPresent(character -> {
             try {
@@ -111,6 +111,14 @@ public class UserService {
                 throw new IllegalStateException(ex);
             }
         });
+    }
+
+    public void initCreate(User user) {
+        user.setPassword(passwordHash.generate(user.getPassword().toCharArray()));
+        if (user.getRoles() == null || user.getRoles().isEmpty()) {
+            user.setRoles(List.of(UserRoles.USER));
+        }
+        repository.create(user);
     }
 
 }
