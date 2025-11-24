@@ -2,11 +2,19 @@ package pl.edu.pg.eti.kask.list.authentication;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.security.enterprise.authentication.mechanism.http.BasicAuthenticationMechanismDefinition;
+import jakarta.security.enterprise.authentication.mechanism.http.CustomFormAuthenticationMechanismDefinition;
+import jakarta.security.enterprise.authentication.mechanism.http.LoginToContinue;
 import jakarta.security.enterprise.identitystore.DatabaseIdentityStoreDefinition;
 import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 
 @ApplicationScoped
-@BasicAuthenticationMechanismDefinition(realmName = "List Creator")
+//@BasicAuthenticationMechanismDefinition(realmName = "List Creator")
+@CustomFormAuthenticationMechanismDefinition(
+        loginToContinue = @LoginToContinue(
+                loginPage = "/auth/custom/login.xhtml",
+                errorPage = "/auth/custom/login_error.xhtml"
+        )
+)
 @DatabaseIdentityStoreDefinition(
         dataSourceLookup = "jdbc/ListCreatorDS",
         callerQuery = "SELECT password FROM users WHERE login = ?",

@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.kask.list.view;
+package pl.edu.pg.eti.kask.list.view.converter;
 
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;

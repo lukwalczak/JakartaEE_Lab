@@ -8,5 +8,17 @@
             <h:graphicImage library="images" name="logo.png" alt="logo" style="height:50px;"/>
         </h:link>
         <h1 style="display:inline-block; margin-left:0.5rem; vertical-align:middle;">List Creator</h1>
+        <div class="container d-flex  align-items-center justify-content-end">
+            <h:form styleClass="d-flex align-items-center me-3">
+                <h:panelGroup rendered="#{not empty request.remoteUser}">
+                    <span class="me-2">Zalogowany: <strong>#{request.remoteUser}</strong></span>
+                    <h:commandButton value="Wyloguj" action="#{userLogout.logoutAction}" styleClass="btn btn-outline-secondary btn-sm"/>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{empty request.remoteUser}">
+                    <h:link value="Zaloguj" outcome="/auth/custom/login.xhtml" styleClass="btn btn-outline-primary btn-sm"/>
+                </h:panelGroup>
+            </h:form>
+            <h:graphicImage styleClass="flag" library="images" name="flag_pl.png" style="height:50px;"/>
+        </div>
     </header>
 </ui:composition>

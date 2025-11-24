@@ -17,13 +17,16 @@
         <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
         <h:outputStylesheet library="default" name="css/styles.css"/>
         <h:outputScript library="webjars" name="mdb-ui-kit/6.4.0/js/mdb.min.js"/>
-        <h:outputScript library="webjars" name="mdbootstrap/x.x.x/js/mdb.min.js"/>
+<!--        <h:outputScript library="webjars" name="mdbootstrap/x.x.x/js/mdb.min.js"/>-->
 
-        <h:outputScript library="mdb" name="js/init.js" target="body"/>
+<!--        <h:outputScript library="mdb" name="resources/init.js" target="body"/>-->
     </h:head>
 
 
     <h:body>
+        <f:websocket channel="broadcastChannel" scope="application" onmessage="receive"/>
+        <f:websocket rendered="#{facesContext.externalContext.userPrincipal != null}" channel="userChannel"
+                     user="#{facesContext.externalContext.userPrincipal.name}" onmessage="receive"/>
         <div class="container">
 
             <div id="header">
@@ -38,25 +41,38 @@
                         </li>
                         <li>
                             <h:link styleClass="nav-link"
-                                    outcome="/army/army_list.xhtml">Armies
+                                    outcome="/army/army_list.xhtml">#{messages['nav.armies']}
                             </h:link>
                         </li>
                         <li>
                             <h:link styleClass="nav-link"
-                                    outcome="/squad/squad_list.xhtml">Squads
+                                    outcome="/squad/squad_list.xhtml">#{messages['nav.squads']}
                             </h:link>
                         </li>
                         <li>
                             <h:link styleClass="nav-link"
-                                    outcome="/unit/unit_list.xhtml">Units
+                                    outcome="/unit/unit_list.xhtml">#{messages['nav.units']}
                             </h:link>
                         </li>
+                        <h:panelGroup rendered="#{facesContext.externalContext.isUserInRole('admin')}">
+                            <li class="nav-item">
+                                <h:link styleClass="nav-link"
+                                        outcome="/user/user_list.xhtml">#{messages['nav.users']}</h:link>
+                            </li>
+                        </h:panelGroup>
                     </ul>
                 </div>
             </nav>
             <main class="mb-4 mt-4">
                 <ui:insert name="content"/>
             </main>
+
+            <aside>
+                <div class="form-outline">
+                    <textarea class="form-control" rows="4" id="messageContainer" readonly="readonly"/>
+                    <label for="messageContainer" class="form-label">#{messages.messages}</label>
+                </div>
+            </aside>
 
             <div id="footer">
                 <ui:include src="footer.xhtml"/>

@@ -1,4 +1,4 @@
-package pl.edu.pg.eti.kask.list.view;
+package pl.edu.pg.eti.kask.list.view.config;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.faces.annotation.FacesConfig;
