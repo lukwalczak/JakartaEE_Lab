@@ -17,9 +17,18 @@
         <h:outputStylesheet library="webjars" name="mdb-ui-kit/6.4.0/css/mdb.min.css"/>
         <h:outputStylesheet library="default" name="css/styles.css"/>
         <h:outputScript library="webjars" name="mdb-ui-kit/6.4.0/js/mdb.min.js"/>
-<!--        <h:outputScript library="webjars" name="mdbootstrap/x.x.x/js/mdb.min.js"/>-->
+        <script type="text/javascript">
+            function receive(message, channel, event) {
+                console.log("WS MSG:", message);
+                alert("WIADOMOŚĆ PRZYSZŁA: " + message); // ALERT MUSI WYSKOCZYĆ
 
-<!--        <h:outputScript library="mdb" name="resources/init.js" target="body"/>-->
+                var textArea = document.getElementById("messageContainer");
+                if (textArea) {
+                    textArea.value += message + "\n";
+                    textArea.scrollTop = textArea.scrollHeight;
+                }
+            }
+        </script>
     </h:head>
 
 
@@ -54,12 +63,11 @@
                                     outcome="/unit/unit_list.xhtml">#{messages['nav.units']}
                             </h:link>
                         </li>
-<!--                        <h:panelGroup rendered="#{facesContext.externalContext.isUserInRole('admin')}">-->
-<!--                            <li class="nav-item">-->
-<!--                                <h:link styleClass="nav-link"-->
-<!--                                        outcome="/user/user_list.xhtml">#{messages['nav.users']}</h:link>-->
-<!--                            </li>-->
-<!--                        </h:panelGroup>-->
+                        <li>
+                            <h:link styleClass="nav-link"
+                                    outcome="/chat/chat.xhtml">#{messages['nav.chat'] != null ? messages['nav.chat'] : 'Czat'}
+                            </h:link>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -69,8 +77,13 @@
 
             <aside>
                 <div class="form-outline">
-                    <textarea class="form-control" rows="4" id="messageContainer" readonly="readonly"/>
-                    <label for="messageContainer" class="form-label">#{messages.messages}</label>
+                    <!-- ZMIANA: value przypisane do initialHistory -->
+                    <h:inputTextarea styleClass="form-control" rows="4" id="messageContainer" readonly="true"
+                                     value="#{chatView.initialHistory}"/>
+
+                    <label for="messageContainer" class="form-label">
+                        #{messages.messages != null ? messages.messages : 'Wiadomości'}
+                    </label>
                 </div>
             </aside>
 

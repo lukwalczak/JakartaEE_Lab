@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                template="/WEB-INF/template/main.xhtml">
+
+    <ui:define name="content">
+        <article>
+            <header><h2>Czat</h2></header>
+
+            <h:panelGroup rendered="#{facesContext.externalContext.userPrincipal != null}">
+                <h:form>
+                    <div class="mb-3">
+                        <h:outputLabel for="recipient" value="Do kogo:" class="form-label"/>
+                        <h:selectOneMenu id="recipient" value="#{chatView.recipient}" class="form-select">
+                            <f:selectItem itemLabel="Wszyscy" itemValue="all"/>
+                            <f:selectItems value="#{chatView.users}" var="u" itemLabel="#{u}" itemValue="#{u}"/>
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div class="mb-3">
+                        <h:outputLabel for="msg" value="Wiadomość:" class="form-label"/>
+                        <h:inputText id="msg" value="#{chatView.messageContent}" class="form-control" autocomplete="off"/>
+                    </div>
+
+                    <h:commandButton value="Wyślij" action="#{chatView.sendMessage}" class="btn btn-primary">
+                        <f:ajax execute="@form" render="msg"/>
+                    </h:commandButton>
+                </h:form>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{facesContext.externalContext.userPrincipal == null}">
+                <div class="alert alert-warning">Musisz być zalogowany, aby korzystać z czatu.</div>
+            </h:panelGroup>
+        </article>
+    </ui:define>
+</ui:composition>

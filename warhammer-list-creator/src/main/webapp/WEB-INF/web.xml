@@ -5,25 +5,13 @@
          version="6.0"
          metadata-complete="false">
 
-<!--    <listener>-->
-<!--        <listener-class>pl.edu.pg.eti.kask.list.configuration.listener.CreateDataSource</listener-class>-->
-<!--    </listener>-->
-
-<!--    <listener>-->
-<!--        <listener-class>pl.edu.pg.eti.kask.list.configuration.listener.CreateServices</listener-class>-->
-<!--    </listener>-->
-
-<!--    <listener>-->
-<!--        <listener-class>pl.edu.pg.eti.kask.list.configuration.listener.CreateControllers</listener-class>-->
-<!--    </listener>-->
-    
     <context-param>
         <param-name>avatar.dir</param-name>
         <param-value>avatar</param-value>
     </context-param>
 
     <context-param>
-        <param-name>jakarta.faces.FACELETS_SKIP_COMMENTS </param-name>
+        <param-name>jakarta.faces.FACELETS_SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
     </context-param>
 
@@ -32,9 +20,15 @@
         <param-value>Development</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>jakarta.faces.ENABLE_WEBSOCKET_ENDPOINT</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
     <servlet>
         <servlet-name>facesServlet</servlet-name>
         <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
@@ -111,4 +105,5 @@
         <error-code>404</error-code>
         <location>/error/404.xhtml</location>
     </error-page>
+
 </web-app>
