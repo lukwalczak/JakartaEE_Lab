@@ -31,6 +31,9 @@ public class Squad implements Serializable {
     //    count of units in a squad
     private Integer count;
 
+    @Version
+    private Long version;
+
     //    Units squad consists of
     @ManyToOne
     @JoinColumn(name = "unit_id", nullable = false)

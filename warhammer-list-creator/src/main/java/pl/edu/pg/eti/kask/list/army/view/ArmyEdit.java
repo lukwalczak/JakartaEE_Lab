@@ -1,10 +1,12 @@
 package pl.edu.pg.eti.kask.list.army.view;
 
 import jakarta.ejb.EJB;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +17,7 @@ import pl.edu.pg.eti.kask.list.army.model.function.ModelToArmyFunction;
 import pl.edu.pg.eti.kask.list.army.service.ArmyService;
 import pl.edu.pg.eti.kask.list.squad.entity.Squad;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
+import pl.edu.pg.eti.kask.list.unit.entity.Unit;
 import pl.edu.pg.eti.kask.list.unit.model.UnitsModel;
 import pl.edu.pg.eti.kask.list.unit.model.function.ToUnitsModelFunction;
 import pl.edu.pg.eti.kask.list.unit.service.UnitService;
@@ -42,6 +45,15 @@ public class ArmyEdit implements Serializable {
 
     @Getter
     private ArmyEditModel army;
+
+    @Getter
+    private boolean versionConflict = false;
+
+    @Getter
+    private ArmyEditModel armyEditModelCurrent;
+
+    @Getter
+    private ArmyEditModel armyEditModelNew;
 
     @Inject
     public ArmyEdit(
@@ -101,36 +113,113 @@ public class ArmyEdit implements Serializable {
     }
 
     public String saveAction() {
-        Army originalArmy = armyService.find(army.getId()).orElseThrow();
-        Army updated = ModelToArmyFunctionHolder.apply(army, originalArmy.getOwner());
-        armyService.update(updated);
+        try {
+            this.armyEditModelNew = cloneArmyEditModel(army);
 
-        army.getSquads().forEach(s -> {
-            if (s.getSquadId() != null) {
-                Squad squad = Squad.builder()
-                        .id(s.getSquadId())
-                        .count(s.getCount())
-                        .build();
-                squadService.update(squad);
-            } else {
-                Squad squad = Squad.builder()
-                        .id(UUID.randomUUID())
-                        .count(s.getCount())
-                        .build();
-                squadService.create(squad, army.getId(), s.getUnitId());
+            Army originalArmy = armyService.find(army.getId()).orElseThrow();
+
+            if (! originalArmy.getVersion().equals(army.getVersion())) {
+                handleVersionConflict(originalArmy);
+                return null;
             }
-        });
 
-        return "/army/army_view.xhtml?faces-redirect=true&amp;id=" + army.getId();
+            Army updated = ModelToArmyFunctionHolder.apply(army, originalArmy.getOwner(), army.getVersion());
+            armyService.update(updated);
+
+            for (ArmyEditModel.Squad s : army.getSquads()) {
+                if (s.getSquadId() != null) {
+                    Optional<Squad> existingSquadOpt = squadService. findById(s.getSquadId());
+                    if (existingSquadOpt. isPresent()) {
+                        Squad existingSquad = existingSquadOpt.get();
+
+                        existingSquad.setCount(s.getCount());
+
+                        if (s.getUnitId() != null &&
+                                (existingSquad. getUnit() == null || !existingSquad.getUnit(). getId().equals(s. getUnitId()))) {
+                            Optional<Unit> newUnit = unitService.find(s.getUnitId());
+                            newUnit.ifPresent(existingSquad::setUnit);
+                        }
+
+                        squadService.update(existingSquad);
+                    }
+                } else {
+                    Squad squad = Squad.builder()
+                            .id(UUID.randomUUID())
+                            .count(s.getCount())
+                            . build();
+                    squadService.create(squad, army.getId(), s.getUnitId());
+                }
+            }
+
+
+            return "/army/army_view.xhtml? faces-redirect=true&id=" + army. getId();
+
+        } catch (OptimisticLockException e) {
+            Army currentArmy = armyService.find(army. getId()).orElseThrow();
+            currentArmy.setSquads(squadService.findByArmyId(currentArmy.getId()));
+            handleVersionConflict(currentArmy);
+            return null;
+        }
+    }
+
+
+    private void handleVersionConflict(Army currentArmy) {
+        this.versionConflict = true;
+        this.armyEditModelCurrent = toArmyEditModelFunction.apply(currentArmy);
+
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "VERSION CONFLICT",
+                        "The army has been modified by another user. Choose to keep your changes or accept the current version."));
+    }
+
+    public String acceptCurrentArmyModel() {
+        this.army = this.armyEditModelCurrent;
+        this.versionConflict = false;
+        this.armyEditModelCurrent = null;
+        this.armyEditModelNew = null;
+        return null;
+    }
+
+    public String forceOverwrite() {
+        if (armyEditModelNew != null && armyEditModelCurrent != null) {
+            armyEditModelNew.setVersion(armyEditModelCurrent.getVersion());
+            this.army = armyEditModelNew;
+        }
+        this.versionConflict = false;
+        this.armyEditModelCurrent = null;
+        this.armyEditModelNew = null;
+        return saveAction();
+    }
+
+    private ArmyEditModel cloneArmyEditModel(ArmyEditModel original) {
+        ArmyEditModel.ArmyEditModelBuilder builder = ArmyEditModel.builder()
+                .id(original.getId())
+                .name(original.getName())
+                .description(original.getDescription())
+                .createdAt(original.getCreatedAt())
+                .updatedAt(original.getUpdatedAt())
+                .version(original.getVersion());
+
+        for (ArmyEditModel.Squad s : original.getSquads()) {
+            builder.squad(ArmyEditModel.Squad.builder()
+                    .squadId(s.getSquadId())
+                    .count(s.getCount())
+                    .unitId(s.getUnitId())
+                    .unitName(s.getUnitName())
+                    .build());
+        }
+        return builder.build();
     }
 
     private static class ModelToArmyFunctionHolder {
-        static pl.edu.pg.eti.kask.list.army.entity.Army apply(ArmyEditModel m, User userId) {
-            return pl.edu.pg.eti.kask.list.army.entity.Army.builder()
+        static Army apply(ArmyEditModel m, User userId, Long version) {
+            return Army.builder()
                     .id(m.getId())
                     .name(m.getName())
                     .owner(userId)
                     .description(m.getDescription())
+                    .version(version)
                     .build();
         }
     }

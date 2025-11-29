@@ -6,40 +6,55 @@
                 template="/WEB-INF/template/main.xhtml">
 
     <ui:define name="content">
-        <h:outputStylesheet library="army" name="css/army_list.css"/>
-        <article class="text--justified">
+        <article>
             <header><h2>#{messages['nav.armies']}</h2></header>
 
-            <h:form id="listForm">
-
+            <h:form id="armyListForm">
                 <h:dataTable id="armiesTable" value="#{armyList.armiesModel.armies}" var="army"
-                             styleClass="table align-middle mb-0 bg-white"
-                             headerClass="bg-light">
+                             styleClass="table table-striped">
+
                     <h:column>
-                        <f:facet name="header">Name</f:facet>
-                        <h:outputText value="#{army.name}"/>
+                        <f:facet name="header">#{messages. name}</f:facet>
+                        <h:outputText value="#{army. name}"/>
                     </h:column>
 
                     <h:column>
-                        <f:facet name="header">Actions</f:facet>
-                        <h:link outcome="/army/army_view.xhtml" value="#{messages.view}" class="btn btn-primary">
-                            <f:param name="id" value="#{army.id}"/>
-                        </h:link>
-                        <h:link outcome="/army/army_edit.xhtml" value="#{messages.edit}" class="btn btn-secondary">
-                            <f:param name="id" value="#{army.id}"/>
-                        </h:link>
+                        <f:facet name="header">#{messages.version}</f:facet>
+                        <h:outputText value="#{army.version}"/>
+                    </h:column>
 
-                        <h:commandButton value="#{messages.delete}" styleClass="btn btn-danger"
+                    <h:column>
+                        <f:facet name="header">#{messages.created}</f:facet>
+                        <h:outputText value="#{army.createdAt}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" type="localDateTime"/>
+                        </h:outputText>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">#{messages.updated}</f:facet>
+                        <h:outputText value="#{army.updatedAt}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" type="localDateTime"/>
+                        </h:outputText>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">#{messages.actions}</f:facet>
+                        <h:link outcome="/army/army_view.xhtml" value="#{messages.view}" class="btn btn-primary btn-sm">
+                            <f:param name="id" value="#{army. id}"/>
+                        </h:link>
+                        <h:link outcome="/army/army_edit.xhtml" value="#{messages.edit}" class="btn btn-secondary btn-sm">
+                            <f:param name="id" value="#{army.id}"/>
+                        </h:link>
+                        <h:commandButton value="#{messages.delete}" styleClass="btn btn-danger btn-sm"
                                          action="#{armyList.deleteArmy(army)}">
-                            <f:ajax execute="@this" render=":listForm:armiesTable"/>
+                            <f:ajax execute="@this" render=":armyListForm:armiesTable"/>
                         </h:commandButton>
                     </h:column>
+
                 </h:dataTable>
             </h:form>
 
-            <div style="margin-top:1rem;">
-                <h:link outcome="/army/army_create_basic.xhtml" value="#{messages.create}" class="btn btn-primary"/>
-            </div>
+            <h:link outcome="/army/army_create_basic.xhtml" value="#{messages.create}" class="btn btn-success"/>
         </article>
     </ui:define>
 </ui:composition>

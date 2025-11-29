@@ -12,32 +12,87 @@
 
     <ui:define name="content">
         <article>
-            <header><h2>Edit squad</h2></header>
-            <h:form>
-                <h:panelGrid columns="2">
-                    <h:outputLabel for="army" value="Army:" class=" "/>
-                    <h:selectOneMenu id="army" value="#{squadEdit.squad.armyId}" required="true" class="list-group form-control">
-                        <f:selectItems value="#{squadEdit.availableArmies.armies}" var="a"
-                                       itemLabel="#{a.name}" itemValue="#{a.id}" class="list-group-item"/>
-                    </h:selectOneMenu>
+            <header><h2>Edit Squad</h2></header>
 
-                    <h:outputLabel for="unit" value="Unit:"/>
-                    <h:selectOneMenu id="unit" value="#{squadEdit.squad.unitId}" required="true" class="list-group form-control">
-                        <f:selectItems value="#{squadEdit.availableUnits.units}" var="u"
-                                       itemLabel="#{u.name}" itemValue="#{u.id}" class="list-group-item"/>
-                    </h:selectOneMenu>
+            <h:messages globalOnly="true" styleClass="alert alert-danger"/>
 
-                    <h:outputLabel for="count" value="Count:"/>
-                    <h:inputText id="count" value="#{squadEdit.squad.count}" required="true" class="form-control"/>
-                </h:panelGrid>
-
-                <div style="margin-top:1rem;">
-                    <h:commandButton value="Save" action="#{squadEdit.saveAction()}" class="btn btn-primary"/>
-                    <h:link value="Back" outcome="/squad/squad_view.xhtml" class="btn btn-secondary" style="margin-left:1rem;">
-                        <f:param name="id" value="#{squadEdit.squad.id}"/>
-                    </h:link>
+            <h:panelGroup rendered="#{squadEdit.versionConflict}">
+                <div class="alert alert-warning">
+                    <h4>⚠️ Wykryto konflikt wersji! </h4>
+                    <p>Dane zostały zmienione przez innego użytkownika podczas edycji.</p>
                 </div>
-            </h:form>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h5>Aktualny stan w bazie danych (wersja: #{squadEdit.squadEditModelCurrent.version})</h5>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Armia:</strong> #{squadEdit.squadEditModelCurrent.armyName}</p>
+                                <p><strong>Jednostka:</strong> #{squadEdit.squadEditModelCurrent.unitName}</p>
+                                <p><strong>Liczba:</strong> #{squadEdit.squadEditModelCurrent.count}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-warning">
+                                <h5>Twoje niezapisane zmiany</h5>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Armia:</strong> #{squadEdit.squadEditModelNew.armyName}</p>
+                                <p><strong>Jednostka:</strong> #{squadEdit.squadEditModelNew.unitName}</p>
+                                <p><strong>Liczba:</strong> #{squadEdit.squadEditModelNew.count}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <h:form>
+                        <h:commandButton value="Akceptuj stan z bazy"
+                                         action="#{squadEdit.acceptsquadEditModelCurrent()}"
+                                         styleClass="btn btn-info mr-2"/>
+                        <h:commandButton value="Nadpisz moimi zmianami"
+                                         action="#{squadEdit.forceOverwrite}"
+                                         styleClass="btn btn-warning"/>
+                    </h:form>
+                </div>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{! squadEdit.versionConflict}">
+                <h:form>
+                    <h:inputHidden value="#{squadEdit.squad.version}"/>
+
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="army" value="Army:" class="form-group"/>
+                        <h:selectOneMenu id="army" value="#{squadEdit.squad.armyId}" required="true"
+                                         class="list-group form-control">
+                            <f:selectItems value="#{squadEdit. availableArmies. armies}" var="a"
+                                           itemValue="#{a.id}" itemLabel="#{a. name}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputLabel for="unit" value="Unit:" class="form-group"/>
+                        <h:selectOneMenu id="unit" value="#{squadEdit. squad.unitId}" required="true"
+                                         class="list-group form-control">
+                            <f:selectItems value="#{squadEdit.availableUnits.units}" var="u"
+                                           itemValue="#{u.id}" itemLabel="#{u. name}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputLabel for="count" value="Count:" class="form-group"/>
+                        <h:inputText id="count" value="#{squadEdit.squad. count}" required="true"
+                                     class="form-control"/>
+
+                        <h:outputLabel value="Version:" class="form-group"/>
+                        <h:outputText value="#{squadEdit. squad.version}" styleClass="form-control-plaintext"/>
+                    </h:panelGrid>
+
+                    <h:commandButton value="Save" action="#{squadEdit.saveAction}" class="btn btn-primary"/>
+                    <h:link outcome="/squad/squad_list.xhtml" value="Cancel" class="btn btn-secondary"/>
+                </h:form>
+            </h:panelGroup>
         </article>
     </ui:define>
 </ui:composition>

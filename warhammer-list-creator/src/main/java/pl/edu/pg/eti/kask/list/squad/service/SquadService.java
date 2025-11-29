@@ -103,14 +103,22 @@ public class SquadService {
         }
         squadRepository.delete(squad);
     }
+
     @LogOperation
-    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
+    @RolesAllowed({UserRoles.USER, UserRoles. ADMIN})
     public void update(Squad squad) {
-        if(!squad.getArmy().getOwner().getId().equals(getUserIdFromSecurityContext()) && !securityContext.isCallerInRole(UserRoles.ADMIN)){
+        if (squad.getArmy() == null) {
+            throw new IllegalArgumentException("Squad must have Army set before update");
+        }
+
+        if (!squad. getArmy().getOwner().getId(). equals(getUserIdFromSecurityContext())
+                && !securityContext.isCallerInRole(UserRoles.ADMIN)) {
             throw new ForbiddenException();
         }
+
         squadRepository.update(squad);
     }
+
     @LogOperation
     @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public void delete(UUID id) {

@@ -29,6 +29,7 @@ public class SquadsModel implements Serializable {
         private String unitName;
         private UUID armyId;
         private String armyName;
+        private Long version;
     }
 
     @Singular

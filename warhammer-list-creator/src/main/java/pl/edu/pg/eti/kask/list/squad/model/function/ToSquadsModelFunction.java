@@ -7,21 +7,25 @@ import pl.edu.pg.eti.kask.list.squad.model.SquadsModel;
 import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Dependent
 public class ToSquadsModelFunction implements Function<List<Squad>, SquadsModel>, Serializable {
 
     @Override
-    public SquadsModel apply(List<Squad> entities) {
-        SquadsModel.SquadsModelBuilder builder = SquadsModel.builder();
-        entities.forEach(s -> builder.squad(SquadsModel.Squad.builder()
-                .id(s.getId())
-                .count(s.getCount())
-                .unitId(s.getUnit() != null ? s.getUnit().getId() : null)
-                .unitName(s.getUnit() != null ? s.getUnit().getName() : null)
-                .armyId(s.getArmy() != null ? s.getArmy().getId() : null)
-                .armyName(s.getArmy() != null ? s.getArmy().getName() : null)
-                .build()));
-        return builder.build();
+    public SquadsModel apply(List<Squad> squads) {
+        return SquadsModel.builder()
+                .squads(squads. stream()
+                        .map(squad -> SquadsModel.Squad.builder()
+                                .id(squad.getId())
+                                .count(squad.getCount())
+                                . unitId(squad.getUnit() != null ? squad.getUnit().getId() : null)
+                                .unitName(squad.getUnit() != null ?  squad.getUnit(). getName() : null)
+                                .armyId(squad.getArmy() != null ?  squad.getArmy().getId() : null)
+                                . armyName(squad.getArmy() != null ? squad. getArmy().getName() : null)
+                                .version(squad.getVersion())
+                                . build())
+                        .collect(Collectors.toList()))
+                . build();
     }
 }

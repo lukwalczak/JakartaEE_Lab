@@ -17,6 +17,9 @@ public class ToArmiesModelFunction implements Function<List<Army>, ArmiesModel>,
         armies.forEach(a -> builder.army(ArmiesModel.Army.builder()
                 .id(a.getId())
                 .name(a.getName())
+                .version(a.getVersion())
+                .createdAt(a.getCreatedAt())
+                .updatedAt(a.getUpdatedAt())
                 .build()));
         return builder.build();
     }

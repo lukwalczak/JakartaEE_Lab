@@ -3,6 +3,7 @@ package pl.edu.pg.eti.kask.list.army.model;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,9 @@ public class ArmiesModel implements Serializable {
     public static class Army {
         private UUID id;
         private String name;
+        private Long version;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
     }
 
     @Singular

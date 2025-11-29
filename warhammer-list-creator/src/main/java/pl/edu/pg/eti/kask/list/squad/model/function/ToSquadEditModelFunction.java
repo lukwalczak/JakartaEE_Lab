@@ -15,10 +15,11 @@ public class ToSquadEditModelFunction implements Function<Squad, SquadEditModel>
         return SquadEditModel.builder()
                 .id(squad.getId())
                 .count(squad.getCount())
-                .armyId(squad.getArmy() != null ? squad.getArmy().getId() : null)
+                .armyId(squad.getArmy() != null ?  squad.getArmy().getId() : null)
                 .armyName(squad.getArmy() != null ? squad.getArmy().getName() : null)
                 .unitId(squad.getUnit() != null ? squad.getUnit().getId() : null)
-                .unitName(squad.getUnit() != null ? squad.getUnit().getName() : null)
+                . unitName(squad.getUnit() != null ? squad.getUnit().getName() : null)
+                .version(squad.getVersion())
                 .build();
     }
 }

@@ -16,6 +16,9 @@ public class ToArmyEditModelFunction implements Function<Army, ArmyEditModel>, S
         ArmyEditModel.ArmyEditModelBuilder builder = ArmyEditModel.builder()
                 .id(army.getId())
                 .name(army.getName())
+                .version(army.getVersion())
+                .createdAt(army.getCreatedAt())
+                .updatedAt(army.getUpdatedAt())
                 .description(army.getDescription());
 
         if (army.getSquads() != null) {
@@ -25,6 +28,7 @@ public class ToArmyEditModelFunction implements Function<Army, ArmyEditModel>, S
                         .count(s.getCount())
                         .unitId(s.getUnit() != null ? s.getUnit().getId() : null)
                         .unitName(s.getUnit() != null ? s.getUnit().getName() : null)
+                        .version(s.getVersion())
                         .build());
             }
         }

@@ -19,4 +19,5 @@ public class SquadEditModel implements Serializable {
     private UUID unitId;
     private String unitName;
     private Integer count;
+    private Long version;
 }
