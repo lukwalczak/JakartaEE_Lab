@@ -145,7 +145,7 @@ public class SquadService {
 
     public void initCreate(Squad squad) {
         squadRepository.create(squad);
-        armyRepository.update(squad.getArmy());
+//        armyRepository.update(squad.getArmy());
     }
 
     private UUID getUserIdFromSecurityContext() {

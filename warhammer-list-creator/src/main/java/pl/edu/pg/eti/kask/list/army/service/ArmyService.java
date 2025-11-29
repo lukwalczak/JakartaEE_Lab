@@ -9,6 +9,7 @@ import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 import pl.edu.pg.eti.kask.list.army.entity.Army;
+import pl.edu.pg.eti.kask.list.army.model.ArmyFilterModel;
 import pl.edu.pg.eti.kask.list.army.repository.api.ArmyRepository;
 import pl.edu.pg.eti.kask.list.interceptor.logging.LogOperation;
 import pl.edu.pg.eti.kask.list.squad.service.SquadService;
@@ -140,6 +141,15 @@ public class ArmyService {
             }
         }
         armyRepository.update(army);
+    }
+
+    @RolesAllowed({UserRoles.USER, UserRoles. ADMIN})
+    public List<Army> findWithFilter(ArmyFilterModel filter) {
+        UUID userId = null;
+        if (! securityContext.isCallerInRole(UserRoles. ADMIN)) {
+            userId = getUserIdFromSecurityContext();
+        }
+        return armyRepository.findWithFilter(filter, userId);
     }
 
     public boolean exists(UUID id) {

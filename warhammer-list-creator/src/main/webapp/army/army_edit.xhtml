@@ -3,7 +3,6 @@
                 xmlns:h="jakarta.faces.html"
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:f="jakarta.faces.core"
-                xmlns:c="jakarta.tags.core"
                 template="/WEB-INF/template/main.xhtml">
 
     <f:metadata>
@@ -13,71 +12,83 @@
 
     <ui:define name="content">
         <article>
-            <header><h2>#{messages. edit} #{messages['nav.armies']}</h2></header>
+            <header><h2>#{messages.edit} #{messages['nav.armies']}</h2></header>
 
             <h:messages globalOnly="true" styleClass="alert alert-danger" />
 
             <h:panelGroup rendered="#{armyEdit.versionConflict}">
                 <div class="alert alert-warning">
-                    <h4>⚠️ Wykryto konflikt wersji! </h4>
-                    <p>Dane zostały zmienione przez innego użytkownika podczas edycji.</p>
+                    <h4>⚠️ #{messages['version.conflict']}</h4>
+                    <p>#{messages['version.conflict.description']}</p>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-info text-white">
-                                <h5>Aktualny stan w bazie danych (wersja: #{armyEdit.armyEditModelCurrent.version})</h5>
-                            </div>
-                            <div class="card-body">
-                                <p><strong>Nazwa:</strong> #{armyEdit.armyEditModelCurrent.name}</p>
-                                <p><strong>Opis:</strong> #{armyEdit.armyEditModelCurrent.description}</p>
-                            </div>
-                        </div>
-                    </div>
+                <h:panelGrid columns="2" styleClass="table">
+                    <h:outputText value="#{messages['version.current']}:" styleClass="font-weight-bold"/>
+                    <h:outputText value="#{armyEdit.armyEditModelCurrent.name}"/>
 
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-warning">
-                                <h5>Twoje niezapisane zmiany</h5>
-                            </div>
-                            <div class="card-body">
-                                <p><strong>Nazwa:</strong> #{armyEdit.armyEditModelNew.name}</p>
-                                <p><strong>Opis:</strong> #{armyEdit.armyEditModelNew.description}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <h:outputText value="#{messages['version.your']}:" styleClass="font-weight-bold"/>
+                    <h:outputText value="#{armyEdit.armyEditModelNew.name}"/>
+                </h:panelGrid>
 
-                <div class="mt-3">
-                    <h:form>
-                        <h:commandButton value="Akceptuj stan z bazy"
-                                         action="#{armyEdit.acceptCurrentArmyModel()}"
-                                         styleClass="btn btn-info mr-2"/>
-                        <h:commandButton value="Nadpisz moimi zmianami"
-                                         action="#{armyEdit. forceOverwrite}"
-                                         styleClass="btn btn-warning"/>
-                    </h:form>
-                </div>
+                <h:form>
+                    <h:commandButton value="#{messages['version.accept. current']}"
+                                     action="#{armyEdit.acceptCurrentArmyModel}"
+                                     styleClass="btn btn-info"/>
+                    <h:commandButton value="#{messages['version.force.overwrite']}"
+                                     action="#{armyEdit. forceOverwrite}"
+                                     styleClass="btn btn-warning"/>
+                </h:form>
             </h:panelGroup>
 
             <h:panelGroup rendered="#{! armyEdit.versionConflict}">
                 <h:form id="armyForm">
                     <h:inputHidden value="#{armyEdit.army.version}"/>
 
-                    <h:panelGrid columns="2">
-                        <h:outputLabel for="name" value="#{messages. name}:" class="form-group"/>
-                        <h:inputText id="name" value="#{armyEdit.army.name}" required="true" class="form-control"/>
+                    <h:panelGrid columns="3" styleClass="table">
+                        <h:outputLabel for="name" value="#{messages. name}:"/>
+                        <h:inputText id="name"
+                                     value="#{armyEdit.army.name}"
+                                     required="true"
+                                     requiredMessage="Nazwa armii jest wymagana"
+                                     styleClass="form-control #{not empty facesContext.getMessageList('armyForm:name') ? 'is-invalid' : ''}">
+                            <f:validateLength minimum="3" maximum="100"/>
+                        </h:inputText>
+                        <h:message for="name" styleClass="text-danger"/>
 
-                        <h:outputLabel for="description" value="#{messages. description}:" class="form-group"/>
-                        <h:inputTextarea id="description" value="#{armyEdit.army.description}" class="form-control"/>
+                        <h:outputLabel for="description" value="#{messages. description}:"/>
+                        <h:inputTextarea id="description"
+                                         value="#{armyEdit.army.description}"
+                                         styleClass="form-control #{not empty facesContext.getMessageList('armyForm:description') ? 'is-invalid' : ''}"
+                                         rows="3">
+                            <f:validateLength maximum="1000"/>
+                        </h:inputTextarea>
+                        <h:message for="description" styleClass="text-danger"/>
 
-                        <h:outputLabel value="Wersja:" class="form-group"/>
+                        <h:outputLabel value="#{messages. version}:"/>
                         <h:outputText value="#{armyEdit.army.version}" styleClass="form-control-plaintext"/>
+                        <h:outputText value=""/>
+
+                        <h:outputLabel value="#{messages.created}:"/>
+                        <h:outputText value="#{armyEdit.army. createdAt}" styleClass="form-control-plaintext">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" type="localDateTime"/>
+                        </h:outputText>
+                        <h:outputText value=""/>
+
+                        <h:outputLabel value="#{messages.updated}:"/>
+                        <h:outputText value="#{armyEdit. army.updatedAt}" styleClass="form-control-plaintext">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" type="localDateTime"/>
+                        </h:outputText>
+                        <h:outputText value=""/>
                     </h:panelGrid>
 
-                    <h:commandButton value="#{messages.save}" action="#{armyEdit.saveAction}" class="btn btn-primary"/>
-                    <h:link outcome="/army/army_list.xhtml" value="#{messages.cancel}" class="btn btn-secondary"/>
+                    <div class="button-group">
+                        <h:commandButton value="#{messages. save}"
+                                         action="#{armyEdit.saveAction}"
+                                         styleClass="btn btn-primary"/>
+                        <h:link outcome="/army/army_list.xhtml"
+                                value="#{messages.cancel}"
+                                styleClass="btn btn-secondary"/>
+                    </div>
                 </h:form>
             </h:panelGroup>
         </article>

@@ -25,6 +25,7 @@ import pl.edu.pg.eti.kask.list.user.entity.User;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -220,6 +221,7 @@ public class ArmyEdit implements Serializable {
                     .owner(userId)
                     .description(m.getDescription())
                     .version(version)
+                    .createdAt(m.getCreatedAt())
                     .build();
         }
     }

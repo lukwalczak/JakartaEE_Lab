@@ -1,13 +1,13 @@
-package pl.edu.pg.eti.kask.list.unit.repository.persistence;
+package pl.edu.pg. eti.kask.list.unit. repository.persistence;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.context.Dependent;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
+import jakarta.enterprise. context.Dependent;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import pl.edu.pg.eti.kask.list.unit.entity.Unit;
-import pl.edu.pg.eti.kask.list.unit.repository.api.UnitRepository;
+import jakarta.persistence. PersistenceContext;
+import jakarta. persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence. criteria.Root;
+import pl.edu. pg.eti. kask.list. unit.entity.Unit;
+import pl. edu.pg. eti.kask. list.unit.repository.api.UnitRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +23,6 @@ public class UnitPersistenceRepository implements UnitRepository {
         this.entityManager = entityManager;
     }
 
-
     @Override
     public Optional<Unit> find(UUID id) {
         return Optional.ofNullable(entityManager.find(Unit.class, id));
@@ -31,7 +30,11 @@ public class UnitPersistenceRepository implements UnitRepository {
 
     @Override
     public List<Unit> findAll() {
-        return entityManager.createQuery("SELECT u from Unit u", Unit.class).getResultList();
+        CriteriaBuilder cb = entityManager. getCriteriaBuilder();
+        CriteriaQuery<Unit> query = cb. createQuery(Unit. class);
+        Root<Unit> root = query.from(Unit.class);
+        query.select(root);
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override
@@ -46,7 +49,6 @@ public class UnitPersistenceRepository implements UnitRepository {
 
     @Override
     public void update(Unit entity) {
-        entityManager.merge(entity);
+        entityManager. merge(entity);
     }
-
 }

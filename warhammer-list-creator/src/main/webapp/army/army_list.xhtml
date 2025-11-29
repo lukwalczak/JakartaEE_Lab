@@ -4,18 +4,58 @@
                 xmlns:ui="jakarta.faces.facelets"
                 xmlns:f="jakarta.faces.core"
                 template="/WEB-INF/template/main.xhtml">
-
     <ui:define name="content">
         <article>
             <header><h2>#{messages['nav.armies']}</h2></header>
 
+            <h:form id="filterForm" styleClass="filter-form">
+                <h:panelGrid columns="8" styleClass="filter-panel">
+                    <h:outputLabel for="filterName" value="#{messages.name}:"/>
+                    <h:inputText id="filterName"
+                                 value="#{armyList.filter.name}"
+                                 styleClass="form-control"
+                                 placeholder="... "/>
+
+                    <h:outputLabel for="filterDescription" value="#{messages.description}:"/>
+                    <h:inputText id="filterDescription"
+                                 value="#{armyList.filter.description}"
+                                 styleClass="form-control"
+                                 placeholder="..."/>
+
+                    <h:outputLabel for="filterVersionMin" value="#{messages.version} od:"/>
+                    <h:inputText id="filterVersionMin"
+                                 value="#{armyList.filter.versionMin}"
+                                 styleClass="form-control"
+                                 placeholder="min"/>
+
+                    <h:outputLabel for="filterVersionMax" value="#{messages.version} do:"/>
+                    <h:inputText id="filterVersionMax"
+                                 value="#{armyList.filter.versionMax}"
+                                 styleClass="form-control"
+                                 placeholder="max"/>
+                </h:panelGrid>
+
+                <div class="filter-buttons">
+                    <h:commandButton value="#{messages.search}"
+                                     action="#{armyList.searchAction}"
+                                     styleClass="btn btn-primary">
+                        <f:ajax execute="@form" render=":armyListForm"/>
+                    </h:commandButton>
+
+                    <h:commandButton value="#{messages.clear}"
+                                     action="#{armyList.clearFilterAction}"
+                                     styleClass="btn btn-secondary">
+                        <f:ajax execute="@form" render="@form :armyListForm"/>
+                    </h:commandButton>
+                </div>
+            </h:form>
             <h:form id="armyListForm">
-                <h:dataTable id="armiesTable" value="#{armyList.armiesModel.armies}" var="army"
+                <h:dataTable id="armiesTable" value="#{armyList.armiesModel. armies}" var="army"
                              styleClass="table table-striped">
 
                     <h:column>
-                        <f:facet name="header">#{messages. name}</f:facet>
-                        <h:outputText value="#{army. name}"/>
+                        <f:facet name="header">#{messages.name}</f:facet>
+                        <h:outputText value="#{army.name}"/>
                     </h:column>
 
                     <h:column>
@@ -39,11 +79,11 @@
 
                     <h:column>
                         <f:facet name="header">#{messages.actions}</f:facet>
-                        <h:link outcome="/army/army_view.xhtml" value="#{messages.view}" class="btn btn-primary btn-sm">
-                            <f:param name="id" value="#{army. id}"/>
-                        </h:link>
-                        <h:link outcome="/army/army_edit.xhtml" value="#{messages.edit}" class="btn btn-secondary btn-sm">
+                        <h:link outcome="/army/army_view. xhtml" value="#{messages.view}" class="btn btn-primary btn-sm">
                             <f:param name="id" value="#{army.id}"/>
+                        </h:link>
+                        <h:link outcome="/army/army_edit.xhtml" value="#{messages. edit}" class="btn btn-secondary btn-sm">
+                            <f:param name="id" value="#{army. id}"/>
                         </h:link>
                         <h:commandButton value="#{messages.delete}" styleClass="btn btn-danger btn-sm"
                                          action="#{armyList.deleteArmy(army)}">

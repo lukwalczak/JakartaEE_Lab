@@ -1,16 +1,19 @@
 package pl.edu.pg.eti.kask.list.squad.repository.persistence;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Dependent;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
+import jakarta. persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import pl.edu.pg.eti.kask.list.squad.entity.Squad;
-import pl.edu.pg.eti.kask.list.squad.repository.api.SquadRepository;
+import jakarta.persistence.criteria. CriteriaBuilder;
+import jakarta. persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import pl.edu.pg.eti.kask.list.army.entity.Army_;
+import pl.edu.pg.eti.kask.list.squad.entity. Squad;
+import pl.edu.pg. eti.kask.list.squad. entity.Squad_;
+import pl.edu.pg.eti.kask.list.squad.repository.api. SquadRepository;
+import pl.edu. pg.eti. kask.list. user.entity.User_;
 
-import java.util.List;
-import java.util.Optional;
+import java. util.List;
+import java.util. Optional;
 import java.util.UUID;
 
 @Dependent
@@ -25,26 +28,43 @@ public class SquadPersistanceRepository implements SquadRepository {
 
     @Override
     public List<Squad> findByArmyId(UUID armyId) {
-        return entityManager.createQuery("SELECT s from Squad s WHERE s.army.id = :armyId", Squad.class)
-                .setParameter("armyId", armyId)
-                .getResultList();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Squad> query = cb.createQuery(Squad.class);
+        Root<Squad> root = query.from(Squad. class);
+
+        query.select(root)
+                . where(cb.equal(root.get(Squad_.army).get(Army_.id), armyId));
+
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override
     public List<Squad> findByUserId(UUID userId) {
-        return entityManager.createQuery("SELECT s from Squad s WHERE s.army.owner.id = :userId", Squad.class)
-                .setParameter("userId", userId)
-                .getResultList();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Squad> query = cb.createQuery(Squad.class);
+        Root<Squad> root = query.from(Squad.class);
+
+        query. select(root)
+                .where(cb.equal(
+                        root.get(Squad_.army).get(Army_. owner).get(User_.id),
+                        userId
+                ));
+
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override
     public Optional<Squad> find(UUID id) {
-        return Optional.ofNullable(entityManager.find(Squad.class, id));
+        return Optional. ofNullable(entityManager.find(Squad.class, id));
     }
 
     @Override
     public List<Squad> findAll() {
-        return entityManager.createQuery("SELECT s from Squad s", Squad.class).getResultList();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Squad> query = cb.createQuery(Squad.class);
+        Root<Squad> root = query.from(Squad. class);
+        query.select(root);
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override

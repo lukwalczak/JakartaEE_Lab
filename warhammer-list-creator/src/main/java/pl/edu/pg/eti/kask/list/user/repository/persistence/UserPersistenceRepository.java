@@ -1,12 +1,16 @@
-package pl.edu.pg.eti.kask.list.user.repository.persistence;
+package pl.edu.pg.eti.kask.list.user.repository. persistence;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context. ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import pl.edu.pg.eti.kask.list.user.entity.User;
-import pl.edu.pg.eti.kask.list.user.repository.api.UserRepository;
+import jakarta.persistence. criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria. Root;
+import pl.edu.pg. eti.kask.list.user. entity.User;
+import pl.edu. pg.eti. kask.list. user.entity.User_;
+import pl.edu. pg.eti. kask.list. user.repository.api.UserRepository;
 
-import java.util.List;
+import java.util. List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,11 +26,17 @@ public class UserPersistenceRepository implements UserRepository {
 
     @Override
     public Optional<User> findByLogin(String login) {
-        List<User> users = entityManager
-                .createQuery("SELECT u FROM User u WHERE u.login = :login", User.class)
-                .setParameter("login", login)
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> query = cb.createQuery(User.class);
+        Root<User> root = query.from(User. class);
+
+        query.select(root)
+                . where(cb.equal(root.get(User_.login), login));
+
+        List<User> users = entityManager.createQuery(query)
                 .setMaxResults(1)
                 .getResultList();
+
         return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
 
@@ -37,7 +47,11 @@ public class UserPersistenceRepository implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        return entityManager.createQuery("select u from User u", User.class).getResultList();
+        CriteriaBuilder cb = entityManager. getCriteriaBuilder();
+        CriteriaQuery<User> query = cb. createQuery(User. class);
+        Root<User> root = query.from(User.class);
+        query.select(root);
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override
@@ -52,6 +66,6 @@ public class UserPersistenceRepository implements UserRepository {
 
     @Override
     public void update(User entity) {
-        entityManager.merge(entity);
+        entityManager. merge(entity);
     }
 }

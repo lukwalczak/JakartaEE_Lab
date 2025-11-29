@@ -1,3 +1,35 @@
 .page-footer {
     padding-bottom: 20px;
 }
+.filter-form {
+    margin-bottom: 20px;
+}
+
+.filter-panel {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.filter-panel td {
+    padding: 5px 10px;
+}
+
+.filter-panel label {
+    font-weight: normal;
+    color: #555;
+}
+
+.filter-panel input. form-control {
+    width: 150px;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filter-buttons {
+    margin-bottom: 20px;
+}
+
+.filter-buttons . btn {
+    margin-right: 10px;
+}
