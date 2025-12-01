@@ -17,8 +17,15 @@
                     <div class="col-12">
                         <h:panelGrid columns="2">
                             <h:outputLabel for="name" value="#{messages.name}:"/>
-                            <h:inputText id="name" value="#{armyCreate.army.name}" required="true"/>
-
+                            <h:inputText id="name"
+                                         value="#{armyCreate.army.name}"
+                                         required="true"
+                                         styleClass="form-control"
+                                         validatorMessage="Name contains forbidden words">
+                                <f:validateBean/>
+                                <f:ajax event="keyup" render="armyNameMessage" delay="150"/>
+                                <h:message id="armyNameMessage" for="name" styleClass="text-danger"/>
+                            </h:inputText>
                             <h:outputLabel for="desc" value="Description:"/>
                             <h:inputTextarea id="desc" value="#{armyCreate.army.description}" rows="4"/>
                         </h:panelGrid>

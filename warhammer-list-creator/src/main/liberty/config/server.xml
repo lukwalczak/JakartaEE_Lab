@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Open Liberty documentation does not use schema in examples.-->
 <server description="Jakarta EE example server">
     <featureManager>
         <feature>servlet-6.0</feature>
@@ -12,6 +11,7 @@
         <feature>enterpriseBeans-4.0</feature>
         <feature>appSecurity-5.0</feature>
         <feature>websocket-2.1</feature>
+        <feature>beanValidation-3.0</feature>
     </featureManager>
 
     <dataSource id="ListCreatorDS" jndiName="jdbc/ListCreatorDS">

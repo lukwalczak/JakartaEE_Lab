@@ -279,7 +279,7 @@ public class InitializedData {
 
         Army AstraMilitarum = Army.builder()
                 .id(UUID.fromString("f1e2d3c4-b5a6-7980-1a2b-3c4d5e6f7a8b"))
-                .name("Astra Militarum Leman Russ Spam")
+                .name("Astra Militarum Leman Russ")
                 .description("Tried a new list with Rogal Dorn as a commander. Lots of tanks, maily Leman Russ.")
                 .faction(Faction.IMPERIUM)
                 .owner(test)
