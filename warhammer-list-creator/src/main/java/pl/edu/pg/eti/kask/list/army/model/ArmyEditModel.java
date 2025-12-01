@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Model used by edit view. Contains squad entries with squad id (so they can be updated/deleted).
- */
 @Getter
 @Setter
 @Builder

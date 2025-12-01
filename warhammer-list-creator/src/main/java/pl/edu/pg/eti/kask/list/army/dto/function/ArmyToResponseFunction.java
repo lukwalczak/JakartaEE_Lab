@@ -21,7 +21,6 @@ public class ArmyToResponseFunction implements Function<Army, GetArmyResponse> {
                         .login(entity.getOwner().getLogin())
                         .build()
                 )
-                // Keep squads empty here; controller will hydrate with SquadService
                 .squads(
                         Optional.ofNullable(entity.getSquads())
                                 .orElse(Collections.emptyList())

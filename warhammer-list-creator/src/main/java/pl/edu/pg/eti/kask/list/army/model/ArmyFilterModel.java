@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel. PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 public class ArmyFilterModel implements Serializable {
 
@@ -24,7 +24,7 @@ public class ArmyFilterModel implements Serializable {
 
     public boolean isEmpty() {
         return (name == null || name.isBlank())
-                && (description == null || description. isBlank())
+                && (description == null || description.isBlank())
                 && versionMin == null
                 && versionMax == null
                 && createdAtFrom == null

@@ -12,7 +12,7 @@
     <ui:define name="content">
         <article>
             <header><h2>Create army</h2></header>
-            <h:form styleClass="container">
+            <h:form styleClass="container" id="armyForm">
                 <div class="row">
                     <div class="col-12">
                         <h:panelGrid columns="2">
@@ -21,10 +21,10 @@
                                          value="#{armyCreate.army.name}"
                                          required="true"
                                          styleClass="form-control"
-                                         validatorMessage="Name contains forbidden words">
+                                         validatorMessage="#{messages['validation.army.name.forbidden']}">
                                 <f:validateBean/>
                                 <f:ajax event="keyup" render="armyNameMessage" delay="150"/>
-                                <h:message id="armyNameMessage" for="name" styleClass="text-danger"/>
+                                <h:message id="armyNameMessage" for="name" styleClass="text-danger" showDetail="false" showSummary="true"/>
                             </h:inputText>
                             <h:outputLabel for="desc" value="Description:"/>
                             <h:inputTextarea id="desc" value="#{armyCreate.army.description}" rows="4"/>

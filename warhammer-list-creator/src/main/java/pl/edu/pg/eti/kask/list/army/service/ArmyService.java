@@ -143,10 +143,10 @@ public class ArmyService {
         armyRepository.update(army);
     }
 
-    @RolesAllowed({UserRoles.USER, UserRoles. ADMIN})
+    @RolesAllowed({UserRoles.USER, UserRoles.ADMIN})
     public List<Army> findWithFilter(ArmyFilterModel filter) {
         UUID userId = null;
-        if (! securityContext.isCallerInRole(UserRoles. ADMIN)) {
+        if (! securityContext.isCallerInRole(UserRoles.ADMIN)) {
             userId = getUserIdFromSecurityContext();
         }
         return armyRepository.findWithFilter(filter, userId);

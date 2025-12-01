@@ -129,14 +129,14 @@ public class ArmyEdit implements Serializable {
 
             for (ArmyEditModel.Squad s : army.getSquads()) {
                 if (s.getSquadId() != null) {
-                    Optional<Squad> existingSquadOpt = squadService. findById(s.getSquadId());
-                    if (existingSquadOpt. isPresent()) {
+                    Optional<Squad> existingSquadOpt = squadService.findById(s.getSquadId());
+                    if (existingSquadOpt.isPresent()) {
                         Squad existingSquad = existingSquadOpt.get();
 
                         existingSquad.setCount(s.getCount());
 
                         if (s.getUnitId() != null &&
-                                (existingSquad. getUnit() == null || !existingSquad.getUnit(). getId().equals(s. getUnitId()))) {
+                                (existingSquad.getUnit() == null || !existingSquad.getUnit().getId().equals(s.getUnitId()))) {
                             Optional<Unit> newUnit = unitService.find(s.getUnitId());
                             newUnit.ifPresent(existingSquad::setUnit);
                         }
@@ -147,16 +147,16 @@ public class ArmyEdit implements Serializable {
                     Squad squad = Squad.builder()
                             .id(UUID.randomUUID())
                             .count(s.getCount())
-                            . build();
+                            .build();
                     squadService.create(squad, army.getId(), s.getUnitId());
                 }
             }
 
 
-            return "/army/army_view.xhtml? faces-redirect=true&id=" + army. getId();
+            return "/army/army_view.xhtml? faces-redirect=true&id=" + army.getId();
 
         } catch (OptimisticLockException e) {
-            Army currentArmy = armyService.find(army. getId()).orElseThrow();
+            Army currentArmy = armyService.find(army.getId()).orElseThrow();
             currentArmy.setSquads(squadService.findByArmyId(currentArmy.getId()));
             handleVersionConflict(currentArmy);
             return null;
@@ -171,7 +171,7 @@ public class ArmyEdit implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "VERSION CONFLICT",
-                        "The army has been modified by another user. Choose to keep your changes or accept the current version."));
+                        "The army has been modified by another user.Choose to keep your changes or accept the current version."));
     }
 
     public String acceptCurrentArmyModel() {

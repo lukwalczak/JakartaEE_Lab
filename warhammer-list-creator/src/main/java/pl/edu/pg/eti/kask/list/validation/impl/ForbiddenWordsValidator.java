@@ -17,7 +17,7 @@ public class ForbiddenWordsValidator implements ConstraintValidator<ForbiddenWor
     @Override
     public void initialize(ForbiddenWordsValidatorApi constraintAnnotation) {
         String[] customWords = constraintAnnotation.forbiddenWords();
-        if (customWords. length > 0) {
+        if (customWords.length > 0) {
             forbiddenWords = Arrays.asList(customWords);
         } else {
             forbiddenWords = DEFAULT_FORBIDDEN_WORDS;
@@ -30,7 +30,7 @@ public class ForbiddenWordsValidator implements ConstraintValidator<ForbiddenWor
             return true;
         }
 
-        String lowerValue = value. toLowerCase();
+        String lowerValue = value.toLowerCase();
 
         for (String forbiddenWord : forbiddenWords) {
             if (lowerValue.contains(forbiddenWord.toLowerCase())) {
