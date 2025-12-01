@@ -33,7 +33,7 @@ public class SquadPersistanceRepository implements SquadRepository {
         Root<Squad> root = query.from(Squad. class);
 
         query.select(root)
-                . where(cb.equal(root.get(Squad_.army).get(Army_.id), armyId));
+                .where(cb.equal(root.get(Squad_.army).get(Army_.id), armyId));
 
         return entityManager.createQuery(query).getResultList();
     }
@@ -44,7 +44,7 @@ public class SquadPersistanceRepository implements SquadRepository {
         CriteriaQuery<Squad> query = cb.createQuery(Squad.class);
         Root<Squad> root = query.from(Squad.class);
 
-        query. select(root)
+        query.select(root)
                 .where(cb.equal(
                         root.get(Squad_.army).get(Army_. owner).get(User_.id),
                         userId

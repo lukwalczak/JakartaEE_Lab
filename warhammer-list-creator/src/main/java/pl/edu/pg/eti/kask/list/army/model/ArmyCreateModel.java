@@ -22,8 +22,8 @@ public class ArmyCreateModel implements Serializable {
     private UUID id;
 
     @NotBlank
-    @Size(min = 1, max = 100, message = "Name must be between 1 and 100 characters long")
-    @ForbiddenWordsValidatorApi(message = "Name contains forbidden words")
+    @Size(min = 5, max = 100, message = "Name must be between 1 and 100 characters long")
+    @ForbiddenWordsValidatorApi(message = "Name contains forbidden wordss")
     private String name;
 
     @Size(max = 1000, message = "Opis armii nie może przekraczać 1000 znaków")

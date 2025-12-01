@@ -21,7 +21,7 @@
                                          value="#{armyCreate.army.name}"
                                          required="true"
                                          styleClass="form-control"
-                                         validatorMessage="#{messages['validation.army.name.forbidden']}">
+                                         validatorMessage="#{messages['validation.army.name.error']}">
                                 <f:validateBean/>
                                 <f:ajax event="keyup" render="armyNameMessage" delay="150"/>
                                 <h:message id="armyNameMessage" for="name" styleClass="text-danger" showDetail="false" showSummary="true"/>
